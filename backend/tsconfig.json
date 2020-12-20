@@ -7,8 +7,7 @@
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
-    "esModuleInterop": true,
-    "types": []
+    "esModuleInterop": true
   },
   "include": [
     "src"
