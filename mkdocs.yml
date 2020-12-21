@@ -1,0 +1,24 @@
+site_name: MyCargonaut
+
+theme:
+  features:
+      - navigation.tabs
+      - navigation.tabs.sticky
+  name: material
+  logo: images/myCargonautLogo.png
+  icon: 
+    repo: fontawesome/brands/github
+
+repo_url: https://github.com/KMS-WS20-T01/MyCargonaut
+repo_name:  KMS-WS20-T01/MyCargonaut
+edit_uri: edit/dev/docs/
+
+nav:
+  - Home: 
+    - 'index.md'
+  - Infrastruktur:
+    - 'content/infrastruktur.md'
+    - 'content/teststrategie.md'
+  - Konzepte:
+    - 'content/mockups.md'
+    - 'content/uml-diagramme.md'
