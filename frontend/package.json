@@ -39,17 +39,14 @@
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
+    "plugins": [
+      "prettier"
+    ],
     "extends": [
       "react-app",
-      "react-app/jest"
-    ],
-    "rules": {
-      "object-curly-spacing": ["error", "always"],
-      "key-spacing": ["error", { "beforeColon": false }],
-      "semi": ["error", "always"],
-      "semi-spacing": ["error", {"before": false, "after": true}],
-      "indent": ["error", 2]
-    }
+      "react-app/jest",
+      "plugin:prettier/recommended"
+    ]
   },
   "browserslist": {
     "production": [
@@ -63,5 +60,10 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "http://localhost:8080"
+  "proxy": "http://localhost:8080",
+  "devDependencies": {
+    "eslint-config-prettier": "^7.1.0",
+    "eslint-plugin-prettier": "^3.3.0",
+    "prettier": "^2.2.1"
+  }
 }
