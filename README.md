@@ -1,8 +1,10 @@
 # MyCargonaut
 
 [![Documentation Status](https://readthedocs.org/projects/mycargonaut/badge/?version=latest)](https://mycargonaut.readthedocs.io/en/latest/?badge=latest)
-[![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat)](https://github.com/prettier/prettier)
+![CI/CD](https://github.com/KMS-WS20-T01/MyCargonaut/workflows/CI/CD/badge.svg)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/160ba71e8bf2434cb7f11130290d2695)](https://www.codacy.com/gh/KMS-WS20-T01/MyCargonaut/dashboard?utm_source=github.com&utm_medium=referral&utm_content=KMS-WS20-T01/MyCargonaut&utm_campaign=Badge_Grade)
+[![Codacy Badge](https://app.codacy.com/project/badge/Coverage/160ba71e8bf2434cb7f11130290d2695)](https://www.codacy.com/gh/KMS-WS20-T01/MyCargonaut/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=KMS-WS20-T01/MyCargonaut&amp;utm_campaign=Badge_Coverage)
+[![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat)](https://github.com/prettier/prettier)
 
 MyCargonaut ist ein Projekt im Rahmen des KmS-Praktikums im WS20/21.
 
