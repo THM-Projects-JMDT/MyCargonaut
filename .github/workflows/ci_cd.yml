@@ -1,0 +1,63 @@
+name: CI/CD
+
+on: [push, pull_request]
+
+jobs:
+  frontend-tests:
+    name: Frontend tests
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v2
+    - name: test
+      uses: actions/setup-node@v1
+      with:
+        node-version: '14'
+    - run: (cd frontend && npm ci)
+    - run: (cd frontend && npm run test:cov)
+    - name: Upload Frontend coverage report
+      uses: actions/upload-artifact@v2
+      with:
+        name: coverage-frontend
+        path: frontend/coverage/lcov.info
+
+      
+  backend-tests:
+    name: Backend tests
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: test
+      uses: actions/setup-node@v1
+      with:
+        node-version: '14'
+    - run: (cd backend && npm ci)
+    - run: (cd backend && npm run test:cov)
+    - name: Upload Backend coverage report
+      uses: actions/upload-artifact@v2
+      with:
+        name: coverage-backend
+        path: backend/coverage/lcov.info
+      
+  codacy-coverage-reporter:
+    runs-on: ubuntu-latest
+    
+    name: codacy-coverage-reporter
+    needs: [frontend-tests, backend-tests]
+    steps:
+      - uses: actions/download-artifact@v2
+        with:
+          name: coverage-frontend
+          path: frontend
+      - uses: actions/download-artifact@v2
+        with:
+          name: coverage-backend
+          path: backend
+      - name: Display structure of downloaded files
+        run: ls -R
+      - name: Run codacy-coverage-reporter
+        uses: codacy/codacy-coverage-reporter-action@master
+        with:
+          project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
+          coverage-reports: frontend/lcov.info, backend/lcov.info
