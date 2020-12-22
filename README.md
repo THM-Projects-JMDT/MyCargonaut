@@ -2,16 +2,17 @@
 
 [![Documentation Status](https://readthedocs.org/projects/mycargonaut/badge/?version=latest)](https://mycargonaut.readthedocs.io/en/latest/?badge=latest)
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat)](https://github.com/prettier/prettier)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/160ba71e8bf2434cb7f11130290d2695)](https://www.codacy.com/gh/KMS-WS20-T01/MyCargonaut/dashboard?utm_source=github.com&utm_medium=referral&utm_content=KMS-WS20-T01/MyCargonaut&utm_campaign=Badge_Grade)
 
 MyCargonaut ist ein Projekt im Rahmen des KmS-Praktikums im WS20/21.
 
 ## Technologien
 
-- [ReactJS](https://reactjs.org/)
-- [Redux](https://redux.js.org/)
-- [Material-UI](https://material-ui.com/)
-- [NestJS](https://nestjs.com/)
-- [GraphQL](https://graphql.org/)
+-   [ReactJS](https://reactjs.org/)
+-   [Redux](https://redux.js.org/)
+-   [Material-UI](https://material-ui.com/)
+-   [NestJS](https://nestjs.com/)
+-   [GraphQL](https://graphql.org/)
 
 ## Frontend starten
 
@@ -21,7 +22,7 @@ MyCargonaut ist ein Projekt im Rahmen des KmS-Praktikums im WS20/21.
 
 ## Dokumentation starten
 
-### mkdocs installieren:
+### mkdocs installieren
 
 `sudo pip3 install mkdocs`
 
