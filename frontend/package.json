@@ -36,6 +36,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "test:cov": "react-scripts test --coverage --watchAll=false",
     "eject": "react-scripts eject"
   },
   "browserslist": {
@@ -55,5 +56,13 @@
     "eslint-config-prettier": "^7.1.0",
     "eslint-plugin-prettier": "^3.3.0",
     "prettier": "^2.2.1"
+  },
+  "jest": {
+    "coveragePathIgnorePatterns": [
+      "reportWebVitals.ts",
+      "service-worker.ts",
+      "serviceWorkerRegistration.ts",
+      "index.tsx"
+    ]
   }
 }
