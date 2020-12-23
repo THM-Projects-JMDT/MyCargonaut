@@ -21,17 +21,13 @@ MyCargonaut ist ein Projekt im Rahmen des KmS-Praktikums im WS20/21.
 ### Frontend
 
 -   _In den `frontend`-Ordner wechseln:_ `cd frontend`
-
 -   _Benötigte Module installieren:_ `npm i`
-
 -   _Development-Server starten: `npm run start`
 
 ### Backend
 
 -   _In den `backend`-Ordner wechseln:_ `cd backend`
-
 -   _Benötigte Module installieren:_ `npm i`
-
 -   _Development-Server starten: `npm run start:dev`
 
 ## Dokumentation
