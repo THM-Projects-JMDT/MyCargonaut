@@ -22,3 +22,7 @@ nav:
   - Konzepte:
     - 'content/mockups.md'
     - 'content/uml-diagramme.md'
+
+markdown_extensions:
+  - pymdownx.tabbed
+  - pymdownx.superfences
