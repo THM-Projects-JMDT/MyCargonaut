@@ -26,6 +26,3 @@ nav:
 markdown_extensions:
   - pymdownx.tabbed
   - pymdownx.superfences
-  - pymdownx.emoji:
-      emoji_index: !!python/name:materialx.emoji.twemoji
-      emoji_generator: !!python/name:materialx.emoji.to_svg
