@@ -1,4 +1,4 @@
-import {Injectable} from '@nestjs/common';
+import {Injectable} from "@nestjs/common";
 import {User} from "./user";
 
 
@@ -10,10 +10,10 @@ export class UsersService {
     this.users = [
       {
         id: 1,
-        username: 'admin',
-        password: 'admin',
-        firstName: 'Jannik',
-        lastName: 'Lapp'
+        username: "admin",
+        password: "admin",
+        firstName: "Jannik",
+        lastName: "Lapp"
       },
     ];
     /**

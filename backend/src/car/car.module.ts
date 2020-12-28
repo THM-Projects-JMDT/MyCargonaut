@@ -1,4 +1,4 @@
-import {Module} from '@nestjs/common';
+import {Module} from "@nestjs/common";
 import {CarService} from "./car.service";
 import {CarController} from "./car.controller";
 

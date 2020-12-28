@@ -1,8 +1,8 @@
-import {Test, TestingModule} from '@nestjs/testing';
+import {Test, TestingModule} from "@nestjs/testing";
 import {ChatService} from "./chat.service";
 import {ChatController} from "./chat.controller";
 
-describe('ChatService', () => {
+describe("ChatService", () => {
   let service: ChatService;
   let controller: ChatController;
 
@@ -16,10 +16,10 @@ describe('ChatService', () => {
     controller = moduleRef.get<ChatController>(ChatController);
   });
 
-  it('should be defined', () => {
+  it("should be defined", () => {
     expect(service).toBeDefined();
   });
-  it('should be defined', () => {
+  it("should be defined", () => {
     expect(controller).toBeDefined();
   });
 });

@@ -1,8 +1,8 @@
-import {Test, TestingModule} from '@nestjs/testing';
+import {Test, TestingModule} from "@nestjs/testing";
 import {CarService} from "./car.service";
 import {CarController} from "./car.controller";
 
-describe('CarService', () => {
+describe("CarService", () => {
   let service: CarService;
   let controller: CarController;
 
@@ -16,10 +16,10 @@ describe('CarService', () => {
     controller = moduleRef.get<CarController>(CarController);
   });
 
-  it('should be defined', () => {
+  it("should be defined", () => {
     expect(service).toBeDefined();
   });
-  it('should be defined', () => {
+  it("should be defined", () => {
     expect(controller).toBeDefined();
   });
 
