@@ -1,11 +1,9 @@
 import React from "react";
 
-const App = () => {
+export const Dashboard = () => {
   return (
     <div>
       <h1>My Cargonaut</h1>
     </div>
   );
 };
-
-export default App;
