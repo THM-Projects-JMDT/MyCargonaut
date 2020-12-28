@@ -16,14 +16,14 @@ export class AuthController {
 
   @UseGuards(JwtAuthGuard)
   @Get("check")
-  async checkLoginStatus(@Request() req): Promise<{}> {
+  async checkLoginStatus(@Request() req): Promise<{ message: string }> {
     return null;
   }
 
   @UseGuards(LocalAuthGuard)
   @Post("login")
-  async login(@Request() req) {
-    return this.authService.login(req.user);
+  async login(@Request() req): Promise<{ message: string }> {
+    return { message: this.authService.login(req.user).toString() };
   }
 
   @UseGuards(JwtAuthGuard)
