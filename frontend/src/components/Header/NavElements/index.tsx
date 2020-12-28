@@ -12,17 +12,17 @@ export const NavElements: React.FC = () => {
     setAnchorEl(event.currentTarget);
   };
 
-  const handleProfileMenuClose = () => {
+  const handleAvatarMenuClose = () => {
     setAnchorEl(null);
   };
 
   const handleProfileClick = () => {
-    handleProfileMenuClose();
+    handleAvatarMenuClose();
     // TODO: navigate to profile
   };
 
   const handleLogoutClick = () => {
-    handleProfileMenuClose();
+    handleAvatarMenuClose();
     setAuth(false); // TODO: implement actual logout logic
   };
 
@@ -95,7 +95,7 @@ export const NavElements: React.FC = () => {
             anchorEl={anchorEl}
             keepMounted
             open={Boolean(anchorEl)}
-            onClose={handleProfileMenuClose}
+            onClose={handleAvatarMenuClose}
           >
             <MenuItem onClick={handleProfileClick}>Mein Profil</MenuItem>
             <MenuItem onClick={handleLogoutClick}>Logout</MenuItem>
