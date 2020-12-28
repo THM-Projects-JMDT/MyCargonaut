@@ -1,4 +1,4 @@
-import { Button, IconButton } from "@material-ui/core";
+import { Button, IconButton, Menu, MenuItem } from "@material-ui/core";
 import { AccountCircle, MonetizationOn } from "@material-ui/icons";
 import React from "react";
 import { useStyles } from "../style";
@@ -6,9 +6,28 @@ import { useStyles } from "../style";
 export const NavElements: React.FC = () => {
   const classes = useStyles();
   const [auth, setAuth] = React.useState(false);
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+
+  const handleAvatarClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleProfileMenuClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleProfileClick = () => {
+    handleProfileMenuClose();
+    // TODO: navigate to profile
+  };
+
+  const handleLogoutClick = () => {
+    handleProfileMenuClose();
+    setAuth(false); // TODO: implement actual logout logic
+  };
 
   const handleLoginClick = () => {
-    // TODO: open login modal etc.
+    // TODO: open login modal and implement actual login logic
     setAuth(true);
   };
 
@@ -20,15 +39,13 @@ export const NavElements: React.FC = () => {
     // TODO: show dialog for adding cargo coins?
   };
 
-  const handleAvatarClick = () => {};
-
   return (
     <div className={classes.buttonsGroup}>
       {!auth ? (
         <div>
           <Button
             className={classes.button}
-            variant="outlined"
+            variant="contained"
             color="primary"
             onClick={handleLoginClick}
           >
@@ -73,6 +90,16 @@ export const NavElements: React.FC = () => {
           <IconButton onClick={handleAvatarClick}>
             <AccountCircle fontSize="large" />
           </IconButton>
+          <Menu
+            id="simple-menu"
+            anchorEl={anchorEl}
+            keepMounted
+            open={Boolean(anchorEl)}
+            onClose={handleProfileMenuClose}
+          >
+            <MenuItem onClick={handleProfileClick}>Mein Profil</MenuItem>
+            <MenuItem onClick={handleLogoutClick}>Logout</MenuItem>
+          </Menu>
         </div>
       )}
     </div>
