@@ -1,5 +1,5 @@
-import {User} from "../users/user";
-import {State} from "../status/status";
+import { User } from "../users/user";
+import { State } from "../status/status";
 
 export interface Offer {
   id: number;

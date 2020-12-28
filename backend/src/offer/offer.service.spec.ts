@@ -1,7 +1,6 @@
-import {Test, TestingModule} from "@nestjs/testing";
-import {OfferService} from "./offer.service";
-import {OfferController} from "./offer.controller";
-
+import { Test, TestingModule } from "@nestjs/testing";
+import { OfferService } from "./offer.service";
+import { OfferController } from "./offer.controller";
 
 describe("OfferService", () => {
   let service: OfferService;
@@ -23,5 +22,4 @@ describe("OfferService", () => {
   it("should be defined", () => {
     expect(controller).toBeDefined();
   });
-
 });

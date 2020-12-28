@@ -1,6 +1,6 @@
-import {Test, TestingModule} from "@nestjs/testing";
-import {StatusService} from "./status.service";
-import {StatusController} from "./status.controller";
+import { Test, TestingModule } from "@nestjs/testing";
+import { StatusService } from "./status.service";
+import { StatusController } from "./status.controller";
 
 describe("StatusService", () => {
   let service: StatusService;
@@ -22,5 +22,4 @@ describe("StatusService", () => {
   it("should be defined", () => {
     expect(controller).toBeDefined();
   });
-
 });
