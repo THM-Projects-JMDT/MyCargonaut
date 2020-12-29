@@ -4,8 +4,4 @@ export interface Status {
   text: string;
 }
 
-export enum State {
-  Waiting,
-  InProgress,
-  Delivered,
-}
+export type State = "Waiting" | "InProgress" | "Delivered";
