@@ -13,6 +13,7 @@ export const Header: React.FC = () => {
         <Toolbar>
           <Link to="/">
             <img
+              data-testid={"logo"}
               src={logo}
               alt="logo"
               style={{ marginBottom: 10, marginRight: 5 }}
@@ -20,7 +21,7 @@ export const Header: React.FC = () => {
           </Link>
           <Typography variant="h4" color="primary">
             <i>
-              <b>My </b>Cargonaut
+              <b>My</b>Cargonaut
             </i>
           </Typography>
           <NavElements />
