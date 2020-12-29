@@ -1,5 +1,5 @@
 import React from "react";
-import logo from "./logo_car.png";
+import logo from "../../assets/logo_car.png";
 import { AppBar, Toolbar, Typography } from "@material-ui/core";
 import { useStyles } from "./style";
 import { NavElements } from "./NavElements";
