@@ -1,7 +1,5 @@
 export interface Status {
   offerId: number;
-  state: State;
+  state: "Waiting" | "InProgress" | "Delivered";
   text: string;
 }
-
-export type State = "Waiting" | "InProgress" | "Delivered";

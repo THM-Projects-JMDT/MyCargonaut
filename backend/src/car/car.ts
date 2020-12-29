@@ -1,8 +1,9 @@
 export interface Car {
   id: number;
-  producer: number;
+  ownerId: number;
+  manufacturer: string;
   model: string;
-  vintage: number;
-  seat: number;
-  space: number;
+  manufactureYear: number;
+  seats: number;
+  storageSpace: number;
 }

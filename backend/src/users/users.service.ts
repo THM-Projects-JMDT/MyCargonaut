@@ -13,6 +13,7 @@ export class UsersService {
         password: "admin",
         firstName: "Jannik",
         lastName: "Lapp",
+        cargoCoins: 3000,
       },
     ];
     /**
