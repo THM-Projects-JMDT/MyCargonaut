@@ -9,12 +9,6 @@ const header = (
   </BrowserRouter>
 );
 
-it("contains 'MyCargonaut'", () => {
-  const { getByText } = render(header);
-  expect(getByText("My")).toBeInTheDocument();
-  expect(getByText("Cargonaut")).toBeInTheDocument();
-});
-
 it("contains the logo with a link to the start page", () => {
   const { getByTestId } = render(header);
   expect(getByTestId("logo").closest("a")).toHaveAttribute("href", "/");
