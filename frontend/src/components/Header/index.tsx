@@ -4,6 +4,7 @@ import { AppBar, Toolbar } from "@material-ui/core";
 import { useStyles } from "./style";
 import { NavElements } from "./NavElements";
 import { Link } from "react-router-dom";
+import { routes } from "../../routes";
 
 export const Header: React.FC = () => {
   const classes = useStyles();
@@ -11,7 +12,7 @@ export const Header: React.FC = () => {
     <div className="classes.root">
       <AppBar className={classes.appBar} position="static">
         <Toolbar>
-          <Link to="/">
+          <Link to={routes.home.path}>
             <img data-testid={"logo"} src={logo} alt="logo" />
           </Link>
           <NavElements />
