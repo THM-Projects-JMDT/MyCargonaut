@@ -3,10 +3,12 @@ import { AccountCircle, MonetizationOn } from "@material-ui/icons";
 import React from "react";
 import { useStyles } from "../style";
 
+// TODO: retrieve logged in user from store
 export const NavElements: React.FC = () => {
   const classes = useStyles();
   const [auth, setAuth] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const cargoCoinsBalance = 3000; // TODO: retrieve actual balance
 
   const handleAvatarClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -63,8 +65,11 @@ export const NavElements: React.FC = () => {
       ) : (
         <div>
           <IconButton className={classes.button} onClick={handleMoneyClick}>
-            <MonetizationOn className={classes.moneyIcon} />
-            3000
+            <MonetizationOn
+              className={classes.moneyIcon}
+              data-testid="money-icon"
+            />
+            {cargoCoinsBalance}
           </IconButton>
           <Button
             className={classes.button}
@@ -88,10 +93,9 @@ export const NavElements: React.FC = () => {
             Fahrzeuge
           </Button>
           <IconButton onClick={handleAvatarClick}>
-            <AccountCircle fontSize="large" />
+            <AccountCircle fontSize="large" data-testid="avatar-icon" />
           </IconButton>
           <Menu
-            id="simple-menu"
             anchorEl={anchorEl}
             keepMounted
             open={Boolean(anchorEl)}
