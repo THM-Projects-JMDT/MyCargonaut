@@ -25,7 +25,7 @@ export class StatusController {
   async addStatus(
     @Param("offerId") offerId: number,
     @Body("text") text: string | null,
-    @Body("state") status: Status,
+    @Body("state") state: string,
     @Request() req
   ): Promise<{ message: string }> {
     return null;
