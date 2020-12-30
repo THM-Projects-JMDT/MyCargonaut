@@ -100,6 +100,11 @@ export const NavElements: React.FC = () => {
             keepMounted
             open={Boolean(anchorEl)}
             onClose={handleAvatarMenuClose}
+            getContentAnchorEl={null}
+            anchorOrigin={{
+              vertical: "bottom",
+              horizontal: "left",
+            }}
           >
             <MenuItem onClick={handleProfileClick}>Mein Profil</MenuItem>
             <MenuItem onClick={handleLogoutClick}>Logout</MenuItem>
