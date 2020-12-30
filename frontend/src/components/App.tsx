@@ -4,16 +4,8 @@ import { Provider } from "react-redux";
 import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
 import { routes, routesArray } from "../routes";
 import { Header } from "./Header";
-
-import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
-
-const theme = createMuiTheme({
-  palette: {
-    primary: {
-      main: "#005B52",
-    },
-  },
-});
+import { ThemeProvider } from "@material-ui/core";
+import { theme } from "../assets/theme";
 
 const App = () => {
   return (

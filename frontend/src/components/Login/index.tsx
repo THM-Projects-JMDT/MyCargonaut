@@ -1,7 +1,7 @@
 import React from "react";
-import { CustomCard } from "../util/CustomCard";
-import { InputForm } from "../util/InputForm";
-import { CenterCard } from "../util/CenterCard";
+import { CustomCard } from "../../util/CustomCard";
+import { InputForm } from "../../util/InputForm";
+import { CenterCard } from "../../util/CenterCard";
 import { useHistory } from "react-router-dom";
 import { routes } from "../../routes";
 

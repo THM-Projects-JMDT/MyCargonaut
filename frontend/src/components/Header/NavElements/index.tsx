@@ -1,17 +1,10 @@
-import {
-  Box,
-  Button,
-  IconButton,
-  Menu,
-  MenuItem,
-  Typography,
-} from "@material-ui/core";
+import { Box, Button, IconButton, Menu, MenuItem } from "@material-ui/core";
 import { AccountCircle } from "@material-ui/icons";
 import React from "react";
 import { useHistory } from "react-router-dom";
 import { routes } from "../../../routes";
 import { useStyles } from "../Header.style";
-import { CargoCoins } from "../../util/CargoCoins";
+import { CargoCoins } from "../../../util/CargoCoins";
 
 // TODO: retrieve logged in user from store
 export const NavElements: React.FC = () => {
@@ -41,10 +34,6 @@ export const NavElements: React.FC = () => {
 
   const handleClick = (path: string) => {
     history.push(path);
-  };
-
-  const handleSignupClick = () => {
-    // TODO: open sign up modal etc.
   };
 
   const handleMoneyClick = () => {

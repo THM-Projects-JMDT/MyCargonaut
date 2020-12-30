@@ -17,7 +17,7 @@ export const StartPage = () => {
         timeout={800}
         onEntered={() => setState(true)}
       >
-        <img src={truck}></img>
+        <img alt="truck" src={truck}></img>
       </Slide>
       <Zoom in={state} timeout={400}>
         <div className={classes.text}>

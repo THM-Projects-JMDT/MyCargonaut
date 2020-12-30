@@ -1,6 +1,6 @@
 import React from "react";
 import { FormControl, TextField } from "@material-ui/core";
-import { useStyles } from "../InputForm/InputForm.style";
+import { useStyles } from "./InputForm.style";
 
 export interface InputFormProps {
   inputFields: string[];
@@ -11,14 +11,18 @@ export const InputForm: React.FC<InputFormProps> = ({ inputFields }) => {
 
   return (
     <FormControl fullWidth>
-      {inputFields.map((field) => (
-        <TextField
-          fullWidth
-          label={field}
-          variant="outlined"
-          className={classes.input}
-        />
-      ))}
+      {
+        //TODO unique key
+        inputFields.map((field) => (
+          <TextField
+            key={field}
+            fullWidth
+            label={field}
+            variant="outlined"
+            className={classes.input}
+          />
+        ))
+      }
     </FormControl>
   );
 };
