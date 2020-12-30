@@ -11,7 +11,6 @@ export const useStyles = makeStyles((theme: Theme) =>
     },
     button: {
       borderRadius: "0 0 10px 10px",
-      backgroundColor: "#005b52",
       color: "white",
       height: "100%",
       fontSize: "18px",
