@@ -1,14 +1,25 @@
-import { Button, IconButton, Menu, MenuItem } from "@material-ui/core";
-import { AccountCircle, MonetizationOn } from "@material-ui/icons";
+import {
+  Box,
+  Button,
+  IconButton,
+  Menu,
+  MenuItem,
+  Typography,
+} from "@material-ui/core";
+import { AccountCircle } from "@material-ui/icons";
 import React from "react";
-import { useStyles } from "../style";
+import { useHistory } from "react-router-dom";
+import { routes } from "../../../routes";
+import { useStyles } from "../Header.style";
+import { CargoCoins } from "../../util/CargoCoins";
 
 // TODO: retrieve logged in user from store
 export const NavElements: React.FC = () => {
   const classes = useStyles();
-  const [auth, setAuth] = React.useState(false);
+  const [auth, setAuth] = React.useState(true);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const cargoCoinsBalance = 3000; // TODO: retrieve actual balance
+  const history = useHistory();
 
   const handleAvatarClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -28,9 +39,8 @@ export const NavElements: React.FC = () => {
     setAuth(false); // TODO: implement actual logout logic
   };
 
-  const handleLoginClick = () => {
-    // TODO: open login modal and implement actual login logic
-    setAuth(true);
+  const handleClick = (path: string) => {
+    history.push(path);
   };
 
   const handleSignupClick = () => {
@@ -49,7 +59,7 @@ export const NavElements: React.FC = () => {
             className={classes.button}
             variant="contained"
             color="primary"
-            onClick={handleLoginClick}
+            onClick={() => handleClick(routes.login.path)}
           >
             Login
           </Button>
@@ -57,39 +67,30 @@ export const NavElements: React.FC = () => {
             className={classes.button}
             variant="outlined"
             color="primary"
-            onClick={handleSignupClick}
+            onClick={() => handleClick(routes.createAccount.path)}
           >
             Registrieren
           </Button>
         </div>
       ) : (
         <div>
-          <IconButton className={classes.button} onClick={handleMoneyClick}>
-            <MonetizationOn
-              className={classes.moneyIcon}
-              data-testid="money-icon"
-            />
-            {cargoCoinsBalance}
-          </IconButton>
           <Button
             className={classes.button}
             color="primary"
-            onClick={handleLoginClick}
+            onClick={handleMoneyClick}
           >
+            <CargoCoins fontSize="large" />
+            <Box ml={1} fontSize={20} fontWeight="fontWeightBold">
+              {cargoCoinsBalance}
+            </Box>
+          </Button>
+          <Button className={classes.button} color="primary" onClick={() => {}}>
             Anfragen
           </Button>
-          <Button
-            className={classes.button}
-            color="primary"
-            onClick={handleLoginClick}
-          >
+          <Button className={classes.button} color="primary" onClick={() => {}}>
             Angebote
           </Button>
-          <Button
-            className={classes.button}
-            color="primary"
-            onClick={handleLoginClick}
-          >
+          <Button className={classes.button} color="primary" onClick={() => {}}>
             Fahrzeuge
           </Button>
           <IconButton onClick={handleAvatarClick}>

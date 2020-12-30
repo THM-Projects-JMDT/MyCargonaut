@@ -1,15 +1,26 @@
 import React from "react";
-import { useStyles } from "./Login.style";
 import { CustomCard } from "../util/CustomCard";
 import { InputForm } from "../util/InputForm";
+import { CenterCard } from "../util/CenterCard";
+import { useHistory } from "react-router-dom";
+import { routes } from "../../routes";
 
 export const Login = () => {
-  const classes = useStyles();
+  const history = useHistory();
+
+  const handleLogin = () => {
+    //TODO Login logic
+    history.push(routes.home.path);
+  };
 
   return (
-    <CustomCard
-      buttonText="LOGIN"
-      content={<InputForm inputFields={["E-Mail", "Passwort"]} />}
-    />
+    <CenterCard>
+      <CustomCard
+        buttonText="LOGIN"
+        heading="MyCargonaut - Login"
+        content={<InputForm inputFields={["E-Mail", "Passwort"]} />}
+        event={handleLogin}
+      />
+    </CenterCard>
   );
 };
