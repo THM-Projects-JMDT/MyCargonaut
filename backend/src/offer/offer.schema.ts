@@ -8,9 +8,6 @@ export type OfferDocument = Offer & Document;
 @Schema()
 export class Offer {
   @Prop()
-  id: number;
-
-  @Prop()
   from: string;
 
   @Prop()

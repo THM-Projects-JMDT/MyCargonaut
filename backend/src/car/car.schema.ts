@@ -7,9 +7,6 @@ export type CarDocument = Car & Document;
 
 @Schema()
 export class Car {
-  @Prop()
-  id: number;
-
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: "User" })
   owner: User;
 
