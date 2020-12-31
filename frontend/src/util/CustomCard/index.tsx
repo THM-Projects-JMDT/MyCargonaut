@@ -20,7 +20,7 @@ export const CustomCard: React.FC<CustomCardProps> = ({
   const classes = useStyles();
 
   return (
-    <Card className={classes.card}>
+    <Card className={classes.card} elevation={8}>
       <CardContent>
         <Typography variant="h5">{heading}</Typography>
         {content}
