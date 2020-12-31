@@ -6,6 +6,7 @@ import { CarModule } from "./car/car.module";
 import { ChatModule } from "./chat/chat.module";
 import { StatusModule } from "./status/status.module";
 import { UsersModule } from "./users/users.module";
+import { MongooseModule } from "@nestjs/mongoose";
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { UsersModule } from "./users/users.module";
     RatingModule,
     StatusModule,
     UsersModule,
+    MongooseModule.forRoot("mongodb://localhost/nest"),
   ],
 })
 export class AppModule {}
