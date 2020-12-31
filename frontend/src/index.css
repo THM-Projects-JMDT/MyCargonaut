@@ -1,5 +1,6 @@
 body {
   margin: 0;
+  height: 100%;
   font-family:
     "Roboto",
     -apple-system,
@@ -24,4 +25,9 @@ code {
     Consolas,
     "Courier New",
     monospace;
+}
+
+html,
+#root {
+  height: 100%;
 }
