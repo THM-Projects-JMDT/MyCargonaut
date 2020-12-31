@@ -1,3 +1,5 @@
+import { User } from "../users/user";
+
 export interface Offer {
   id: number;
   from: string;
@@ -9,6 +11,6 @@ export interface Offer {
   seats: number | undefined;
   storageSpace: number | undefined;
   description: string;
-  providerId: number | undefined;
-  customerId: number | undefined;
+  provider: User | undefined;
+  customer: User | undefined;
 }

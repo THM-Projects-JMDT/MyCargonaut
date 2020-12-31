@@ -1,5 +1,7 @@
+import { Offer } from "../offer/offer";
+
 export interface Status {
-  offerId: number;
+  offer: Offer;
   state: "Waiting" | "InProgress" | "Delivered";
   text: string;
 }
