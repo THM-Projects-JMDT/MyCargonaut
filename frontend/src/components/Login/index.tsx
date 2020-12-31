@@ -13,12 +13,38 @@ export const Login = () => {
     history.push(routes.home.path);
   };
 
+  const handlePressEnter = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (e.key === "Enter") {
+      handleLogin();
+    }
+  };
+
+  const inputFields = [
+    {
+      label: "E-Mail/Username",
+      inputProps: {
+        onKeyDown: handlePressEnter,
+        autoComplete: "username",
+        name: "username",
+      },
+    },
+    {
+      label: "Passwort",
+      inputProps: {
+        onKeyDown: handlePressEnter,
+        autoComplete: "current-password",
+        type: "password",
+        name: "password",
+      },
+    },
+  ];
+
   return (
     <CenterCard>
       <CustomCard
         buttonText="LOGIN"
         heading="MyCargonaut - Login"
-        content={<InputForm inputFields={["E-Mail", "Passwort"]} />}
+        content={<InputForm inputFields={inputFields} />}
         event={handleLogin}
       />
     </CenterCard>
