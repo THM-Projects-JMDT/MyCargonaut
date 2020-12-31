@@ -22,7 +22,7 @@ export const StartPage = () => {
       <Zoom in={state} timeout={400}>
         <div className={classes.text}>
           <Box mb={10} color="primary" fontSize={64} textAlign="center">
-            Willkommen bei <i>MyCargonaut</i>
+            Willkommen bei <i>MyCargonaut</i> !
           </Box>
           <Box color="primary" fontSize={48} textAlign="center">
             <b>Die</b> Plattform für Transport- und Mitfahrgelenheiten.
