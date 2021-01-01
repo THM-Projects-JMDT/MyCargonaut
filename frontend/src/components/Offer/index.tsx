@@ -14,6 +14,7 @@ import { useStyles } from "./Offer.style";
 import { CheckCircle } from "@material-ui/icons";
 import { GridElement } from "../GridElement";
 import { UserSummary } from "../UserSummary";
+import { TrackingDetails, TrackingDialog } from "./TrackingDialog";
 
 export interface UserDetails {
   id: number;
@@ -31,6 +32,7 @@ export interface OfferDetails {
   storageSpace?: number;
   price: number;
   description: string;
+  tracking?: TrackingDetails;
 }
 
 export interface OfferProps {
@@ -62,6 +64,7 @@ export const Offer: React.FC<OfferProps> = ({
   loggedInUserId,
 }) => {
   const classes = useStyles();
+  const [open, setOpen] = React.useState(false);
 
   const isPendingOffer = customer === undefined;
   const isPendingRequest = provider === undefined;
@@ -70,6 +73,11 @@ export const Offer: React.FC<OfferProps> = ({
   const isProvider = loggedInUserId === provider?.id;
   const isCustomer = loggedInUserId === customer?.id;
   const isMyOffer = isProvider || isCustomer;
+
+  const handleTrackingClick = (event: any) => {
+    event.stopPropagation();
+    setOpen(true);
+  };
 
   return (
     <Accordion className={classes.root} data-testid="offer-card">
@@ -131,13 +139,22 @@ export const Offer: React.FC<OfferProps> = ({
                   <i>OFFEN</i>
                 </Typography>
               ) : (
-                <Button
-                  color="secondary"
-                  variant="outlined"
-                  onClick={(event) => event.stopPropagation()}
-                >
-                  IN BEARBEITUNG
-                </Button>
+                <div>
+                  <Button
+                    color="secondary"
+                    variant="outlined"
+                    onClick={handleTrackingClick}
+                  >
+                    IN BEARBEITUNG
+                  </Button>
+                  {offer.tracking && (
+                    <TrackingDialog
+                      tracking={offer.tracking}
+                      open={open}
+                      onClose={() => setOpen(false)}
+                    />
+                  )}
+                </div>
               )}
             </GridElement>
           )}
