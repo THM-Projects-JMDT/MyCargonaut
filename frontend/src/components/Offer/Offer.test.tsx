@@ -1,6 +1,8 @@
 import React from "react";
 import { render } from "@testing-library/react";
 import { Offer, OfferDetails, renderService, UserDetails } from "./index";
+import { TrackingDetails } from "./TrackingDialog";
+import userEvent from "@testing-library/user-event";
 
 const offer: OfferDetails = {
   from: "Giessen",
@@ -23,6 +25,12 @@ const userB: UserDetails = {
   id: 2,
   username: "cargo_98",
   rating: 4,
+};
+
+const tracking: TrackingDetails = {
+  state: "waiting",
+  lastMessage: "bin noch daheim",
+  lastMessageDate: new Date(),
 };
 
 describe("general tests", () => {
@@ -121,5 +129,20 @@ describe("offer does belong to logged in user", () => {
     expect(queryByTestId("check-circle-icon")).not.toBeInTheDocument();
     expect(getByText("IN BEARBEITUNG")).toBeInTheDocument();
     expect(getByText(userB.username)).toBeInTheDocument();
+  });
+  it("displays tracking information when offer has customer and provider", () => {
+    const { getByText } = render(
+      <Offer
+        customer={userA}
+        provider={userB}
+        offer={{ ...offer, tracking }}
+        loggedInUserId={1}
+      />
+    );
+    const trackingButton = getByText("IN BEARBEITUNG");
+    const message = String(tracking?.lastMessage);
+    userEvent.click(trackingButton);
+    expect(getByText("Bereit!")).toBeInTheDocument();
+    expect(getByText(message)).toBeInTheDocument();
   });
 });
