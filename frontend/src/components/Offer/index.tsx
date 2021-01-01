@@ -67,7 +67,6 @@ export const Offer: React.FC<OfferProps> = ({
   const isPendingRequest = provider === undefined;
   const isPending = isPendingOffer || isPendingRequest;
 
-  // TODO: retrieve logged in user an check if user id equals offer.providerId or offer.customerId
   const isProvider = loggedInUserId === provider?.id;
   const isCustomer = loggedInUserId === customer?.id;
   const isMyOffer = isProvider || isCustomer;
