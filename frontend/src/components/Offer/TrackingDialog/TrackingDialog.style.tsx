@@ -7,6 +7,6 @@ export const useStyles = makeStyles((theme) => ({
   message: {
     borderRadius: theme.spacing(1),
     padding: theme.spacing(1),
-    backgroundColor: "#c0c0c0",
+    backgroundColor: "#ededed",
   },
 }));
