@@ -9,6 +9,10 @@ import { LocalStrategy } from "./strategies/local.strategy";
 import { AuthController } from "./auth.controller";
 import { INestApplication } from "@nestjs/common";
 import * as request from "supertest";
+import {
+  closeInMongodConnection,
+  rootMongooseTestModule,
+} from "../testUtil/MongooseTestModule";
 
 describe("AuthService", () => {
   let service: AuthService;
@@ -19,6 +23,7 @@ describe("AuthService", () => {
   beforeEach(async () => {
     const moduleRef: TestingModule = await Test.createTestingModule({
       imports: [
+        rootMongooseTestModule(),
         UsersModule,
         PassportModule,
         JwtModule.register({
@@ -68,6 +73,7 @@ describe("AuthService", () => {
   });
 
   afterAll(async () => {
+    await closeInMongodConnection();
     await app.close();
   });
 });
