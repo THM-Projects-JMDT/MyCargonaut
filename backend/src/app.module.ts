@@ -6,6 +6,8 @@ import { CarModule } from "./car/car.module";
 import { ChatModule } from "./chat/chat.module";
 import { StatusModule } from "./status/status.module";
 import { UsersModule } from "./users/users.module";
+import { MongooseModule } from "@nestjs/mongoose";
+import { ConfigModule, ConfigService } from "@nestjs/config";
 
 @Module({
   imports: [
@@ -16,6 +18,14 @@ import { UsersModule } from "./users/users.module";
     RatingModule,
     StatusModule,
     UsersModule,
+    ConfigModule.forRoot(),
+    MongooseModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: async (config: ConfigService) => ({
+        uri: config.get("DATABASE_URI"),
+      }),
+      inject: [ConfigService],
+    }),
   ],
 })
 export class AppModule {}

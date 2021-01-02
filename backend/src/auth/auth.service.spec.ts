@@ -9,15 +9,21 @@ import { LocalStrategy } from "./strategies/local.strategy";
 import { AuthController } from "./auth.controller";
 import { INestApplication } from "@nestjs/common";
 import * as request from "supertest";
+import {
+  closeInMongodConnection,
+  rootMongooseTestModule,
+} from "../testUtil/MongooseTestModule";
 
 describe("AuthService", () => {
   let service: AuthService;
   let controller: AuthController;
   let app: INestApplication;
+  let jwtToken: string;
 
   beforeEach(async () => {
     const moduleRef: TestingModule = await Test.createTestingModule({
       imports: [
+        rootMongooseTestModule(),
         UsersModule,
         PassportModule,
         JwtModule.register({
@@ -51,14 +57,23 @@ describe("AuthService", () => {
       .expect({ statusCode: 401, message: "Unauthorized" });
   });
 
-  it(`login`, () => {
-    return request(app.getHttpServer())
+  it(`login`, async () => {
+    const response = await request(app.getHttpServer())
       .post("/auth/login")
       .send({ username: "admin", password: "admin" })
+      .expect(201);
+    jwtToken = response.body.access_token;
+  });
+
+  it(`logout with login before`, () => {
+    return request(app.getHttpServer())
+      .post("/auth/logout")
+      .set("Authorization", `Bearer ${jwtToken}`)
       .expect(201);
   });
 
   afterAll(async () => {
+    await closeInMongodConnection();
     await app.close();
   });
 });
