@@ -8,34 +8,22 @@ import {
   Box,
   IconButton,
   Button,
+  Menu,
+  MenuItem,
+  ListItemIcon,
 } from "@material-ui/core";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import { useStyles } from "./Offer.style";
 import { CheckCircle } from "@material-ui/icons";
-import { GridElement } from "../GridElement";
-import { UserSummary } from "../UserSummary";
-import { TrackingDetails, TrackingDialog } from "./TrackingDialog";
+import { GridElement } from "../../util/GridElement";
+import { UserSummary } from "../../util/UserSummary";
+import { TrackingDialog } from "./TrackingDialog";
 import { CargoCoins } from "../../util/CargoCoins";
 import Divider from "@material-ui/core/Divider";
-
-export interface UserDetails {
-  id: number;
-  username: string;
-  rating: number; // TODO: create type for number of stars (0 - 5)
-  // TODO: field for profile picture
-}
-
-export interface OfferDetails {
-  from: string;
-  to: string;
-  service: string; // TODO: use 'Service' type
-  date: Date;
-  seats?: number;
-  storageSpace?: number;
-  price: number;
-  description: string;
-  tracking?: TrackingDetails;
-}
+import ChatBubbleIcon from "@material-ui/icons/ChatBubble";
+import StarIcon from "@material-ui/icons/Star";
+import { UserDetails } from "../../model/UserDetails";
+import { OfferDetails } from "../../model/OfferDetails";
 
 export interface OfferProps {
   provider?: UserDetails;
@@ -67,6 +55,7 @@ export const Offer: React.FC<OfferProps> = ({
 }) => {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
   const isPendingOffer = customer === undefined;
   const isPendingRequest = provider === undefined;
@@ -81,10 +70,25 @@ export const Offer: React.FC<OfferProps> = ({
     setOpen(true);
   };
 
+  const handleAvatarClick = (
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) => {
+    event.stopPropagation();
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleAvatarMenuClose = () => {
+    setAnchorEl(null);
+  };
+
   return (
-    <Accordion className={classes.root} data-testid="offer-card" elevation={4}>
+    <Accordion
+      className={classes.root}
+      data-testid="offer-card"
+      classes={{ rounded: classes.paper }}
+    >
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-        <Grid container>
+        <Grid container alignItems="center">
           {!isMyOffer && (
             <GridElement>
               {isPendingOffer ? (
@@ -167,18 +171,21 @@ export const Offer: React.FC<OfferProps> = ({
           )}
           {isMyOffer && (
             <GridElement>
-              {!isPending &&
-                (isProvider ? (
-                  <UserSummary
-                    username={customer?.username}
-                    rating={customer?.rating}
-                  />
-                ) : (
-                  <UserSummary
-                    username={provider?.username}
-                    rating={provider?.rating}
-                  />
-                ))}
+              {!isPending && (
+                <div onClick={handleAvatarClick}>
+                  {isProvider ? (
+                    <UserSummary
+                      username={customer?.username}
+                      rating={customer?.rating}
+                    />
+                  ) : (
+                    <UserSummary
+                      username={provider?.username}
+                      rating={provider?.rating}
+                    />
+                  )}
+                </div>
+              )}
             </GridElement>
           )}
         </Grid>
@@ -190,6 +197,30 @@ export const Offer: React.FC<OfferProps> = ({
           <Typography>{offer.description}</Typography>
         </Box>
       </AccordionDetails>
+      <Menu
+        anchorEl={anchorEl}
+        keepMounted
+        open={Boolean(anchorEl)}
+        onClose={handleAvatarMenuClose}
+        getContentAnchorEl={null}
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "center",
+        }}
+      >
+        <MenuItem onClick={() => {}}>
+          <ListItemIcon>
+            <ChatBubbleIcon />
+          </ListItemIcon>
+          Chat
+        </MenuItem>
+        <MenuItem onClick={() => {}}>
+          <ListItemIcon>
+            <StarIcon />
+          </ListItemIcon>
+          Bewerten
+        </MenuItem>
+      </Menu>
     </Accordion>
   );
 };
