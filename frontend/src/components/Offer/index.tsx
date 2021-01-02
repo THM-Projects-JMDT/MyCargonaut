@@ -15,6 +15,8 @@ import { CheckCircle } from "@material-ui/icons";
 import { GridElement } from "../GridElement";
 import { UserSummary } from "../UserSummary";
 import { TrackingDetails, TrackingDialog } from "./TrackingDialog";
+import { CargoCoins } from "../../util/CargoCoins";
+import Divider from "@material-ui/core/Divider";
 
 export interface UserDetails {
   id: number;
@@ -80,7 +82,7 @@ export const Offer: React.FC<OfferProps> = ({
   };
 
   return (
-    <Accordion className={classes.root} data-testid="offer-card">
+    <Accordion className={classes.root} data-testid="offer-card" elevation={4}>
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
         <Grid container>
           {!isMyOffer && (
@@ -116,7 +118,12 @@ export const Offer: React.FC<OfferProps> = ({
             </GridElement>
           )}
           <GridElement header="Preis:">
-            {typography(String(offer.price + " CargoCoins"))}
+            {
+              <div style={{ display: "flex", justifyContent: "center" }}>
+                {typography(String(offer.price))}
+                <CargoCoins className={classes.moneyIcon} />
+              </div>
+            }
           </GridElement>
           {!isMyOffer && isPending ? (
             <GridElement>
@@ -176,8 +183,9 @@ export const Offer: React.FC<OfferProps> = ({
           )}
         </Grid>
       </AccordionSummary>
+      <Divider variant="middle" className={classes.divider} />
       <AccordionDetails className={classes.accordionDetails}>
-        <Box ml={7}>
+        <Box ml={7} my={2}>
           <Typography variant="subtitle2">Beschreibung:</Typography>
           <Typography>{offer.description}</Typography>
         </Box>

@@ -5,13 +5,15 @@ export const useStyles = makeStyles((theme) => ({
     textAlign: "center",
   },
   moneyIcon: {
-    color: "#FFE600",
-    marginRight: theme.spacing(1),
+    marginLeft: theme.spacing(1),
   },
   accordionDetails: {
     textAlign: "left",
   },
   greenText: {
     color: "green",
+  },
+  divider: {
+    margin: "0 65px",
   },
 }));
