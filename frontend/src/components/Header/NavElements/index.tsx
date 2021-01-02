@@ -24,7 +24,7 @@ export const NavElements: React.FC = () => {
 
   const handleProfileClick = () => {
     handleAvatarMenuClose();
-    // TODO: navigate to profile
+    history.push(routes.profile.path);
   };
 
   const handleLogoutClick = () => {
