@@ -7,6 +7,7 @@ import { ChatModule } from "./chat/chat.module";
 import { StatusModule } from "./status/status.module";
 import { UsersModule } from "./users/users.module";
 import { MongooseModule } from "@nestjs/mongoose";
+import { ConfigModule, ConfigService } from "@nestjs/config";
 
 @Module({
   imports: [
@@ -17,7 +18,14 @@ import { MongooseModule } from "@nestjs/mongoose";
     RatingModule,
     StatusModule,
     UsersModule,
-    MongooseModule.forRoot("mongodb://localhost/nest"),
+    ConfigModule.forRoot(),
+    MongooseModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: async (config: ConfigService) => ({
+        uri: config.get("DATABASE_URI"),
+      }),
+      inject: [ConfigService],
+    }),
   ],
 })
 export class AppModule {}
