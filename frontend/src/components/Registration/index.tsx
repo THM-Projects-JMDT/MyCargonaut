@@ -4,6 +4,7 @@ import { routes } from "../../routes";
 import { CenterCard } from "../../util/CenterCard";
 import { CustomCard } from "../../util/CustomCard";
 import { InputForm } from "../../util/InputForm";
+import { inputFields } from "../../assets/inputFields";
 
 export const Registration = () => {
   const history = useHistory();
@@ -12,48 +13,6 @@ export const Registration = () => {
     //TODO Registration logic
     history.push(routes.login.path);
   };
-
-  const inputFields = [
-    {
-      label: "Vorname",
-    },
-    {
-      label: "Nachname",
-    },
-    {
-      label: "Geburtstag",
-    },
-    {
-      label: "Username",
-      inputProps: {
-        autoComplete: "off",
-        name: "username",
-      },
-    },
-    {
-      label: "E-Mail",
-      inputProps: {
-        autoComplete: "off",
-        type: "email",
-        name: "email",
-      },
-    },
-    {
-      label: "Passwort",
-      inputProps: {
-        autoComplete: "new-password",
-        type: "password",
-        name: "password",
-      },
-    },
-    {
-      label: "Passwort wiederholen",
-      inputProps: {
-        type: "password",
-        name: "password",
-      },
-    },
-  ];
 
   return (
     <CenterCard>
