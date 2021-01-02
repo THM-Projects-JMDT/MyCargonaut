@@ -41,7 +41,7 @@ describe("general tests", () => {
     expect(getByText(offer.from)).toBeInTheDocument();
     expect(getByText(offer.to)).toBeInTheDocument();
     expect(getByText(offer.date.toLocaleDateString())).toBeInTheDocument();
-    expect(getByText(offer.price + " CargoCoins")).toBeInTheDocument();
+    expect(getByText(offer.price)).toBeInTheDocument();
     expect(getByText(renderService(offer.service))).toBeInTheDocument();
     expect(getByText(String(offer.seats))).toBeInTheDocument();
     expect(getByText(offer.description)).toBeInTheDocument();
