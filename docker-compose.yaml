@@ -1,0 +1,11 @@
+version: '3'
+
+services:
+  db:
+    image: mongo:4.4.2
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: MDNlYWE2NmRiNzk4Y2RlZDMyMmQ0ZTA1
+    ports: 
+      - "27017:27017"
