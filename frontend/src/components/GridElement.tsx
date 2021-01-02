@@ -12,7 +12,7 @@ export const GridElement: React.FC<GridElementProps> = ({
   return (
     <Grid item xs>
       {header && (
-        <Box mb={3}>
+        <Box mb={2}>
           <Typography variant="subtitle2">{header}</Typography>
         </Box>
       )}
