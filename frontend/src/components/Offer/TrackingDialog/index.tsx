@@ -11,12 +11,7 @@ import {
 } from "@material-ui/core";
 import React from "react";
 import { useStyles } from "./TrackingDialog.style";
-
-export interface TrackingDetails {
-  state: string; // TODO: use 'TrackingState" type
-  lastMessage?: string;
-  lastMessageDate?: Date;
-}
+import { TrackingDetails } from "../../../model/TrackingDetails";
 
 export interface TrackingDialogProps {
   tracking: TrackingDetails;
@@ -50,7 +45,13 @@ export const TrackingDialog: React.FC<TrackingDialogProps> = ({
 
   return (
     <div onClick={handleOutsideClick}>
-      <Dialog open={open} fullWidth>
+      <Dialog
+        open={open}
+        fullWidth
+        classes={{
+          paper: classes.paper,
+        }}
+      >
         <DialogTitle>Tracking-Status</DialogTitle>
         <DialogContent>
           <Stepper alternativeLabel activeStep={activeStep}>

@@ -9,4 +9,7 @@ export const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(1),
     backgroundColor: "#ededed",
   },
+  paper: {
+    borderRadius: "15px",
+  },
 }));
