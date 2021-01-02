@@ -28,7 +28,8 @@ MyCargonaut ist ein Projekt im Rahmen des KmS-Praktikums im WS20/21.
 
 -   _In den `backend`-Ordner wechseln:_ `cd backend`
 -   _Benötigte Module installieren:_ `npm i`
--   _Development-Server starten: `npm run start:dev`
+-   _Datenbank starten_: `npm run db:start`
+-   _Development-Server starten_: `npm run start:dev`
 
 ## Dokumentation
 
@@ -47,7 +48,6 @@ Für die Dokumentation wird [mkdocs-material](https://squidfunk.github.io/mkdocs
 
 -   _requirements installieren:_ `pip install -r docs/requirements.txt`
 -   _mkdocs-material starten:_ `mkdocs serve`
-
 
 > sollte der Port 8000 belegt sein, so kann das Pragramm auf einem anderen gestartet werden:
 > `mkdocs serve --dev-addr 127.0.0.1:port`
