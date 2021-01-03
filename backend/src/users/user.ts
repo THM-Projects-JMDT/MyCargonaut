@@ -5,4 +5,7 @@ export interface User {
   firstName: string;
   lastName: string;
   cargoCoins: number;
+  birthday: Date;
+  ppPath: string;
+  email: string;
 }
