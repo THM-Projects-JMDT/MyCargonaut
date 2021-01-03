@@ -18,6 +18,15 @@ export class User {
   lastName: string;
 
   @Prop()
+  email: string;
+
+  @Prop()
+  ppPath: string;
+
+  @Prop()
+  birthday: Date;
+
+  @Prop()
   cargoCoins: number;
 }
 
