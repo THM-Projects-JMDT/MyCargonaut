@@ -1,5 +1,5 @@
 import { Card, Grid, IconButton, Typography } from "@material-ui/core";
-import { Delete } from "@material-ui/icons";
+import DeleteIcon from "@material-ui/icons/Delete";
 import React from "react";
 import { GridElement } from "../../../util/GridElement";
 import { VehicleIcon } from "../../../util/VehicleIcon";
@@ -45,7 +45,7 @@ export const Vehicle: React.FC<VehicleProps> = ({
         <GridElement>
           <div style={{ borderLeft: "solid grey 2px" }}>
             <IconButton color="secondary">
-              <Delete fontSize="large" />
+              <DeleteIcon fontSize="large" />
             </IconButton>
           </div>
         </GridElement>

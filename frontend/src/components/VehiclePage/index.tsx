@@ -1,5 +1,5 @@
 import { Box, Grid, IconButton, List, ListItem } from "@material-ui/core";
-import { AddCircle } from "@material-ui/icons";
+import AddCircleIcon from "@material-ui/icons/AddCircle";
 import React from "react";
 import { Vehicle } from "./Vehicle";
 
@@ -28,7 +28,7 @@ export const VehiclePage: React.FC = () => {
         <Grid item xs={2} />
         <Grid item xs={1}>
           <IconButton color="primary">
-            <AddCircle fontSize="large"></AddCircle>
+            <AddCircleIcon fontSize="large" />
           </IconButton>
         </Grid>
         <Grid item xs={9} />
