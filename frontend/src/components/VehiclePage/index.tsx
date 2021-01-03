@@ -1,4 +1,5 @@
-import { Box, Grid, List, ListItem } from "@material-ui/core";
+import { Box, Grid, IconButton, List, ListItem } from "@material-ui/core";
+import { AddCircle } from "@material-ui/icons";
 import React from "react";
 import { Vehicle } from "./Vehicle";
 
@@ -20,10 +21,19 @@ export const VehiclePage: React.FC = () => {
       storageSpace: 300,
     },
   ];
+
   return (
     <Box mt={2}>
-      <Grid container justify="center">
-        <Grid item>
+      <Grid container>
+        <Grid item xs={2} />
+        <Grid item xs={1}>
+          <IconButton color="primary">
+            <AddCircle fontSize="large"></AddCircle>
+          </IconButton>
+        </Grid>
+        <Grid item xs={9} />
+        <Grid item xs={2} />
+        <Grid item xs={8}>
           <List>
             {vehicles.map((v) => (
               <ListItem>
@@ -38,6 +48,7 @@ export const VehiclePage: React.FC = () => {
             ))}
           </List>
         </Grid>
+        <Grid item xs={2} />
       </Grid>
     </Box>
   );
