@@ -1,11 +1,25 @@
 version: '3'
 
 services:
+  app:
+    build: .
+    restart: always
+    networks:
+      - app
+    ports: 
+      - "8080:8080"
+    environment:
+      DATABASE_URI: mongodb://root:MDNlYWE2NmRiNzk4Y2RlZDMyMmQ0ZTA1@db:27017
   db:
     image: mongo:4.4.2
     restart: always
+    networks:
+      - app
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: MDNlYWE2NmRiNzk4Y2RlZDMyMmQ0ZTA1
     ports: 
       - "27017:27017"
+
+networks:
+  app:
