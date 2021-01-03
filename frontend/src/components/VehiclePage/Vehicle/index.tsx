@@ -43,8 +43,8 @@ export const Vehicle: React.FC<VehicleProps> = ({
           <Typography>{storageSpace + "l"}</Typography>
         </GridElement>
         <GridElement>
-          <div style={{ borderLeft: "solid grey 2px" }}>
-            <IconButton color="secondary">
+          <div className={classes.leftBorder}>
+            <IconButton className={classes.deleteButton}>
               <DeleteIcon fontSize="large" />
             </IconButton>
           </div>
