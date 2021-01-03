@@ -3,6 +3,7 @@ import { Dashboard } from "./components/Dashboard";
 import { Login } from "./components/Login";
 import { Registration } from "./components/Registration";
 import { StartPage } from "./components/StartPage";
+import { VehiclePage } from "./components/VehiclePage";
 
 export interface Route {
   path: string;
@@ -33,6 +34,10 @@ export const routes: Routes = {
   createAccount: {
     path: "/account/create",
     component: Registration,
+  },
+  vehicles: {
+    path: "/vehicles",
+    component: VehiclePage,
   },
 };
 
