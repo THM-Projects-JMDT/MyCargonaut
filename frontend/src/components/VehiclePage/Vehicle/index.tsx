@@ -40,7 +40,7 @@ export const Vehicle: React.FC<VehicleProps> = ({
           <Typography>{seats}</Typography>
         </GridElement>
         <GridElement header="Stauraum">
-          <Typography>{storageSpace}</Typography>
+          <Typography>{storageSpace + "l"}</Typography>
         </GridElement>
         <GridElement>
           <div style={{ borderLeft: "solid grey 2px" }}>
