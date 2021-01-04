@@ -13,12 +13,24 @@ import {
   closeInMongodConnection,
   rootMongooseTestModule,
 } from "../testUtil/MongooseTestModule";
+import { UsersService } from "../users/users.service";
 
 describe("AuthService", () => {
+  let userService: UsersService;
   let service: AuthService;
   let controller: AuthController;
   let app: INestApplication;
   let jwtToken: string;
+  let newUser = {
+    username: "admin",
+    password: "admin",
+    firstName: "Jannik",
+    lastName: "Lapp",
+    ppPath: "images/test.png",
+    birthday: new Date("11-09-1998"),
+    email: "jannik.lapp@mni.thm.de",
+    cargoCoins: 3000,
+  };
 
   beforeEach(async () => {
     const moduleRef: TestingModule = await Test.createTestingModule({
@@ -35,7 +47,7 @@ describe("AuthService", () => {
       controllers: [AuthController],
       providers: [AuthService, LocalStrategy, JwtStrategy],
     }).compile();
-
+    userService = moduleRef.get<UsersService>(UsersService);
     service = moduleRef.get<AuthService>(AuthService);
     controller = moduleRef.get<AuthController>(AuthController);
 
@@ -58,6 +70,7 @@ describe("AuthService", () => {
   });
 
   it(`login`, async () => {
+    await userService.addUser(newUser);
     const response = await request(app.getHttpServer())
       .post("/auth/login")
       .send({ username: "admin", password: "admin" })
@@ -70,6 +83,19 @@ describe("AuthService", () => {
       .post("/auth/logout")
       .set("Authorization", `Bearer ${jwtToken}`)
       .expect(201);
+  });
+  it(`check if im login when logged in`, () => {
+    return request(app.getHttpServer())
+      .get("/auth/login")
+      .set("Authorization", `Bearer ${jwtToken}`)
+      .expect(200);
+  });
+
+  it(`check if im login when not logged in`, () => {
+    return request(app.getHttpServer())
+      .get("/auth/login")
+      .expect(401)
+      .expect({ statusCode: 401, message: "Unauthorized" });
   });
 
   afterAll(async () => {

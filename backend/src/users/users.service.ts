@@ -1,30 +1,37 @@
 import { Injectable } from "@nestjs/common";
+import { Model } from "mongoose";
+import { InjectModel } from "@nestjs/mongoose";
 import { User } from "./user";
+import { UserDocument } from "./user.schema";
 
 @Injectable()
 export class UsersService {
-  private readonly users: User[];
+  constructor(
+    @InjectModel("User") private readonly userModel: Model<UserDocument>
+  ) {}
 
-  constructor() {
-    this.users = [
-      {
-        id: 1,
-        username: "admin",
-        password: "admin",
-        firstName: "Jannik",
-        lastName: "Lapp",
-        ppPath: "images/test.png",
-        birthday: new Date("11-09-1998"),
-        email: "jannik.lapp@mni.thm.de",
-        cargoCoins: 3000,
-      },
-    ];
-    /**
-     * Get from Database
-     */
+  async findOne(username: string) {
+    return this.userModel.findOne({ username: username });
   }
 
-  async findOne(username: string): Promise<User | undefined> {
-    return this.users.find((user) => user.username === username);
+  async addUser(user: User) {
+    const newUser = new this.userModel(user);
+    return newUser.save();
+  }
+
+  async updateUser(userId: number, user: User) {
+    return this.userModel.findByIdAndUpdate(userId, user, {
+      new: true,
+    });
+  }
+
+  async updateMoney(userId: number, coins: number) {
+    let user = await this.userModel.findById(userId);
+    user.cargoCoins = user.cargoCoins + coins;
+    return this.updateUser(userId, user);
+  }
+
+  async getAll() {
+    return await this.userModel.find().exec();
   }
 }

@@ -12,7 +12,7 @@ export class User {
   username: string;
 
   @Prop()
-  firstname: string;
+  firstName: string;
 
   @Prop()
   lastName: string;
