@@ -21,7 +21,7 @@ describe("AuthService", () => {
   let controller: AuthController;
   let app: INestApplication;
   let jwtToken: string;
-  let newUser = {
+  const newUser = {
     username: "admin",
     password: "admin",
     firstName: "Jannik",

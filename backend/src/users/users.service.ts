@@ -26,7 +26,7 @@ export class UsersService {
   }
 
   async updateMoney(userId: number, coins: number) {
-    let user = await this.userModel.findById(userId);
+    const user = await this.userModel.findById(userId);
     user.cargoCoins = user.cargoCoins + coins;
     return this.updateUser(userId, user);
   }

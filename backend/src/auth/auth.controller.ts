@@ -52,7 +52,7 @@ export class AuthController {
     @Body("password") password: string | null,
     @Request() req
   ) {
-    let user = {
+    return this.userService.addUser({
       password: password,
       username: username,
       firstName: firstName,
@@ -61,7 +61,6 @@ export class AuthController {
       birthday: birthday,
       ppPath: ppPath,
       email: email,
-    };
-    return this.userService.addUser(user);
+    });
   }
 }

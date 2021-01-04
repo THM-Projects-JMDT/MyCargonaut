@@ -13,7 +13,7 @@ describe("UsersService", () => {
   let service: UsersService;
   let controller: UserController;
   let app: INestApplication;
-  let newUser = {
+  const newUser = {
     username: "admin2",
     password: "admin",
     firstName: "Test",
@@ -49,19 +49,19 @@ describe("UsersService", () => {
   });
 
   it("add user", async () => {
-    let user = await service.addUser(newUser);
+    const user = await service.addUser(newUser);
     expect(user.firstName).toBe("Test");
   });
 
   it("findOne works", async () => {
     await service.addUser(newUser);
-    let user = await service.findOne("admin2");
+    const user = await service.findOne("admin2");
     expect(user.firstName).toBe("Test");
   });
 
   it("get all length is 1", async () => {
     await service.addUser(newUser);
-    let users = await service.getAll();
+    const users = await service.getAll();
     expect(users.length).toBe(1);
   });
 
