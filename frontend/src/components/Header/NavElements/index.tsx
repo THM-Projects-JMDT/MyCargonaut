@@ -79,7 +79,11 @@ export const NavElements: React.FC = () => {
           <Button className={classes.button} color="primary" onClick={() => {}}>
             Angebote
           </Button>
-          <Button className={classes.button} color="primary" onClick={() => {}}>
+          <Button
+            className={classes.button}
+            color="primary"
+            onClick={() => handleClick(routes.vehicles.path)}
+          >
             Fahrzeuge
           </Button>
           <IconButton onClick={handleAvatarClick}>
