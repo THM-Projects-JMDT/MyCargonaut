@@ -1,12 +1,13 @@
 import { User } from "../users/user";
 
+export type Service = "transport" | "rideShare";
+
 export interface Offer {
-  id: number;
   from: string;
   to: string;
   createDate: Date;
   orderDate: Date;
-  service: "transport" | "rideShare";
+  service: Service;
   price: number;
   seats: number | undefined;
   storageSpace: number | undefined;
