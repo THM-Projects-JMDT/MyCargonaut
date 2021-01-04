@@ -3,7 +3,6 @@ import { PassportModule } from "@nestjs/passport";
 import { Test, TestingModule } from "@nestjs/testing";
 import { UsersModule } from "../users/users.module";
 import { AuthService } from "./auth.service";
-import { jwtConstants } from "./constants";
 import { JwtStrategy } from "./strategies/jwt.strategy";
 import { LocalStrategy } from "./strategies/local.strategy";
 import { AuthController } from "./auth.controller";
@@ -13,6 +12,7 @@ import {
   closeInMongodConnection,
   rootMongooseTestModule,
 } from "../testUtil/MongooseTestModule";
+import { ConfigModule, ConfigService } from "@nestjs/config";
 import { UsersService } from "../users/users.service";
 
 describe("AuthService", () => {
@@ -38,10 +38,16 @@ describe("AuthService", () => {
         rootMongooseTestModule(),
         UsersModule,
         PassportModule,
-        JwtModule.register({
-          secret: jwtConstants.secret,
-          signOptions: { expiresIn: "60s" },
+        ConfigModule.forRoot(),
+        JwtModule.registerAsync({
+          imports: [ConfigModule],
+          useFactory: async (config: ConfigService) => ({
+            secret: config.get("JWT_SECRET"),
+            signOptions: { expiresIn: "600s" },
+          }),
+          inject: [ConfigService],
         }),
+        ConfigModule,
       ],
 
       controllers: [AuthController],
