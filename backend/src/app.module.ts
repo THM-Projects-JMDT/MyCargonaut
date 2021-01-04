@@ -8,6 +8,8 @@ import { StatusModule } from "./status/status.module";
 import { UsersModule } from "./users/users.module";
 import { MongooseModule } from "@nestjs/mongoose";
 import { ConfigModule, ConfigService } from "@nestjs/config";
+import { ServeStaticModule } from "@nestjs/serve-static";
+import { join } from "path";
 
 @Module({
   imports: [
@@ -18,6 +20,10 @@ import { ConfigModule, ConfigService } from "@nestjs/config";
     RatingModule,
     StatusModule,
     UsersModule,
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, "public"),
+      exclude: ["/api/v1/*"],
+    }),
     ConfigModule.forRoot(),
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
