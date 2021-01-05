@@ -3,7 +3,7 @@ import { Dashboard } from "./components/Dashboard";
 import { Login } from "./components/Login";
 import { Registration } from "./components/Registration";
 import { StartPage } from "./components/StartPage";
-import { Profile } from "./components/Profile";
+import { ProfilePage } from "./components/ProfilePage";
 
 export interface Route {
   path: string;
@@ -37,7 +37,7 @@ export const routes: Routes = {
   },
   profile: {
     path: "/profile",
-    component: Profile,
+    component: ProfilePage,
   },
 };
 
