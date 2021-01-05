@@ -1,10 +1,11 @@
 import { Box, Button, IconButton, Menu, MenuItem } from "@material-ui/core";
 import { AccountCircle } from "@material-ui/icons";
-import React from "react";
+import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import { routes } from "../../../routes";
 import { useStyles } from "../Header.style";
 import { CargoCoins } from "../../../util/CargoCoins";
+import { CargoCoinsDialog } from "../../../util/CargoCoinsDialog";
 
 // TODO: retrieve logged in user from store
 export const NavElements: React.FC = () => {
@@ -13,6 +14,7 @@ export const NavElements: React.FC = () => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const cargoCoinsBalance = 3000; // TODO: retrieve actual balance
   const history = useHistory();
+  const [open, setOpen] = useState(false);
 
   const handleAvatarClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -24,7 +26,7 @@ export const NavElements: React.FC = () => {
 
   const handleProfileClick = () => {
     handleAvatarMenuClose();
-    // TODO: navigate to profile
+    history.push(routes.profile.path);
   };
 
   const handleLogoutClick = () => {
@@ -37,7 +39,7 @@ export const NavElements: React.FC = () => {
   };
 
   const handleMoneyClick = () => {
-    // TODO: show dialog for adding cargo coins?
+    setOpen(true);
   };
 
   return (
@@ -73,10 +75,18 @@ export const NavElements: React.FC = () => {
               {cargoCoinsBalance}
             </Box>
           </Button>
-          <Button className={classes.button} color="primary" onClick={() => {}}>
+          <Button
+            className={classes.button}
+            color="primary"
+            onClick={() => handleClick(routes.requests.path)}
+          >
             Anfragen
           </Button>
-          <Button className={classes.button} color="primary" onClick={() => {}}>
+          <Button
+            className={classes.button}
+            color="primary"
+            onClick={() => handleClick(routes.offers.path)}
+          >
             Angebote
           </Button>
           <Button
@@ -105,6 +115,7 @@ export const NavElements: React.FC = () => {
           </Menu>
         </div>
       )}
+      <CargoCoinsDialog open={open} setOpen={setOpen} />
     </div>
   );
 };
