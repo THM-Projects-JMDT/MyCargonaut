@@ -18,10 +18,10 @@ export class UserController {
   async editUser(
     @Body("firstName") firstName: string | null,
     @Body("lastName") lastName: string | null,
-    @Body("birthday") birthday: Date | null,
-    @Body("picture") picture: string | null,
     @Body("email") email: string | null,
     @Body("password") password: string | null,
+    @Body("ppPath") ppPath: string | null,
+    @Body("birthday") birthday: string | null,
     @Request() req
   ): Promise<{ message: string }> {
     return null;

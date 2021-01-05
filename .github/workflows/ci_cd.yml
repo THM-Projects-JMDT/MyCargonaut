@@ -9,12 +9,13 @@ jobs:
     
     steps:
     - uses: actions/checkout@v2
-    - name: test
-      uses: actions/setup-node@v1
+    - uses: actions/setup-node@v1
       with:
         node-version: '14'
-    - run: (cd frontend && npm ci)
-    - run: (cd frontend && npm run test:cov)
+    - name: Install dependencies
+      run: (cd frontend && npm ci)
+    - name: Run tests
+      run: (cd frontend && npm run test:cov)
     - name: Upload Frontend coverage report
       uses: actions/upload-artifact@v2
       with:
@@ -28,12 +29,13 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: test
-      uses: actions/setup-node@v1
+    - uses: actions/setup-node@v1
       with:
         node-version: '14'
-    - run: (cd backend && npm ci)
-    - run: (cd backend && npm run test:cov)
+    - name: Install dependencies
+      run: (cd backend && npm ci)
+    - name: Run tests
+      run: (cd backend && npm run test:cov)
     - name: Upload Backend coverage report
       uses: actions/upload-artifact@v2
       with:

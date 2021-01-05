@@ -4,6 +4,7 @@ import { Login } from "./components/Login";
 import { Registration } from "./components/Registration";
 import { StartPage } from "./components/StartPage";
 import { ProfilePage } from "./components/ProfilePage";
+import { VehiclePage } from "./components/VehiclePage";
 
 export interface Route {
   path: string;
@@ -38,6 +39,10 @@ export const routes: Routes = {
   profile: {
     path: "/profile",
     component: ProfilePage,
+  },
+  vehicles: {
+    path: "/vehicles",
+    component: VehiclePage,
   },
 };
 

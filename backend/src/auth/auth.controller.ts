@@ -22,8 +22,8 @@ export class AuthController {
 
   @UseGuards(LocalAuthGuard)
   @Post("login")
-  async login(@Request() req): Promise<{ message: string }> {
-    return { message: this.authService.login(req.user).toString() };
+  async login(@Request() req) {
+    return this.authService.login(req.user);
   }
 
   @UseGuards(JwtAuthGuard)
@@ -36,8 +36,9 @@ export class AuthController {
   async addUser(
     @Body("firstName") firstName: string | null,
     @Body("lastName") lastName: string | null,
+    @Body("userName") userName: string | null,
     @Body("birthday") birthday: Date | null,
-    @Body("picture") picture: string | null,
+    @Body("ppPath") ppPath: string | null,
     @Body("email") email: string | null,
     @Body("password") password: string | null,
     @Request() req

@@ -13,6 +13,9 @@ export class UsersService {
         password: "admin",
         firstName: "Jannik",
         lastName: "Lapp",
+        ppPath: "images/test.png",
+        birthday: new Date("11-09-1998"),
+        email: "jannik.lapp@mni.thm.de",
         cargoCoins: 3000,
       },
     ];
