@@ -45,7 +45,7 @@ export class AuthController {
   async addUser(
     @Body("firstName") firstName: string | null,
     @Body("lastName") lastName: string | null,
-    @Body("userName") username: string | null,
+    @Body("username") username: string | null,
     @Body("birthday") birthday: Date | null,
     @Body("ppPath") ppPath: string | null,
     @Body("email") email: string | null,
