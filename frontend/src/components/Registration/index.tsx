@@ -4,7 +4,7 @@ import { routes } from "../../routes";
 import { CenterCard } from "../../util/CenterCard";
 import { CustomCard } from "../../util/CustomCard";
 import { InputForm } from "../../util/InputForm";
-import { inputFields } from "../../assets/inputFields";
+import { inputFieldsReg } from "../../assets/inputFields";
 
 export const Registration = () => {
   const history = useHistory();
@@ -19,7 +19,7 @@ export const Registration = () => {
       <CustomCard
         buttonText="REGISTRIEREN"
         heading="MyCargonaut - Registrieren"
-        content={<InputForm inputFields={inputFields} />}
+        content={<InputForm inputFields={inputFieldsReg} />}
         event={handleRegistration}
       />
     </CenterCard>
