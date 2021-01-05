@@ -1,6 +1,7 @@
 import { RouteProps } from "react-router-dom";
 import { Dashboard } from "./components/Dashboard";
 import { Login } from "./components/Login";
+import { OfferPage } from "./components/OfferPage";
 import { Registration } from "./components/Registration";
 import { StartPage } from "./components/StartPage";
 import { VehiclePage } from "./components/VehiclePage";
@@ -38,6 +39,16 @@ export const routes: Routes = {
   vehicles: {
     path: "/vehicles",
     component: VehiclePage,
+  },
+  offers: {
+    path: "/offers",
+    props: { show: "offers" },
+    component: OfferPage,
+  },
+  requests: {
+    path: "/requests",
+    props: { show: "requests" },
+    component: OfferPage,
   },
 };
 
