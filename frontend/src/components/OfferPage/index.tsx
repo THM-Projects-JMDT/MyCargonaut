@@ -1,19 +1,21 @@
 import {
   AppBar,
   Box,
+  Button,
   Grid,
-  IconButton,
   List,
   ListItem,
+  MenuItem,
   Tab,
   Tabs,
+  TextField,
 } from "@material-ui/core";
-import AddCircleIcon from "@material-ui/icons/AddCircle";
 import React, { useCallback, useEffect } from "react";
 import { OfferDetails } from "../../model/OfferDetails";
 import { TrackingDetails } from "../../model/TrackingDetails";
 import { UserDetails } from "../../model/UserDetails";
 import { Offer } from "../Offer";
+import { useStyles } from "./OfferPage.style";
 
 export interface OfferPageProps {
   show: "offers" | "requests";
@@ -60,7 +62,7 @@ const pendingOffers = [
   },
   {
     offer: offerDetails,
-    provider: userA,
+    provider: userB,
   },
 ];
 
@@ -68,11 +70,11 @@ const pendingOffers = [
 const pendingRequests = [
   {
     offer: offerDetails,
-    customer: userA,
+    customer: userB,
   },
   {
     offer: offerDetails,
-    customer: userA,
+    customer: userB,
   },
   {
     offer: offerDetails,
@@ -107,6 +109,15 @@ const myRequests = [
 export const OfferPage: React.FC<OfferPageProps> = ({ show }) => {
   const [activeTab, setActiveTab] = React.useState(0);
   const [displayList, setDisplayList] = React.useState<any[] | undefined>([]);
+  const [service, setService] = React.useState<string>("both");
+  const [filter, setFilter] = React.useState({
+    from: "",
+    to: "",
+    service: "both",
+  });
+  const [from, setFrom] = React.useState("");
+  const [to, setTo] = React.useState("");
+  const classes = useStyles();
 
   const displayName = show === "offers" ? "Angebote" : "Anfragen";
   const loggedInUserId = 1; // TODO: retrieve from store
@@ -130,6 +141,44 @@ export const OfferPage: React.FC<OfferPageProps> = ({ show }) => {
     [show]
   );
 
+  const handleServiceFilterChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setService(event.target.value);
+  };
+
+  const handleFromFilterChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setFrom(event.target.value);
+  };
+
+  const handleToFilterChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setTo(event.target.value);
+  };
+
+  const handleApplyFilter = () => {
+    setFilter({
+      from: from.trim().toLowerCase(),
+      to: to.trim().toLowerCase(),
+      service: service.trim(),
+    });
+  };
+
+  const handleReset = () => {
+    setFrom("");
+    setTo("");
+    setService("both");
+  };
+
+  const predicate = (o: any) => {
+    return (
+      (!filter.from || o.offer.from.toLowerCase() === filter.from) &&
+      (!filter.to || o.offer.to.toLowerCase() === filter.to) &&
+      (filter.service === "both" || o.offer.service === filter.service)
+    );
+  };
+
   useEffect(() => {
     setDisplayList(getOffers(0));
   }, [getOffers]);
@@ -138,12 +187,52 @@ export const OfferPage: React.FC<OfferPageProps> = ({ show }) => {
     <Box mt={2}>
       <Grid container>
         <Grid item xs={2} />
-        <Grid item xs={1}>
-          <IconButton color="primary">
-            <AddCircleIcon fontSize="large" />
-          </IconButton>
+
+        <Grid item xs={6} className={classes.filterTextFieldGroup}>
+          <TextField
+            label="Von:"
+            className={classes.filterTextField}
+            value={from}
+            onChange={handleFromFilterChange}
+          />
+          <TextField
+            label="Nach:"
+            className={classes.filterTextField}
+            value={to}
+            onChange={handleToFilterChange}
+          />
+          <TextField
+            select
+            label="Service:"
+            value={service}
+            className={classes.filterTextField}
+            onChange={handleServiceFilterChange}
+          >
+            <MenuItem value={"rideShare"}>Mitfahrgelegenheit</MenuItem>
+            <MenuItem value={"transport"}>Transport</MenuItem>
+            <MenuItem value={"both"}>Transport / Mitfahrgelegenheit</MenuItem>
+          </TextField>
         </Grid>
-        <Grid item xs={9} />
+        <Grid item xs={2}>
+          <Button
+            color="primary"
+            variant="contained"
+            className={classes.filterButton}
+            onClick={handleApplyFilter}
+          >
+            Filtern
+          </Button>
+          <Button
+            color="primary"
+            variant="outlined"
+            className={classes.filterButton}
+            onClick={handleReset}
+          >
+            Zurücksetzen
+          </Button>
+        </Grid>
+
+        <Grid item xs={2} />
         <Grid item xs={2} />
         <Grid item xs={8}>
           <AppBar position="static" color="default">
@@ -159,7 +248,7 @@ export const OfferPage: React.FC<OfferPageProps> = ({ show }) => {
             </Tabs>
           </AppBar>
           <List>
-            {displayList?.map((o: any, idx: number) => (
+            {displayList?.filter(predicate).map((o: any, idx: number) => (
               <ListItem key={idx}>
                 <Offer
                   offer={o.offer}
