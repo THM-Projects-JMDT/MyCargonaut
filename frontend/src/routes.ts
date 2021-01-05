@@ -4,6 +4,7 @@ import { Login } from "./components/Login";
 import { OfferPage } from "./components/OfferPage";
 import { Registration } from "./components/Registration";
 import { StartPage } from "./components/StartPage";
+import { ProfilePage } from "./components/ProfilePage";
 import { VehiclePage } from "./components/VehiclePage";
 
 export interface Route {
@@ -35,6 +36,10 @@ export const routes: Routes = {
   createAccount: {
     path: "/account/create",
     component: Registration,
+  },
+  profile: {
+    path: "/profile",
+    component: ProfilePage,
   },
   vehicles: {
     path: "/vehicles",

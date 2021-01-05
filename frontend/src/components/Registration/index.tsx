@@ -4,6 +4,7 @@ import { routes } from "../../routes";
 import { CenterCard } from "../../util/CenterCard";
 import { CustomCard } from "../../util/CustomCard";
 import { InputForm } from "../../util/InputForm";
+import { inputFieldsReg } from "../../assets/inputFields";
 
 export const Registration = () => {
   const history = useHistory();
@@ -13,54 +14,12 @@ export const Registration = () => {
     history.push(routes.login.path);
   };
 
-  const inputFields = [
-    {
-      label: "Vorname",
-    },
-    {
-      label: "Nachname",
-    },
-    {
-      label: "Geburtstag",
-    },
-    {
-      label: "Username",
-      inputProps: {
-        autoComplete: "off",
-        name: "username",
-      },
-    },
-    {
-      label: "E-Mail",
-      inputProps: {
-        autoComplete: "off",
-        type: "email",
-        name: "email",
-      },
-    },
-    {
-      label: "Passwort",
-      inputProps: {
-        autoComplete: "new-password",
-        type: "password",
-        name: "password",
-      },
-    },
-    {
-      label: "Passwort wiederholen",
-      inputProps: {
-        type: "password",
-        name: "password",
-      },
-    },
-  ];
-
   return (
     <CenterCard>
       <CustomCard
         buttonText="REGISTRIEREN"
         heading="MyCargonaut - Registrieren"
-        content={<InputForm inputFields={inputFields} />}
+        content={<InputForm inputFields={inputFieldsReg} />}
         event={handleRegistration}
       />
     </CenterCard>
