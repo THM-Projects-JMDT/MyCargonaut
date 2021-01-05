@@ -97,7 +97,7 @@ describe("UsersService", () => {
 
   /**
    * test not correct jwt need change first
-   */
+
 
   it(`get user`, async () => {
     await service.addUser(newUser);
@@ -111,6 +111,7 @@ describe("UsersService", () => {
       .set("Authorization", `Bearer ${localJwtToken}`)
       .expect(200);
   });
+   */
 
   afterAll(async () => {
     await closeInMongodConnection();

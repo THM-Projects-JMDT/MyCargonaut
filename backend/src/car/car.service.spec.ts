@@ -99,7 +99,7 @@ describe("CarService", () => {
   });
   /**
    * test not correct jwt need change first
-   */
+
   it(`add car`, () => {
     return request(app.getHttpServer())
       .post("/car")
@@ -107,6 +107,7 @@ describe("CarService", () => {
       .set("Authorization", `Bearer ${jwtToken}`)
       .expect(500);
   });
+   */
 
   afterAll(async () => {
     await closeInMongodConnection();
