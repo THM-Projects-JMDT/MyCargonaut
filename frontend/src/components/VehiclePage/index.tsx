@@ -35,8 +35,8 @@ export const VehiclePage: React.FC = () => {
         <Grid item xs={2} />
         <Grid item xs={8}>
           <List>
-            {vehicles.map((v) => (
-              <ListItem>
+            {vehicles.map((v, idx) => (
+              <ListItem key={idx}>
                 <Vehicle
                   manufacturer={v.manufacturer}
                   model={v.model}

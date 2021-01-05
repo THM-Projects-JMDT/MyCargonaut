@@ -75,10 +75,18 @@ export const NavElements: React.FC = () => {
               {cargoCoinsBalance}
             </Box>
           </Button>
-          <Button className={classes.button} color="primary" onClick={() => {}}>
+          <Button
+            className={classes.button}
+            color="primary"
+            onClick={() => handleClick(routes.requests.path)}
+          >
             Anfragen
           </Button>
-          <Button className={classes.button} color="primary" onClick={() => {}}>
+          <Button
+            className={classes.button}
+            color="primary"
+            onClick={() => handleClick(routes.offers.path)}
+          >
             Angebote
           </Button>
           <Button
