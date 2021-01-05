@@ -11,6 +11,7 @@ import {
 } from "@nestjs/common";
 import { JwtAuthGuard } from "../auth/guards/jwt-auth.guard";
 import { CarService } from "./car.service";
+import { log } from "util";
 
 @Controller("car")
 @UseGuards(JwtAuthGuard)
@@ -48,7 +49,6 @@ export class CarController {
   async addCar(
     @Body("manufacturer") manufacturer: string | null,
     @Body("model") model: string | null,
-    @Body("vintage") vintage: number | null,
     @Body("manufactureYear") manufactureYear: number | null,
     @Body("seats") seats: number | null,
     @Body("storageSpace") storageSpace: number | null,
