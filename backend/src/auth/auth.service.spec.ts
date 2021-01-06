@@ -75,13 +75,13 @@ describe("AuthService", () => {
       .expect({ statusCode: 401, message: "Unauthorized" });
   });
 
-  it(`login`, async () => {
-    await userService.addUser(newUser);
-    const response = await request(app.getHttpServer())
+  it(`check if registry and login works`, async () => {
+    await request(app.getHttpServer()).post("/auth/register").send(newUser);
+    const res = await request(app.getHttpServer())
       .post("/auth/login")
       .send({ username: "admin", password: "admin" })
       .expect(201);
-    jwtToken = response.body.access_token;
+    jwtToken = res.body.access_token;
   });
 
   it(`logout with login before`, () => {
@@ -102,19 +102,6 @@ describe("AuthService", () => {
       .get("/auth/login")
       .expect(401)
       .expect({ statusCode: 401, message: "Unauthorized" });
-  });
-  it(`check if registry works`, () => {
-    return request(app.getHttpServer())
-      .post("/auth/registry")
-      .send(newUser)
-      .expect(201);
-  });
-  it(`check if registry and login works`, async () => {
-    await request(app.getHttpServer()).post("/auth/registry").send(newUser);
-    return request(app.getHttpServer())
-      .post("/auth/login")
-      .send({ username: "admin", password: "admin" })
-      .expect(201);
   });
 
   afterAll(async () => {
