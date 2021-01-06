@@ -66,6 +66,6 @@ export class CarController {
 
   @Get()
   async getAllCars(@Request() req) {
-    return this.carService.findByUser(req.user._id);
+    return this.carService.findByUser(req.user.id);
   }
 }

@@ -121,12 +121,12 @@ export class OfferController {
   ) {
     if (forOffer == true) {
       if (forPrivate == true) {
-        return this.offerService.findAllOffersByUser(req.user._id);
+        return this.offerService.findAllOffersByUser(req.user.id);
       }
       return this.offerService.getAllOffers();
     }
     if (forPrivate == true) {
-      return this.offerService.findAllRequestsByUser(req.user._id);
+      return this.offerService.findAllRequestsByUser(req.user.id);
     }
     return this.offerService.getAllRequests();
   }
