@@ -9,43 +9,55 @@ import {
   Request,
   UseGuards,
 } from "@nestjs/common";
-import { Message } from "./message";
 import { JwtAuthGuard } from "../auth/guards/jwt-auth.guard";
+import { ChatService } from "./chat.service";
+import { Offer } from "../offer/offer";
+import { OfferService } from "../offer/offer.service";
 
 @Controller("chat")
 @UseGuards(JwtAuthGuard)
 export class ChatController {
+  constructor(
+    private readonly chatService: ChatService,
+    private readonly offerService: OfferService
+  ) {}
+
   @Get(":offerId")
   async getMessagesFromOfferId(
     @Param("offerId") offerId: number,
     @Request() req
-  ): Promise<Message[]> {
-    return null;
+  ) {
+    return this.chatService.findByOffer(offerId);
   }
 
-  @Delete(":chatId")
-  async deleteMessage(
-    @Param("chatId") chatId: number,
-    @Request() req
-  ): Promise<{ message: string }> {
-    return null;
+  @Delete(":messageId")
+  async deleteMessage(@Param("messageId") messageId: number, @Request() req) {
+    return this.chatService.deleteMessage(messageId);
   }
 
-  @Put(":chatId")
+  @Put(":messageId")
   async editMessage(
-    @Param("chatId") chatId: number,
+    @Param("messageId") messageId: number,
     @Body("content") content: string | null,
     @Request() req
-  ): Promise<{ message: string }> {
-    return null;
+  ) {
+    const oldMessage = await this.chatService.findById(messageId);
+    return this.chatService.updateMessage(messageId, {
+      offer: oldMessage.offer,
+      content: content,
+    });
   }
 
-  @Post(":chatId")
+  @Post(":offerId")
   async writeMessage(
-    @Param("chatId") chatId: number,
+    @Param("offerId") offerId: number,
     @Body("content") content: string | null,
     @Request() req
-  ): Promise<{ message: string }> {
-    return null;
+  ) {
+    const offer: Offer = await this.offerService.getOfferById(offerId);
+    return this.chatService.addMessage({
+      offer: offer,
+      content: content,
+    });
   }
 }

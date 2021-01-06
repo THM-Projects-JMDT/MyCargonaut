@@ -13,6 +13,8 @@ export const rootMongooseTestModule = (options: MongooseModuleOptions = {}) =>
       const mongoUri = await mongod.getUri();
       return {
         uri: mongoUri,
+        useCreateIndex: true,
+        useFindAndModify: false,
         ...options,
       };
     },

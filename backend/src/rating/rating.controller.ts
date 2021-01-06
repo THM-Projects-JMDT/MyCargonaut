@@ -7,27 +7,41 @@ import {
   Request,
   UseGuards,
 } from "@nestjs/common";
-import { Rating } from "./rating";
+import { Stars } from "./rating";
 import { JwtAuthGuard } from "../auth/guards/jwt-auth.guard";
+import { OfferService } from "../offer/offer.service";
+import { RatingService } from "./rating.service";
+import { Offer } from "../offer/offer";
 
 @Controller("rating")
 @UseGuards(JwtAuthGuard)
 export class RatingController {
+  constructor(
+    private readonly ratingService: RatingService,
+    private readonly offerService: OfferService
+  ) {}
+
   @Get(":offerId")
   async getRatingFromOfferId(
     @Param("offerId") offerId: number,
     @Request() req
-  ): Promise<Rating> {
-    return null;
+  ) {
+    const offer: Offer = await this.offerService.getOfferById(offerId);
+    return this.ratingService.findByOffer(offer);
   }
 
   @Post(":offerId")
   async writeRating(
     @Param("offerId") offerId: number,
     @Body("text") text: string | null,
-    @Body("rating") rating: number | null,
+    @Body("rating") rating: Stars | null,
     @Request() req
-  ): Promise<{ message: string }> {
-    return null;
+  ) {
+    const offer: Offer = await this.offerService.getOfferById(offerId);
+    return this.ratingService.addRating({
+      offer: offer,
+      rating: rating,
+      text: text,
+    });
   }
 }

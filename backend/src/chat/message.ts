@@ -1,5 +1,6 @@
+import { Offer } from "../offer/offer";
+
 export interface Message {
-  id: number;
-  offerId: number;
+  offer: Offer;
   content: string;
 }
