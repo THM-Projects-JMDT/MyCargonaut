@@ -3,6 +3,7 @@ import { Model } from "mongoose";
 import { InjectModel } from "@nestjs/mongoose";
 import { User } from "./user";
 import { UserDocument } from "./user.schema";
+import { hash, compare } from "bcrypt";
 
 @Injectable()
 export class UsersService {
@@ -11,27 +12,48 @@ export class UsersService {
   ) {}
 
   async findOne(username: string) {
-    return this.userModel.findOne({ username: username });
+    return this.userModel.findOne({ username: username }, { __v: 0 });
+  }
+
+  async findOneById(id: string) {
+    return this.userModel.findById(id);
   }
 
   async addUser(user: User) {
+    user.password = await this.hashPassword(user.password);
     const newUser = new this.userModel(user);
     return newUser.save();
   }
 
-  async updateUser(userId: number, user: User) {
+  async updateUser(userId: string, user: User) {
     return this.userModel.findByIdAndUpdate(userId, user, {
       new: true,
     });
   }
 
-  async updateMoney(userId: number, coins: number) {
-    const user = await this.userModel.findById(userId);
-    user.cargoCoins = user.cargoCoins + coins;
-    return this.updateUser(userId, user);
+  async updateMoney(userId: string, coins: number) {
+    return await this.userModel.findByIdAndUpdate(userId, {
+      $inc: { cargoCoins: coins },
+    });
   }
 
   async getAll() {
     return await this.userModel.find().exec();
+  }
+
+  async hashPassword(password: string): Promise<string> {
+    return hash(password, 10);
+  }
+
+  async comparePassword(
+    username: string,
+    plantextPassword: string
+  ): Promise<boolean> {
+    const user = await this.userModel.findOne(
+      { username: username },
+      { password: 1 }
+    );
+
+    return user && compare(plantextPassword, user.password);
   }
 }

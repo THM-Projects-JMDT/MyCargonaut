@@ -21,11 +21,11 @@ export class UserController {
     @Body("firstName") firstName: string | null,
     @Body("lastName") lastName: string | null,
     @Body("email") email: string | null,
-    @Body("password") password: string | null,
     @Body("ppPath") ppPath: string | null,
     @Body("birthday") birthday: Date | null,
     @Request() req
   ) {
+    /* TODO
     return this.userService.updateUser(req.user.id, {
       password: password,
       username: req.user.username,
@@ -35,16 +35,17 @@ export class UserController {
       birthday: birthday,
       ppPath: ppPath,
       email: email,
-    });
+    });*/
   }
 
   @Post("addMoney/:moneyAmount")
-  async addMoney(@Param("moneyAmount") cargoCoins: number, @Request() req) {
-    return this.userService.updateMoney(req.user._id, cargoCoins);
+  async addMoney(@Param("moneyAmount") cargoCoins: string, @Request() req) {
+    return this.userService.updateMoney(req.user.id, Number(cargoCoins));
   }
 
   @Get()
   async getUser(@Request() req) {
-    return req.user;
+    console.log(req.user);
+    return this.userService.findOneById(req.user.id);
   }
 }

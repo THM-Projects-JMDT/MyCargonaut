@@ -2,6 +2,8 @@ import {
   Body,
   Controller,
   Get,
+  HttpException,
+  HttpStatus,
   Post,
   Request,
   UseGuards,
@@ -41,7 +43,7 @@ export class AuthController {
     };
   }
 
-  @Post("registry")
+  @Post("register")
   async addUser(
     @Body("firstName") firstName: string | null,
     @Body("lastName") lastName: string | null,
@@ -49,18 +51,29 @@ export class AuthController {
     @Body("birthday") birthday: Date | null,
     @Body("ppPath") ppPath: string | null,
     @Body("email") email: string | null,
-    @Body("password") password: string | null,
-    @Request() req
+    @Body("password") password: string | null
   ) {
-    return this.userService.addUser({
-      password: password,
-      username: username,
-      firstName: firstName,
-      lastName: lastName,
-      cargoCoins: 0,
-      birthday: birthday,
-      ppPath: ppPath,
-      email: email,
-    });
+    try {
+      const user = {
+        password: password,
+        username: username,
+        firstName: firstName,
+        lastName: lastName,
+        cargoCoins: 0,
+        birthday: birthday,
+        ppPath: ppPath,
+        email: email,
+      };
+      await this.userService.addUser(user);
+
+      delete user.password; // TODO improve?
+      return user;
+    } catch {
+      // TODO may improve error msg
+      throw new HttpException(
+        "Something went wrong",
+        HttpStatus.INTERNAL_SERVER_ERROR
+      );
+    }
   }
 }
