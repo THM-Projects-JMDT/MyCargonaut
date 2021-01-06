@@ -1,8 +1,10 @@
 import { RouteProps } from "react-router-dom";
 import { Dashboard } from "./components/Dashboard";
 import { Login } from "./components/Login";
+import { OfferPage } from "./components/OfferPage";
 import { Registration } from "./components/Registration";
 import { StartPage } from "./components/StartPage";
+import { ProfilePage } from "./components/ProfilePage";
 import { VehiclePage } from "./components/VehiclePage";
 
 export interface Route {
@@ -35,9 +37,23 @@ export const routes: Routes = {
     path: "/account/create",
     component: Registration,
   },
+  profile: {
+    path: "/profile",
+    component: ProfilePage,
+  },
   vehicles: {
     path: "/vehicles",
     component: VehiclePage,
+  },
+  offers: {
+    path: "/offers",
+    props: { show: "offers" },
+    component: OfferPage,
+  },
+  requests: {
+    path: "/requests",
+    props: { show: "requests" },
+    component: OfferPage,
   },
 };
 
