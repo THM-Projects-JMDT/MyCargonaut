@@ -11,7 +11,6 @@ import {
 } from "@nestjs/common";
 import { JwtAuthGuard } from "../auth/guards/jwt-auth.guard";
 import { CarService } from "./car.service";
-import { log } from "util";
 
 @Controller("car")
 @UseGuards(JwtAuthGuard)
