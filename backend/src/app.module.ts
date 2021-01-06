@@ -29,6 +29,8 @@ import { join } from "path";
       imports: [ConfigModule],
       useFactory: async (config: ConfigService) => ({
         uri: config.get("DATABASE_URI"),
+        useCreateIndex: true,
+        useFindAndModify: false,
       }),
       inject: [ConfigService],
     }),
