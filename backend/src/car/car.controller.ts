@@ -11,11 +11,15 @@ import {
 } from "@nestjs/common";
 import { JwtAuthGuard } from "../auth/guards/jwt-auth.guard";
 import { CarService } from "./car.service";
+import { UsersService } from "../users/users.service";
 
 @Controller("car")
 @UseGuards(JwtAuthGuard)
 export class CarController {
-  constructor(private readonly carService: CarService) {}
+  constructor(
+    private readonly carService: CarService,
+    private readonly userService: UsersService
+  ) {}
 
   @Delete(":carId")
   async deleteCar(@Param("carId") carId: number, @Request() req) {
@@ -33,8 +37,9 @@ export class CarController {
     @Body("storageSpace") storageSpace: number | null,
     @Request() req
   ) {
+    const user = await this.userService.findOneById(req.user.id);
     const car = {
-      owner: req.user,
+      owner: user,
       manufacturer: manufacturer,
       model: model,
       manufactureYear: manufactureYear,
@@ -53,8 +58,9 @@ export class CarController {
     @Body("storageSpace") storageSpace: number | null,
     @Request() req
   ) {
+    const user = await this.userService.findOneById(req.user.id);
     return this.carService.addCar({
-      owner: req.user,
+      owner: user,
       manufacturer: manufacturer,
       model: model,
       manufactureYear: manufactureYear,
