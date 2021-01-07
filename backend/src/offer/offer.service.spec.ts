@@ -3,6 +3,7 @@ import { OfferService } from "./offer.service";
 import { OfferController } from "./offer.controller";
 import {
   closeInMongodConnection,
+  loginAndGetJWTToken,
   rootMongooseTestModule,
 } from "../testUtil/MongooseTestModule";
 import { MongooseModule } from "@nestjs/mongoose";
@@ -18,6 +19,8 @@ import { AuthController } from "../auth/auth.controller";
 import { AuthService } from "../auth/auth.service";
 import { LocalStrategy } from "../auth/strategies/local.strategy";
 import { JwtStrategy } from "../auth/strategies/jwt.strategy";
+import { randomStringGenerator } from "@nestjs/common/utils/random-string-generator.util";
+import { addCar } from "../car/car.service.spec";
 
 describe("OfferService", () => {
   let userService: UsersService;
@@ -61,8 +64,163 @@ describe("OfferService", () => {
   it("should be defined", () => {
     expect(controller).toBeDefined();
   });
+
+  it(`add offer`, async () => {
+    const [localJwtToken, username] = await loginAndGetJWTToken(
+      userService,
+      app
+    );
+    const response = await addOffer(app, localJwtToken, true);
+    expect(response.body.description).toBe("Test");
+  });
+  it(`get my offers`, async () => {
+    const [localJwtToken, username] = await loginAndGetJWTToken(
+      userService,
+      app
+    );
+    let response = await request(app.getHttpServer())
+      .get("/offer")
+      .send({ forOffer: true, forPrivate: true })
+      .set("Authorization", `Bearer ${localJwtToken}`)
+      .expect(200);
+    expect(response.body.length).toBe(0);
+    await addOffer(app, localJwtToken, true);
+    await addOffer(app, localJwtToken, true);
+    await addOffer(app, localJwtToken, false);
+    response = await request(app.getHttpServer())
+      .get("/offer")
+      .send({ forOffer: true, forPrivate: true })
+      .set("Authorization", `Bearer ${localJwtToken}`)
+      .expect(200);
+    expect(response.body.length).toBe(2);
+    expect(response.body[0].from).toBe("Gießen");
+  });
+  it(`get all offers`, async () => {
+    const [localJwtToken, username] = await loginAndGetJWTToken(
+      userService,
+      app
+    );
+    const [localJwtToken2, username2] = await loginAndGetJWTToken(
+      userService,
+      app
+    );
+    await addOffer(app, localJwtToken, true);
+    await addOffer(app, localJwtToken2, true);
+    await addOffer(app, localJwtToken2, false);
+    let response = await request(app.getHttpServer())
+      .get("/offer")
+      .send({ forOffer: true, forPrivate: false })
+      .set("Authorization", `Bearer ${localJwtToken}`)
+      .expect(200);
+    expect(response.body.length).toBe(2);
+    await addOffer(app, localJwtToken2, true);
+    response = await request(app.getHttpServer())
+      .get("/offer")
+      .send({ forOffer: false, forPrivate: false })
+      .set("Authorization", `Bearer ${localJwtToken2}`)
+      .expect(200);
+    expect(response.body.length).toBe(1);
+  });
+
+  it(`delete offer`, async () => {
+    const [localJwtToken, username] = await loginAndGetJWTToken(
+      userService,
+      app
+    );
+    const offer = await addOffer(app, localJwtToken, true);
+    await addOffer(app, localJwtToken, true);
+    let response = await request(app.getHttpServer())
+      .get("/offer")
+      .send({ forOffer: true, forPrivate: true })
+      .set("Authorization", `Bearer ${localJwtToken}`)
+      .expect(200);
+    expect(response.body.length).toBe(2);
+    await request(app.getHttpServer())
+      .delete("/offer/" + offer.body._id)
+      .set("Authorization", `Bearer ${localJwtToken}`)
+      .expect(200);
+    response = await request(app.getHttpServer())
+      .get("/offer")
+      .send({ forOffer: true, forPrivate: true })
+      .set("Authorization", `Bearer ${localJwtToken}`)
+      .expect(200);
+    expect(response.body.length).toBe(1);
+  });
+
+  it(`edit offer`, async () => {
+    const [localJwtToken, username] = await loginAndGetJWTToken(
+      userService,
+      app
+    );
+    let response = await addOffer(app, localJwtToken, true);
+    response = await request(app.getHttpServer())
+      .put("/offer/" + response.body._id)
+      .send({
+        from: "Grünberg",
+        to: "Frankfurt",
+        service: "transport",
+        price: 50,
+        seats: 2,
+        storageSpace: 50,
+        description: "Test",
+      })
+      .set("Authorization", `Bearer ${localJwtToken}`)
+      .expect(200);
+    expect(response.body.from).toBe("Grünberg");
+  });
+
+  it(`book offer`, async () => {
+    const [localJwtToken, username] = await loginAndGetJWTToken(
+      userService,
+      app
+    );
+    const [localJwtToken2, username2] = await loginAndGetJWTToken(
+      userService,
+      app
+    );
+    const user1 = await request(app.getHttpServer())
+      .get("/user")
+      .set("Authorization", `Bearer ${localJwtToken}`)
+      .expect(200);
+    const user2 = await request(app.getHttpServer())
+      .get("/user")
+      .set("Authorization", `Bearer ${localJwtToken2}`)
+      .expect(200);
+    const offer = await addOffer(app, localJwtToken, true);
+    await request(app.getHttpServer())
+      .post("/offer/bookOffer/" + offer.body._id)
+      .set("Authorization", `Bearer ${localJwtToken2}`)
+      .expect(201);
+
+    const response = await request(app.getHttpServer())
+      .get("/offer")
+      .send({ forOffer: true, forPrivate: true })
+      .set("Authorization", `Bearer ${localJwtToken}`)
+      .expect(200);
+    expect(response.body.length).toBe(1);
+    expect(response.body[0].orderDate).toBeDefined();
+    expect(response.body[0].provider).toBe(user1.body._id);
+    expect(response.body[0].customer).toBe(user2.body._id);
+  });
+
   afterAll(async () => {
     await closeInMongodConnection();
     await app.close();
   });
 });
+
+export const addOffer = async (app, localJwtToken, offer: boolean) => {
+  return request(app.getHttpServer())
+    .post("/offer/addOffer")
+    .send({
+      from: "Gießen",
+      isOffer: offer,
+      to: "Frankfurt",
+      service: "transport",
+      price: 50,
+      seats: 2,
+      storageSpace: 50,
+      description: "Test",
+    })
+    .set("Authorization", `Bearer ${localJwtToken}`);
+};
