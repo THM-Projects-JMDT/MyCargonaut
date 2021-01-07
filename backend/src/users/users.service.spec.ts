@@ -3,6 +3,7 @@ import { UsersService } from "./users.service";
 import { UserController } from "./user.controller";
 import {
   closeInMongodConnection,
+  loginAndGetJWTToken,
   rootMongooseTestModule,
 } from "../testUtil/MongooseTestModule";
 import { MongooseModule } from "@nestjs/mongoose";
@@ -22,17 +23,6 @@ describe("UsersService", () => {
   let service: UsersService;
   let controller: UserController;
   let app: INestApplication;
-  let jwtToken: string;
-  const newUser = {
-    username: "admin2",
-    password: "admin",
-    firstName: "Test",
-    lastName: "Lapp",
-    ppPath: "images/test.png",
-    birthday: new Date("11-09-1998"),
-    email: "jannik.lapp@mni.thm.de",
-    cargoCoins: 3000,
-  };
 
   beforeEach(async () => {
     const moduleRef: TestingModule = await Test.createTestingModule({
@@ -69,43 +59,36 @@ describe("UsersService", () => {
   it("should be defined", () => {
     expect(controller).toBeDefined();
   });
-  it(`login`, async () => {
-    await service.addUser(newUser);
-    const response = await request(app.getHttpServer())
-      .post("/auth/login")
-      .send({ username: "admin2", password: "admin" })
-      .expect(201);
-    jwtToken = response.body.access_token;
-  });
 
   it("add user", async () => {
-    const user = await service.addUser(newUser);
+    const user = await service.addUser({
+      username: "admin2",
+      password: "admin",
+      firstName: "Test",
+      lastName: "Lapp",
+      ppPath: "images/test.png",
+      birthday: new Date("11-09-1998"),
+      email: "jannik.lapp@mni.thm.de",
+      cargoCoins: 3000,
+    });
     expect(user.firstName).toBe("Test");
   });
 
   it("findOne works", async () => {
-    await service.addUser(newUser);
-    const user = await service.findOne("admin2");
-    expect(user.firstName).toBe("Test");
+    const [localJwtToken, username] = await loginAndGetJWTToken(service, app);
+    await loginAndGetJWTToken(service, app);
+    const user = await service.findOne(username);
+    expect(user.lastName).toBe("Test");
   });
 
-  /**
-   * test not correct jwt need change first
-
-
   it(`get user`, async () => {
-    await service.addUser(newUser);
-    const response = await request(app.getHttpServer())
-      .post("/auth/login")
-      .send({ username: "admin2", password: "admin" })
-      .expect(201);
-    let localJwtToken = response.body.access_token;
-    return request(app.getHttpServer())
+    const [localJwtToken, username] = await loginAndGetJWTToken(service, app);
+    const response2 = await request(app.getHttpServer())
       .get("/user")
       .set("Authorization", `Bearer ${localJwtToken}`)
       .expect(200);
+    expect(response2.body.lastName).toBe("Test");
   });
-   */
 
   afterAll(async () => {
     await closeInMongodConnection();
