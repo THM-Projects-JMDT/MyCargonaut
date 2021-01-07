@@ -37,10 +37,6 @@ export class UsersService {
     });
   }
 
-  async getAll() {
-    return await this.userModel.find().exec();
-  }
-
   async hashPassword(password: string): Promise<string> {
     return hash(password, 10);
   }

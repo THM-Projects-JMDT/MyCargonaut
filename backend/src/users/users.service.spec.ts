@@ -89,12 +89,6 @@ describe("UsersService", () => {
     expect(user.firstName).toBe("Test");
   });
 
-  it("get all length is 1", async () => {
-    await service.addUser(newUser);
-    const users = await service.getAll();
-    expect(users.length).toBe(1);
-  });
-
   /**
    * test not correct jwt need change first
 
