@@ -12,7 +12,7 @@ export class OfferService {
     @InjectModel("Offer") private readonly offerModel: Model<OfferDocument>
   ) {}
 
-  async getOfferById(id: number) {
+  async getOfferById(id: string) {
     return this.offerModel.findById(id);
   }
 
@@ -29,7 +29,7 @@ export class OfferService {
     return newOffer.save();
   }
 
-  async updateOffer(offerId: number, offer: Offer) {
+  async updateOffer(offerId: string, offer: Offer) {
     return this.offerModel.findByIdAndUpdate(offerId, offer, {
       new: true,
     });
