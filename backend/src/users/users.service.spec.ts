@@ -90,6 +90,35 @@ describe("UsersService", () => {
     expect(response.body.lastName).toBe("Test");
   });
 
+  it(`edit user`, async () => {
+    const [localJwtToken, username] = await loginAndGetJWTToken(service, app);
+    const response = await request(app.getHttpServer())
+      .put("/user")
+      .send({
+        firstName: "Test123",
+        lastName: "TestABC",
+        email: "test@test.de",
+        ppPath: "test.img",
+      })
+      .set("Authorization", `Bearer ${localJwtToken}`)
+      .expect(200);
+    expect(response.body.lastName).toBe("TestABC");
+  });
+
+  it(`addMoney`, async () => {
+    const [localJwtToken, username] = await loginAndGetJWTToken(service, app);
+    let response = await request(app.getHttpServer())
+      .get("/user")
+      .set("Authorization", `Bearer ${localJwtToken}`)
+      .expect(200);
+    expect(response.body.cargoCoins).toBe(3000);
+    response = await request(app.getHttpServer())
+      .post("/user/20")
+      .set("Authorization", `Bearer ${localJwtToken}`)
+      .expect(201);
+    expect(response.body.cargoCoins).toBe(3020);
+  });
+
   afterAll(async () => {
     await closeInMongodConnection();
     await app.close();
