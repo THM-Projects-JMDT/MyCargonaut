@@ -24,20 +24,20 @@ export class ChatController {
 
   @Get(":offerId")
   async getMessagesFromOfferId(
-    @Param("offerId") offerId: number,
+    @Param("offerId") offerId: string,
     @Request() req
   ) {
     return this.chatService.findByOffer(offerId);
   }
 
   @Delete(":messageId")
-  async deleteMessage(@Param("messageId") messageId: number, @Request() req) {
+  async deleteMessage(@Param("messageId") messageId: string, @Request() req) {
     return this.chatService.deleteMessage(messageId);
   }
 
   @Put(":messageId")
   async editMessage(
-    @Param("messageId") messageId: number,
+    @Param("messageId") messageId: string,
     @Body("content") content: string | null,
     @Request() req
   ) {
@@ -50,7 +50,7 @@ export class ChatController {
 
   @Post(":offerId")
   async writeMessage(
-    @Param("offerId") offerId: number,
+    @Param("offerId") offerId: string,
     @Body("content") content: string | null,
     @Request() req
   ) {

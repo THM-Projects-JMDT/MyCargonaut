@@ -13,7 +13,7 @@ export class StatusService {
     @InjectModel("Offer") private readonly offerModel: Model<OfferDocument>
   ) {}
 
-  async findByOffer(offerId: number) {
+  async findByOffer(offerId: string) {
     const offer = await this.offerModel.findById(offerId);
     return this.statusModel.find({ owner: offer });
   }

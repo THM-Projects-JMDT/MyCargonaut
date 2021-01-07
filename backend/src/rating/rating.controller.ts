@@ -23,7 +23,7 @@ export class RatingController {
 
   @Get(":offerId")
   async getRatingFromOfferId(
-    @Param("offerId") offerId: number,
+    @Param("offerId") offerId: string,
     @Request() req
   ) {
     const offer: Offer = await this.offerService.getOfferById(offerId);
@@ -32,7 +32,7 @@ export class RatingController {
 
   @Post(":offerId")
   async writeRating(
-    @Param("offerId") offerId: number,
+    @Param("offerId") offerId: string,
     @Body("text") text: string | null,
     @Body("rating") rating: Stars | null,
     @Request() req

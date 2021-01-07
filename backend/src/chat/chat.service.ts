@@ -13,16 +13,16 @@ export class ChatService {
     @InjectModel("Offer") private readonly offerModel: Model<OfferDocument>
   ) {}
 
-  async findByOffer(offerId: number) {
+  async findByOffer(offerId: string) {
     const offer = await this.offerModel.findById(offerId);
     return this.chatModel.find({ owner: offer });
   }
 
-  async findById(messageId: number) {
+  async findById(messageId: string) {
     return this.chatModel.findById(messageId);
   }
 
-  async updateMessage(messageId: number, message: Message) {
+  async updateMessage(messageId: string, message: Message) {
     return this.chatModel.findByIdAndUpdate(messageId, message, {
       new: true,
     });
