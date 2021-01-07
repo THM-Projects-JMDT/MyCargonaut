@@ -39,10 +39,10 @@ export class OfferService {
   }
 
   async getAllOffers() {
-    return this.offerModel.find({ provider: undefined });
+    return this.offerModel.find({ customer: undefined });
   }
 
   async getAllRequests() {
-    return this.offerModel.find({ customer: undefined });
+    return this.offerModel.find({ provider: undefined });
   }
 }
