@@ -3,6 +3,8 @@
  */
 import { MongooseModule, MongooseModuleOptions } from "@nestjs/mongoose";
 import { MongoMemoryServer } from "mongodb-memory-server";
+import * as request from "supertest";
+import { randomStringGenerator } from "@nestjs/common/utils/random-string-generator.util";
 
 let mongod: MongoMemoryServer;
 
@@ -24,4 +26,24 @@ export const closeInMongodConnection = async () => {
   if (mongod) {
     await mongod.stop();
   }
+};
+
+export const loginAndGetJWTToken = async (service, app) => {
+  const newUser = {
+    username: randomStringGenerator(),
+    password: "admin",
+    firstName: "Test",
+    lastName: "Test",
+    ppPath: "images/test.png",
+    birthday: new Date("11-09-1998"),
+    email: randomStringGenerator() + "@mni.thm.de",
+    cargoCoins: 3000,
+  };
+  console.log(newUser);
+  await service.addUser(newUser);
+  const response = await request(app.getHttpServer())
+    .post("/auth/login")
+    .send({ username: newUser.username, password: "admin" })
+    .expect(201);
+  return response.body.access_token;
 };
