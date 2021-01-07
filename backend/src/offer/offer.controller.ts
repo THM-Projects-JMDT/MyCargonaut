@@ -32,7 +32,6 @@ export class OfferController {
     @Param("offerId") offerId: string,
     @Body("from") from: string | null,
     @Body("to") to: string | null,
-    @Body("date") date: Date | null,
     @Body("service") service: Service | null,
     @Body("price") price: number | null,
     @Body("storageSpace") storageSpace: number | null,
@@ -91,8 +90,8 @@ export class OfferController {
     return this.offerService.addOffer(newOffer);
   }
 
-  @Post("bookOffer")
-  async bookOffer(@Body("offerId") offerId: string, @Request() req) {
+  @Post("bookOffer/:offerId")
+  async bookOffer(@Param("offerId") offerId: string, @Request() req) {
     const oldOffer = await this.offerService.getOfferById(offerId);
     const newOffer: Offer = {
       from: oldOffer.from,
