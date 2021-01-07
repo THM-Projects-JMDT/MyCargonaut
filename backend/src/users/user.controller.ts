@@ -45,7 +45,6 @@ export class UserController {
 
   @Get()
   async getUser(@Request() req) {
-    console.log(req.user);
     return this.userService.findOneById(req.user.id);
   }
 }
