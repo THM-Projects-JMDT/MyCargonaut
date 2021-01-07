@@ -32,7 +32,7 @@ export class UsersService {
   }
 
   async updateMoney(userId: string, coins: number) {
-    return await this.userModel.findByIdAndUpdate(userId, {
+    return this.userModel.findByIdAndUpdate(userId, {
       $inc: { cargoCoins: coins },
     });
   }
