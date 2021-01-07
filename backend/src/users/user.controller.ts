@@ -22,20 +22,20 @@ export class UserController {
     @Body("lastName") lastName: string | null,
     @Body("email") email: string | null,
     @Body("ppPath") ppPath: string | null,
-    @Body("birthday") birthday: Date | null,
     @Request() req
   ) {
-    /* TODO
+    const oldUser = await this.userService.findOneById(req.user.id);
+
     return this.userService.updateUser(req.user.id, {
-      password: password,
-      username: req.user.username,
+      password: oldUser.password,
+      username: oldUser.username,
       firstName: firstName,
       lastName: lastName,
-      cargoCoins: req.user.cargoCoins,
-      birthday: birthday,
+      cargoCoins: oldUser.cargoCoins,
+      birthday: oldUser.birthday,
       ppPath: ppPath,
       email: email,
-    });*/
+    });
   }
 
   @Post("addMoney/:moneyAmount")
