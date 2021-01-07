@@ -47,13 +47,13 @@ export class UsersService {
 
   async comparePassword(
     username: string,
-    plantextPassword: string
+    planTextPassword: string
   ): Promise<boolean> {
     const user = await this.userModel.findOne(
       { username: username },
       { password: 1 }
     );
 
-    return user && compare(plantextPassword, user.password);
+    return user && compare(planTextPassword, user.password);
   }
 }
