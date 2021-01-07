@@ -39,11 +39,10 @@ export const loginAndGetJWTToken = async (service, app) => {
     email: randomStringGenerator() + "@mni.thm.de",
     cargoCoins: 3000,
   };
-  console.log(newUser);
   await service.addUser(newUser);
   const response = await request(app.getHttpServer())
     .post("/auth/login")
     .send({ username: newUser.username, password: "admin" })
     .expect(201);
-  return response.body.access_token;
+  return [response.body.access_token, newUser.username];
 };
