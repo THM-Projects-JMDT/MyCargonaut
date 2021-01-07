@@ -38,9 +38,10 @@ export class UserController {
     });
   }
 
-  @Post("addMoney/:moneyAmount")
+  @Post(":moneyAmount")
   async addMoney(@Param("moneyAmount") cargoCoins: string, @Request() req) {
-    return this.userService.updateMoney(req.user.id, Number(cargoCoins));
+    await this.userService.updateMoney(req.user.id, Number(cargoCoins));
+    return this.userService.findOneById(req.user.id);
   }
 
   @Get()
