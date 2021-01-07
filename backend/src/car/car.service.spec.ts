@@ -20,6 +20,7 @@ import { AuthService } from "../auth/auth.service";
 import { AuthController } from "../auth/auth.controller";
 import { LocalStrategy } from "../auth/strategies/local.strategy";
 import { JwtStrategy } from "../auth/strategies/jwt.strategy";
+import { randomStringGenerator } from "@nestjs/common/utils/random-string-generator.util";
 
 describe("CarService", () => {
   let userService: UsersService;
@@ -85,12 +86,64 @@ describe("CarService", () => {
       userService,
       app
     );
-    const response = await request(app.getHttpServer())
-      .post("/car")
-      .send(newCar)
-      .set("Authorization", `Bearer ${localJwtToken}`)
-      .expect(201);
+    const response = await addCar(app, localJwtToken);
     expect(response.body.model).toBe("A20");
+  });
+  it(`get my cars`, async () => {
+    const [localJwtToken, username] = await loginAndGetJWTToken(
+      userService,
+      app
+    );
+    let response = await request(app.getHttpServer())
+      .get("/car")
+      .set("Authorization", `Bearer ${localJwtToken}`)
+      .expect(200);
+    expect(response.body.length).toBe(0);
+    await addCar(app, localJwtToken);
+    await addCar(app, localJwtToken);
+    response = await request(app.getHttpServer())
+      .get("/car")
+      .set("Authorization", `Bearer ${localJwtToken}`)
+      .expect(200);
+    expect(response.body.length).toBe(2);
+    expect(response.body[0].model).toBe("A20");
+  });
+
+  it(`edit car`, async () => {
+    const [localJwtToken, username] = await loginAndGetJWTToken(
+      userService,
+      app
+    );
+    let response = await addCar(app, localJwtToken);
+    response = await request(app.getHttpServer())
+      .put("/car/" + response.body._id)
+      .send({
+        manufacturer: randomStringGenerator(),
+        model: "A10",
+        manufactureYear: 2021,
+        seats: 4,
+        storageSpace: 500,
+      })
+      .set("Authorization", `Bearer ${localJwtToken}`)
+      .expect(200);
+    expect(response.body.model).toBe("A10");
+  });
+
+  it(`delete car`, async () => {
+    const [localJwtToken, username] = await loginAndGetJWTToken(
+      userService,
+      app
+    );
+    let response = await addCar(app, localJwtToken);
+    await request(app.getHttpServer())
+      .delete("/car/" + response.body._id)
+      .set("Authorization", `Bearer ${localJwtToken}`)
+      .expect(200);
+    response = await request(app.getHttpServer())
+      .get("/car")
+      .set("Authorization", `Bearer ${localJwtToken}`)
+      .expect(200);
+    expect(response.body.length).toBe(0);
   });
 
   afterAll(async () => {
@@ -98,3 +151,16 @@ describe("CarService", () => {
     await app.close();
   });
 });
+
+export const addCar = async (app, localJwtToken) => {
+  return request(app.getHttpServer())
+    .post("/car")
+    .send({
+      manufacturer: randomStringGenerator(),
+      model: "A20",
+      manufactureYear: 2021,
+      seats: 4,
+      storageSpace: 500,
+    })
+    .set("Authorization", `Bearer ${localJwtToken}`);
+};
