@@ -3,6 +3,7 @@ import { CarService } from "./car.service";
 import { CarController } from "./car.controller";
 import {
   closeInMongodConnection,
+  loginAndGetJWTToken,
   rootMongooseTestModule,
 } from "../testUtil/MongooseTestModule";
 import { MongooseModule } from "@nestjs/mongoose";
@@ -25,17 +26,6 @@ describe("CarService", () => {
   let service: CarService;
   let controller: CarController;
   let app: INestApplication;
-  let jwtToken: string;
-  const newUser = {
-    username: "admin",
-    password: "admin",
-    firstName: "Jannik",
-    lastName: "Lapp",
-    ppPath: "images/test.png",
-    birthday: new Date("11-09-1998"),
-    email: "jannik.lapp@mni.thm.de",
-    cargoCoins: 3000,
-  };
   const newCar = {
     manufacturer: "Test",
     model: "A20",
@@ -89,25 +79,19 @@ describe("CarService", () => {
   it("should be defined", () => {
     expect(controller).toBeDefined();
   });
-  it(`login`, async () => {
-    await userService.addUser(newUser);
-    const response = await request(app.getHttpServer())
-      .post("/auth/login")
-      .send({ username: "admin", password: "admin" })
-      .expect(201);
-    jwtToken = response.body.access_token;
-  });
-  /**
-   * test not correct jwt need change first
 
-  it(`add car`, () => {
-    return request(app.getHttpServer())
+  it(`add car`, async () => {
+    const [localJwtToken, username] = await loginAndGetJWTToken(
+      userService,
+      app
+    );
+    const response = await request(app.getHttpServer())
       .post("/car")
       .send(newCar)
-      .set("Authorization", `Bearer ${jwtToken}`)
-      .expect(500);
+      .set("Authorization", `Bearer ${localJwtToken}`)
+      .expect(201);
+    expect(response.body.model).toBe("A20");
   });
-   */
 
   afterAll(async () => {
     await closeInMongodConnection();

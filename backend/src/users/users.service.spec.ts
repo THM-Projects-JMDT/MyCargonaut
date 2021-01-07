@@ -83,11 +83,11 @@ describe("UsersService", () => {
 
   it(`get user`, async () => {
     const [localJwtToken, username] = await loginAndGetJWTToken(service, app);
-    const response2 = await request(app.getHttpServer())
+    const response = await request(app.getHttpServer())
       .get("/user")
       .set("Authorization", `Bearer ${localJwtToken}`)
       .expect(200);
-    expect(response2.body.lastName).toBe("Test");
+    expect(response.body.lastName).toBe("Test");
   });
 
   afterAll(async () => {
