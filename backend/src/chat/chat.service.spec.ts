@@ -27,16 +27,6 @@ describe("ChatService", () => {
   let controller: ChatController;
   let app: INestApplication;
   let jwtToken: string;
-  const newUser = {
-    username: "admin",
-    password: "admin",
-    firstName: "Jannik",
-    lastName: "Lapp",
-    ppPath: "images/test.png",
-    birthday: new Date("11-09-1998"),
-    email: "jannik.lapp@mni.thm.de",
-    cargoCoins: 3000,
-  };
 
   beforeEach(async () => {
     const moduleRef: TestingModule = await Test.createTestingModule({
@@ -82,14 +72,6 @@ describe("ChatService", () => {
   });
   it("should be defined", () => {
     expect(controller).toBeDefined();
-  });
-  it(`login`, async () => {
-    await userService.addUser(newUser);
-    const response = await request(app.getHttpServer())
-      .post("/auth/login")
-      .send({ username: "admin", password: "admin" })
-      .expect(201);
-    jwtToken = response.body.access_token;
   });
   afterAll(async () => {
     await closeInMongodConnection();
