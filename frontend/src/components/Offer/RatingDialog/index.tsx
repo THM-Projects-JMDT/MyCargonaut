@@ -31,15 +31,15 @@ export const RatingDialog: React.FC<RatingDialogProps> = ({
       <DialogTitle>Bewertung für {username}:</DialogTitle>
       <Divider />
       <DialogContent className={classes.content}>
-        <Rating />
+        <Rating name="rating" />
       </DialogContent>
       <Divider />
       <DialogActions>
-        <Button onClick={onClose} color="primary">
+        <Button onClick={onClose} color="primary" data-testid="rating">
           Schließen
         </Button>
         <Button onClick={handleRating} color="primary">
-          Bewerten
+          Bestätigen
         </Button>
       </DialogActions>
     </Dialog>
