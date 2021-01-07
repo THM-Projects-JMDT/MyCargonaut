@@ -22,16 +22,15 @@ export class CarController {
   ) {}
 
   @Delete(":carId")
-  async deleteCar(@Param("carId") carId: number, @Request() req) {
+  async deleteCar(@Param("carId") carId: string, @Request() req) {
     return this.carService.deleteCar(carId);
   }
 
   @Put(":carId")
   async editCar(
-    @Param("carId") carId: number,
+    @Param("carId") carId: string,
     @Body("manufacturer") manufacturer: string | null,
     @Body("model") model: string | null,
-    @Body("vintage") vintage: number | null,
     @Body("manufactureYear") manufactureYear: number | null,
     @Body("seats") seats: number | null,
     @Body("storageSpace") storageSpace: number | null,
@@ -70,7 +69,7 @@ export class CarController {
   }
 
   @Get()
-  async getAllCars(@Request() req) {
+  async getMyCars(@Request() req) {
     return this.carService.findByUser(req.user.id);
   }
 }

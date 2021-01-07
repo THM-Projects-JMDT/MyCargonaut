@@ -20,12 +20,12 @@ export class CarService {
     return newCar.save();
   }
 
-  async updateCar(carID: number, car: Car) {
+  async updateCar(carID: string, car: Car) {
     return this.carModel.findByIdAndUpdate(carID, car, {
       new: true,
     });
   }
-  async deleteCar(carId) {
+  async deleteCar(carId: string) {
     return this.carModel.findByIdAndRemove(carId);
   }
 }
