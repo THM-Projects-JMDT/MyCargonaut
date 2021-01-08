@@ -2,6 +2,7 @@ import { Test, TestingModule } from "@nestjs/testing";
 import { OfferService } from "./offer.service";
 import { OfferController } from "./offer.controller";
 import {
+  addOffer,
   closeInMongodConnection,
   loginAndGetJWTToken,
   rootMongooseTestModule,
@@ -19,8 +20,6 @@ import { AuthController } from "../auth/auth.controller";
 import { AuthService } from "../auth/auth.service";
 import { LocalStrategy } from "../auth/strategies/local.strategy";
 import { JwtStrategy } from "../auth/strategies/jwt.strategy";
-import { randomStringGenerator } from "@nestjs/common/utils/random-string-generator.util";
-import { addCar } from "../car/car.service.spec";
 
 describe("OfferService", () => {
   let userService: UsersService;
@@ -208,19 +207,3 @@ describe("OfferService", () => {
     await app.close();
   });
 });
-
-export const addOffer = async (app, localJwtToken, offer: boolean) => {
-  return request(app.getHttpServer())
-    .post("/offer/addOffer")
-    .send({
-      from: "Gießen",
-      isOffer: offer,
-      to: "Frankfurt",
-      service: "transport",
-      price: 50,
-      seats: 2,
-      storageSpace: 50,
-      description: "Test",
-    })
-    .set("Authorization", `Bearer ${localJwtToken}`);
-};

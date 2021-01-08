@@ -46,3 +46,19 @@ export const loginAndGetJWTToken = async (service, app) => {
     .expect(201);
   return [response.body.access_token, newUser.username];
 };
+
+export const addOffer = async (app, localJwtToken, offer: boolean) => {
+  return request(app.getHttpServer())
+    .post("/offer/addOffer")
+    .send({
+      from: "Gießen",
+      isOffer: offer,
+      to: "Frankfurt",
+      service: "transport",
+      price: 50,
+      seats: 2,
+      storageSpace: 50,
+      description: "Test",
+    })
+    .set("Authorization", `Bearer ${localJwtToken}`);
+};
