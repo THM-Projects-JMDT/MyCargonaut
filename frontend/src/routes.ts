@@ -6,6 +6,8 @@ import { Registration } from "./components/Registration";
 import { StartPage } from "./components/StartPage";
 import { ProfilePage } from "./components/ProfilePage";
 import { VehiclePage } from "./components/VehiclePage";
+import { AddRequestPage } from "./components/AddRequestPage";
+import { AddOfferPage } from "./components/AddOfferPage";
 
 export interface Route {
   path: string;
@@ -47,13 +49,23 @@ export const routes: Routes = {
   },
   offers: {
     path: "/offers",
+    routeProps: { exact: true },
     props: { show: "offers" },
     component: OfferPage,
   },
   requests: {
     path: "/requests",
+    routeProps: { exact: true },
     props: { show: "requests" },
     component: OfferPage,
+  },
+  addRequest: {
+    path: "/requests/create",
+    component: AddRequestPage,
+  },
+  addOffer: {
+    path: "/offers/create",
+    component: AddOfferPage,
   },
 };
 
