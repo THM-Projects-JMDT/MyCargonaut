@@ -82,7 +82,12 @@ describe("StatusService", () => {
       app
     );
     let response = await addOffer(app, localJwtToken, true);
-    response = await addStatus(app, localJwtToken, response.body._id);
+    response = await addStatus(
+      app,
+      localJwtToken,
+      response.body._id,
+      "Waiting"
+    );
     expect(response.body.state).toBe("Waiting");
   });
 
@@ -91,12 +96,18 @@ describe("StatusService", () => {
       userService,
       app
     );
-    let response = await addOffer(app, localJwtToken, true);
-    await addStatus(app, localJwtToken, response.body._id);
-    response = await request(app.getHttpServer())
-      .get("/status/" + response.body._id)
+    const offer = await addOffer(app, localJwtToken, true);
+    await addStatus(app, localJwtToken, offer.body._id, "Waiting");
+    let response = await request(app.getHttpServer())
+      .get("/status/" + offer.body._id)
       .set("Authorization", `Bearer ${localJwtToken}`);
     expect(response.body[0].state).toBe("Waiting");
+    await addStatus(app, localJwtToken, offer.body._id, "InProgress");
+    response = await request(app.getHttpServer())
+      .get("/status/" + offer.body._id)
+      .set("Authorization", `Bearer ${localJwtToken}`);
+    expect(response.body[0].state).toBe("Waiting");
+    expect(response.body[1].state).toBe("InProgress");
   });
 
   afterAll(async () => {
@@ -105,12 +116,17 @@ describe("StatusService", () => {
   });
 });
 
-export const addStatus = async (app, localJwtToken, offerId: string) => {
+export const addStatus = async (
+  app,
+  localJwtToken,
+  offerId: string,
+  state: string
+) => {
   return request(app.getHttpServer())
     .post("/status/" + offerId)
     .send({
       text: "komme morgen",
-      state: "Waiting",
+      state: state,
     })
     .set("Authorization", `Bearer ${localJwtToken}`);
 };
