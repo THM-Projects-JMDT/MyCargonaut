@@ -7,7 +7,12 @@ export type ChatDocument = Chat & Document;
 
 @Schema()
 export class Chat {
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: "Offer" })
+  @Prop({
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Offer",
+    required: true,
+    index: true,
+  })
   offer: Offer;
 
   @Prop()

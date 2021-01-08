@@ -7,22 +7,27 @@ export type CarDocument = Car & Document;
 
 @Schema()
 export class Car {
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: "User" })
+  @Prop({
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
+    index: true,
+  })
   owner: User;
 
-  @Prop()
+  @Prop({ required: true })
   manufacturer: string;
 
-  @Prop()
+  @Prop({ required: true })
   model: string;
 
-  @Prop()
+  @Prop({ required: true })
   manufactureYear: number;
 
-  @Prop()
+  @Prop({ required: true })
   seats: number;
 
-  @Prop()
+  @Prop({ required: true })
   storageSpace: number;
 }
 

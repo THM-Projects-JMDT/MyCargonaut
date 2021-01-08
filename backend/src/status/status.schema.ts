@@ -7,10 +7,15 @@ export type StatusDocument = Status & Document;
 
 @Schema()
 export class Status {
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: "Offer" })
+  @Prop({
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Offer",
+    required: true,
+    index: true,
+  })
   owner: Offer;
 
-  @Prop()
+  @Prop({ required: true })
   state: "Waiting" | "InProgress" | "Delivered";
 
   @Prop()

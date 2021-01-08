@@ -7,22 +7,22 @@ export type OfferDocument = Offer & Document;
 
 @Schema()
 export class Offer {
-  @Prop()
+  @Prop({ required: true })
   from: string;
 
-  @Prop()
+  @Prop({ required: true })
   to: string;
 
-  @Prop()
+  @Prop({ required: true })
   createDate: Date;
 
   @Prop()
   orderDate: Date;
 
-  @Prop()
+  @Prop({ required: true })
   service: "transport" | "rideShare";
 
-  @Prop()
+  @Prop({ required: true })
   price: number;
 
   @Prop()

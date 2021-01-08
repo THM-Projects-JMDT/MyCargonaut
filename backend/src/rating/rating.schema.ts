@@ -7,10 +7,16 @@ export type RatingDocument = Rating & Document;
 
 @Schema()
 export class Rating {
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: "Offer" })
+  @Prop({
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Offer",
+    unique: true,
+    required: true,
+    index: true,
+  })
   owner: Offer;
 
-  @Prop()
+  @Prop({ required: true })
   rating: 0 | 1 | 2 | 3 | 4 | 5;
 
   @Prop()
