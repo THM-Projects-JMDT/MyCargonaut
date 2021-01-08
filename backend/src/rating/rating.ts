@@ -1,7 +1,9 @@
 import { Offer } from "../offer/offer";
 
+export type Stars = 0 | 1 | 2 | 3 | 4 | 5;
+
 export interface Rating {
   offer: Offer;
-  rating: 0 | 1 | 2 | 3 | 4 | 5;
+  rating: Stars;
   text: string;
 }
