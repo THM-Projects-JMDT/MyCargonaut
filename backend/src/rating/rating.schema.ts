@@ -14,7 +14,7 @@ export class Rating {
     required: true,
     index: true,
   })
-  owner: Offer;
+  offer: Offer;
 
   @Prop({ required: true })
   rating: 0 | 1 | 2 | 3 | 4 | 5;

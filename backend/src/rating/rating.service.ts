@@ -12,15 +12,11 @@ export class RatingService {
   ) {}
 
   async findByOffer(offer: Offer) {
-    return this.ratingModel.find({ owner: offer });
+    return this.ratingModel.findOne({ offer: offer });
   }
 
   async addRating(rating: Rating) {
     const newRating = new this.ratingModel(rating);
     return newRating.save();
-  }
-
-  async getAll() {
-    return await this.ratingModel.find().exec();
   }
 }
