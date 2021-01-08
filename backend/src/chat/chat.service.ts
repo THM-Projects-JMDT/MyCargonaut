@@ -15,7 +15,7 @@ export class ChatService {
 
   async findByOffer(offerId: string) {
     const offer = await this.offerModel.findById(offerId);
-    return this.chatModel.find({ owner: offer });
+    return this.chatModel.find({ offer: offer });
   }
 
   async findById(messageId: string) {
