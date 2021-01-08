@@ -2,7 +2,9 @@ import { Test, TestingModule } from "@nestjs/testing";
 import { RatingService } from "./rating.service";
 import { RatingController } from "./rating.controller";
 import {
+  addOffer,
   closeInMongodConnection,
+  loginAndGetJWTToken,
   rootMongooseTestModule,
 } from "../testUtil/MongooseTestModule";
 import { MongooseModule } from "@nestjs/mongoose";
@@ -16,28 +18,17 @@ import { PassportModule } from "@nestjs/passport";
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import { JwtModule } from "@nestjs/jwt";
 import { UsersService } from "../users/users.service";
-import { UserController } from "../users/user.controller";
 import { AuthController } from "../auth/auth.controller";
 import { AuthService } from "../auth/auth.service";
 import { LocalStrategy } from "../auth/strategies/local.strategy";
 import { JwtStrategy } from "../auth/strategies/jwt.strategy";
+import { OfferController } from "../offer/offer.controller";
 
 describe("RatingService", () => {
   let userService: UsersService;
   let service: RatingService;
   let controller: RatingController;
   let app: INestApplication;
-  let jwtToken: string;
-  const newUser = {
-    username: "admin",
-    password: "admin",
-    firstName: "Jannik",
-    lastName: "Lapp",
-    ppPath: "images/test.png",
-    birthday: new Date("11-09-1998"),
-    email: "jannik.lapp@mni.thm.de",
-    cargoCoins: 3000,
-  };
 
   beforeEach(async () => {
     const moduleRef: TestingModule = await Test.createTestingModule({
@@ -67,7 +58,7 @@ describe("RatingService", () => {
         LocalStrategy,
         JwtStrategy,
       ],
-      controllers: [RatingController, AuthController],
+      controllers: [RatingController, AuthController, OfferController],
     }).compile();
 
     userService = moduleRef.get<UsersService>(UsersService);
@@ -84,16 +75,41 @@ describe("RatingService", () => {
   it("should be defined", () => {
     expect(controller).toBeDefined();
   });
-  it(`login`, async () => {
-    await userService.addUser(newUser);
-    const response = await request(app.getHttpServer())
-      .post("/auth/login")
-      .send({ username: "admin", password: "admin" })
-      .expect(201);
-    jwtToken = response.body.access_token;
+  it(`add rating`, async () => {
+    const [localJwtToken, username] = await loginAndGetJWTToken(
+      userService,
+      app
+    );
+    let response = await addOffer(app, localJwtToken, true);
+    response = await addRating(app, localJwtToken, response.body._id);
+    expect(response.body.rating).toBe(5);
   });
+
+  it(`get rating`, async () => {
+    const [localJwtToken, username] = await loginAndGetJWTToken(
+      userService,
+      app
+    );
+    let response = await addOffer(app, localJwtToken, true);
+    await addRating(app, localJwtToken, response.body._id);
+    response = await request(app.getHttpServer())
+      .get("/rating/" + response.body._id)
+      .set("Authorization", `Bearer ${localJwtToken}`);
+    expect(response.body.rating).toBe(5);
+  });
+
   afterAll(async () => {
     await closeInMongodConnection();
     await app.close();
   });
 });
+
+export const addRating = async (app, localJwtToken, offerId: string) => {
+  return request(app.getHttpServer())
+    .post("/rating/" + offerId)
+    .send({
+      text: "Alles Top",
+      rating: 5,
+    })
+    .set("Authorization", `Bearer ${localJwtToken}`);
+};
