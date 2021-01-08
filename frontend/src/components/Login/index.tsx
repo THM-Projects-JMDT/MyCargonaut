@@ -22,6 +22,7 @@ export const Login = () => {
   const inputFields = [
     {
       label: "E-Mail/Username",
+      type: "text",
       inputProps: {
         onKeyDown: handlePressEnter,
         autoComplete: "username",
@@ -30,6 +31,7 @@ export const Login = () => {
     },
     {
       label: "Passwort",
+      type: "text",
       inputProps: {
         onKeyDown: handlePressEnter,
         autoComplete: "current-password",
