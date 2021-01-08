@@ -15,7 +15,7 @@ export const AddOfferPage: React.FC = () => {
   return (
     <CenterCard>
       <CustomCard
-        heading="Anfrage hinzufügen"
+        heading="Angebot hinzufügen"
         buttonText="HINZUFÜGEN"
         content={<InputForm inputFields={inputFieldOffer}></InputForm>}
         event={handleAdd}
