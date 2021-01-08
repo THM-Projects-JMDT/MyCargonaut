@@ -13,7 +13,7 @@ export class Status {
     required: true,
     index: true,
   })
-  owner: Offer;
+  offer: Offer;
 
   @Prop({ required: true })
   state: "Waiting" | "InProgress" | "Delivered";

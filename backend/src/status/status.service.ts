@@ -15,7 +15,7 @@ export class StatusService {
 
   async findByOffer(offerId: string) {
     const offer = await this.offerModel.findById(offerId);
-    return this.statusModel.find({ owner: offer });
+    return this.statusModel.find({ offer: offer });
   }
 
   async addStatus(status: Status) {

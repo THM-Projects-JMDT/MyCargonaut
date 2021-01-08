@@ -12,6 +12,7 @@ import { JwtAuthGuard } from "../auth/guards/jwt-auth.guard";
 import { OfferService } from "../offer/offer.service";
 import { StatusService } from "./status.service";
 import { Offer } from "../offer/offer";
+import * as request from "supertest";
 
 @Controller("status")
 @UseGuards(JwtAuthGuard)
