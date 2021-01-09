@@ -14,8 +14,6 @@ import { JwtAuthGuard } from "../auth/guards/jwt-auth.guard";
 import { OfferService } from "./offer.service";
 import { UsersService } from "../users/users.service";
 import { RatingService } from "../rating/rating.service";
-import * as request from "supertest";
-import { randomStringGenerator } from "@nestjs/common/utils/random-string-generator.util";
 import { StatusService } from "../status/status.service";
 
 @Controller("offer")

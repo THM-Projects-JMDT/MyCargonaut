@@ -11,7 +11,6 @@ import {
 } from "@nestjs/common";
 import { JwtAuthGuard } from "../auth/guards/jwt-auth.guard";
 import { ChatService } from "./chat.service";
-import { Offer } from "../offer/offer";
 import { OfferService } from "../offer/offer.service";
 
 @Controller("chat")

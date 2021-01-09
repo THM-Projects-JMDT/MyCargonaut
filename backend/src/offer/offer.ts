@@ -1,5 +1,3 @@
-import { User } from "../users/user";
-
 export type Service = "transport" | "rideShare";
 
 export interface Offer {

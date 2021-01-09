@@ -5,7 +5,6 @@ import { Offer } from "../offer/offer";
 import { ChatDocument } from "./chat.schema";
 import { Message } from "./message";
 import { OfferDocument } from "../offer/offer.schema";
-const ObjectId = require("mongoose").Types.ObjectId;
 
 @Injectable()
 export class ChatService {

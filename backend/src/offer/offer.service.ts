@@ -1,10 +1,8 @@
 import { Injectable } from "@nestjs/common";
-import { User } from "../users/user";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
 import { OfferDocument } from "./offer.schema";
 import { Offer } from "./offer";
-const ObjectId = require("mongoose").Types.ObjectId;
 
 @Injectable()
 export class OfferService {

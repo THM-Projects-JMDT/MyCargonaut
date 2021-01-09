@@ -3,7 +3,6 @@ import { InjectModel } from "@nestjs/mongoose";
 import { Model, Schema } from "mongoose";
 import { CarDocument } from "./car.schema";
 import { Car } from "./car";
-const ObjectId = require("mongoose").Types.ObjectId;
 
 @Injectable()
 export class CarService {

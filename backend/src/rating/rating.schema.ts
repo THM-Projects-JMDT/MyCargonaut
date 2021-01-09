@@ -1,7 +1,5 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { Document } from "mongoose";
-import { Offer } from "../offer/offer.schema";
-import * as mongoose from "mongoose";
 
 export type RatingDocument = Rating & Document;
 
