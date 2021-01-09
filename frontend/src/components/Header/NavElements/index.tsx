@@ -6,11 +6,15 @@ import { routes } from "../../../routes";
 import { useStyles } from "../Header.style";
 import { CargoCoins } from "../../../util/CargoCoins";
 import { CargoCoinsDialog } from "../../../util/CargoCoinsDialog";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../../features/rootReducer";
+import { logout } from "../../../features/authSlice";
 
 // TODO: retrieve logged in user from store
 export const NavElements: React.FC = () => {
   const classes = useStyles();
-  const [auth, setAuth] = React.useState(true);
+  const logedIn = useSelector((state: RootState) => state.auth.isLogedIn);
+  const dispatch = useDispatch();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const cargoCoinsBalance = 3000; // TODO: retrieve actual balance
   const history = useHistory();
@@ -31,7 +35,7 @@ export const NavElements: React.FC = () => {
 
   const handleLogoutClick = () => {
     handleAvatarMenuClose();
-    setAuth(false); // TODO: implement actual logout logic
+    dispatch(logout());
   };
 
   const handleClick = (path: string) => {
@@ -44,7 +48,7 @@ export const NavElements: React.FC = () => {
 
   return (
     <div className={classes.buttonsGroup}>
-      {!auth ? (
+      {!logedIn ? (
         <div>
           <Button
             className={classes.button}
