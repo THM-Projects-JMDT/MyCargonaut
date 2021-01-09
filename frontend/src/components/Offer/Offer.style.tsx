@@ -21,4 +21,22 @@ export const useStyles = makeStyles((theme) => ({
     borderRadius: "10px !important",
     boxShadow: "0px 0px 10px 2px rgba(0,0,0,0.2)",
   },
+  dummy: {
+    borderRadius: "10px !important",
+    boxShadow: "0px 0px 10px 2px rgba(0,0,0,0.2)",
+    width: "100%",
+    height: "50px",
+    border: "2px dashed #A4A4A4",
+    display: "grid",
+    alignContent: "center",
+  },
+  text: {
+    display: "flex",
+    justifyContent: "center",
+    color: "#A4A4A4",
+    fontWeight: "bold",
+  },
+  addIcon: {
+    marginRight: "10px",
+  },
 }));

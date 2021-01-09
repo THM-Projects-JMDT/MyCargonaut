@@ -1,15 +1,19 @@
 export const inputFieldsReg = [
   {
     label: "Vorname",
+    type: "text",
   },
   {
     label: "Nachname",
+    type: "text",
   },
   {
     label: "Geburtstag",
+    type: "date",
   },
   {
     label: "Username",
+    type: "text",
     inputProps: {
       autoComplete: "off",
       name: "username",
@@ -17,6 +21,7 @@ export const inputFieldsReg = [
   },
   {
     label: "E-Mail",
+    type: "text",
     inputProps: {
       autoComplete: "off",
       type: "email",
@@ -25,6 +30,7 @@ export const inputFieldsReg = [
   },
   {
     label: "Passwort",
+    type: "text",
     inputProps: {
       autoComplete: "new-password",
       type: "password",
@@ -33,6 +39,7 @@ export const inputFieldsReg = [
   },
   {
     label: "Passwort wiederholen",
+    type: "text",
     inputProps: {
       type: "password",
       name: "password",
@@ -43,22 +50,31 @@ export const inputFieldsReg = [
 export const inputFieldsProfile = [
   {
     label: "Vorname",
+    type: "text",
   },
   {
     label: "Nachname",
+    type: "text",
   },
   {
     label: "Geburtstag",
+    type: "date",
+    inputProps: {
+      disabled: true,
+    },
   },
   {
     label: "Username",
+    type: "text",
     inputProps: {
       autoComplete: "off",
       name: "username",
+      disabled: true,
     },
   },
   {
     label: "E-Mail",
+    type: "text",
     inputProps: {
       autoComplete: "off",
       type: "email",
@@ -70,6 +86,7 @@ export const inputFieldsProfile = [
 export const inputFieldsPassword = [
   {
     label: "Altes Passwort eingeben",
+    type: "text",
     inputProps: {
       type: "password",
       name: "password",
@@ -77,6 +94,7 @@ export const inputFieldsPassword = [
   },
   {
     label: "Passwort",
+    type: "text",
     inputProps: {
       autoComplete: "new-password",
       type: "password",
@@ -85,9 +103,80 @@ export const inputFieldsPassword = [
   },
   {
     label: "Neues Passwort wiederholen",
+    type: "text",
     inputProps: {
       type: "password",
       name: "password",
     },
+  },
+];
+
+export const inputFieldOffer = [
+  {
+    label: "von",
+    type: "text",
+  },
+  {
+    label: "nach",
+    type: "text",
+  },
+  {
+    label: "Service",
+    type: "select",
+    items: [
+      "Mitfahrgelegenheit",
+      "Transport",
+      "Transport / Mitfahrgelegenheit",
+    ],
+  },
+  {
+    label: "Datum",
+    type: "date",
+  },
+  {
+    label: "Fahrzeug",
+    type: "text",
+  },
+  {
+    label: "Preis",
+    type: "text",
+  },
+];
+
+export const inputFieldRequest = [
+  {
+    label: "von",
+    type: "text",
+  },
+  {
+    label: "nach",
+    type: "text",
+  },
+  {
+    label: "Service",
+    type: "select",
+    items: [
+      "Mitfahrgelegenheit",
+      "Transport",
+      "Transport / Mitfahrgelegenheit",
+    ],
+  },
+  {
+    label: "Datum",
+    type: "date",
+  },
+  {
+    label: "Sitze",
+    type: "text",
+    required: false,
+  },
+  {
+    label: "Stauraum",
+    type: "text",
+    required: false,
+  },
+  {
+    label: "Preis",
+    type: "text",
   },
 ];
