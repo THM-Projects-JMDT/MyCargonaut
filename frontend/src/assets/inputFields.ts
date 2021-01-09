@@ -12,7 +12,9 @@ export const inputFieldsProfile: InputField[] = [
   {
     label: "Geburtstag",
     type: "date",
-    inputProps: {
+    dateProps: {
+      value: new Date(),
+      onChange: () => {},
       disabled: true,
     },
   },

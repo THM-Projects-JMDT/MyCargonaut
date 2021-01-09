@@ -69,7 +69,6 @@ export const InputForm: React.FC<InputFormProps> = ({ inputFields }) => {
               inputVariant="outlined"
               required={field.required}
               className={classes.input}
-              disablePast
               disableToolbar
               variant="inline"
               format="dd.MM.yyy"
