@@ -15,7 +15,6 @@ export const Login = () => {
   const handleLogin = () => {
     const username = usernameRef.current?.value;
     const password = passwordRef.current?.value;
-    console.log(usernameRef.current);
 
     if (!username || !password) return;
 

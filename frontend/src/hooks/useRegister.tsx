@@ -31,14 +31,6 @@ export function useRegister() {
   };
 
   const handleRegister = async () => {
-    console.log({
-      firstName: getRefValue(refs.fistNameRef),
-      lastName: getRefValue(refs.lastNameRef),
-      birthday: date?.toDateString() ?? "",
-      username: getRefValue(refs.usernameRef),
-      email: getRefValue(refs.emailRef),
-      password: getRefValue(refs.passwordRef),
-    });
     if (!validate() || !validatePassword()) return;
 
     const user = {
