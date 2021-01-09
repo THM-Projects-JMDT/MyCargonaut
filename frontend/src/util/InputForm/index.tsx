@@ -43,6 +43,7 @@ export const InputForm: React.FC<InputFormProps> = ({ inputFields }) => {
       case field.type === "select":
         return (
           <TextField
+            key={idx}
             select
             className={classes.input}
             label={field.label}
@@ -58,7 +59,7 @@ export const InputForm: React.FC<InputFormProps> = ({ inputFields }) => {
         );
       case field.type === "date":
         return (
-          <MuiPickersUtilsProvider utils={DateFnsUtils} locale={de}>
+          <MuiPickersUtilsProvider key={idx} utils={DateFnsUtils} locale={de}>
             <DatePicker
               inputVariant="outlined"
               required={field.required}
