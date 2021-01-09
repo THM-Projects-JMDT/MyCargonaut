@@ -6,13 +6,18 @@ import {
   TextFieldProps,
 } from "@material-ui/core";
 import { useStyles } from "./InputForm.style";
-import { DatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
+import {
+  DatePicker,
+  DatePickerProps,
+  MuiPickersUtilsProvider,
+} from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
 import { de } from "date-fns/locale";
 
 export interface InputField {
   label: string;
   inputProps?: TextFieldProps;
+  dateProps?: DatePickerProps;
   type: string;
   items?: string[];
   required?: boolean;
@@ -73,6 +78,7 @@ export const InputForm: React.FC<InputFormProps> = ({ inputFields }) => {
                 setDate(date);
               }}
               value={date}
+              {...field.dateProps}
             />
           </MuiPickersUtilsProvider>
         );
