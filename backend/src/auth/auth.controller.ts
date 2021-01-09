@@ -23,10 +23,8 @@ export class AuthController {
 
   @UseGuards(JwtAuthGuard)
   @Get("login")
-  async checkLoginStatus(@Request() req): Promise<{ message: string }> {
-    return {
-      message: "You are already logged in",
-    };
+  async checkLoginStatus(@Request() req) {
+    return this.userService.findOneById(req.user.id);
   }
 
   @UseGuards(LocalAuthGuard)
