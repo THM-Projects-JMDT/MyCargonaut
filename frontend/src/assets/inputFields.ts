@@ -1,4 +1,6 @@
-export const inputFieldsReg = [
+import { InputField } from "../util/InputForm";
+
+export const inputFieldsReg: InputField[] = [
   {
     label: "Vorname",
     type: "text",
@@ -47,7 +49,7 @@ export const inputFieldsReg = [
   },
 ];
 
-export const inputFieldsProfile = [
+export const inputFieldsProfile: InputField[] = [
   {
     label: "Vorname",
     type: "text",
@@ -83,7 +85,7 @@ export const inputFieldsProfile = [
   },
 ];
 
-export const inputFieldsPassword = [
+export const inputFieldsPassword: InputField[] = [
   {
     label: "Altes Passwort eingeben",
     type: "text",
@@ -111,7 +113,7 @@ export const inputFieldsPassword = [
   },
 ];
 
-export const inputFieldOffer = [
+export const inputFieldOffer: InputField[] = [
   {
     label: "von",
     type: "text",
@@ -143,7 +145,7 @@ export const inputFieldOffer = [
   },
 ];
 
-export const inputFieldRequest = [
+export const inputFieldRequest: InputField[] = [
   {
     label: "von",
     type: "text",
