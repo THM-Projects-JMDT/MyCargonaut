@@ -1,6 +1,13 @@
 import { Action, combineReducers } from "@reduxjs/toolkit";
+import offersReducers from "./offers/offersSlice";
+import requestsReducers from "./requests/requestsSlice";
+import vehiclesReducers from "./vehicles/vehiclesSlice";
 
-const appReducer = combineReducers({});
+const appReducer = combineReducers({
+  offers: offersReducers,
+  requests: requestsReducers,
+  vehicles: vehiclesReducers,
+});
 
 export type RootState = ReturnType<typeof appReducer>;
 
