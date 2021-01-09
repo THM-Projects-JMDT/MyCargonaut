@@ -23,6 +23,8 @@ import { AuthService } from "../auth/auth.service";
 import { LocalStrategy } from "../auth/strategies/local.strategy";
 import { JwtStrategy } from "../auth/strategies/jwt.strategy";
 import { OfferController } from "../offer/offer.controller";
+import { Status, StatusSchema } from "../status/status.schema";
+import { StatusService } from "../status/status.service";
 
 describe("RatingService", () => {
   let userService: UsersService;
@@ -49,11 +51,13 @@ describe("RatingService", () => {
         MongooseModule.forFeature([
           { name: Rating.name, schema: RatingSchema },
           { name: Offer.name, schema: OfferSchema },
+          { name: Status.name, schema: StatusSchema },
         ]),
       ],
       providers: [
         RatingService,
         OfferService,
+        StatusService,
         AuthService,
         LocalStrategy,
         JwtStrategy,

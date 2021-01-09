@@ -177,7 +177,6 @@ export class OfferController {
         };
       }
     }
-    console.log(offerList);
     return offerList;
   }
 }

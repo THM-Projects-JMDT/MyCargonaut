@@ -25,6 +25,8 @@ import { JwtStrategy } from "../auth/strategies/jwt.strategy";
 import { OfferController } from "../offer/offer.controller";
 import { Rating, RatingSchema } from "../rating/rating.schema";
 import { RatingService } from "../rating/rating.service";
+import { StatusService } from "../status/status.service";
+import { Status, StatusSchema } from "../status/status.schema";
 
 describe("ChatService", () => {
   let userService: UsersService;
@@ -52,6 +54,7 @@ describe("ChatService", () => {
           { name: Chat.name, schema: ChatSchema },
           { name: Offer.name, schema: OfferSchema },
           { name: Rating.name, schema: RatingSchema },
+          { name: Status.name, schema: StatusSchema },
         ]),
       ],
       providers: [
@@ -61,6 +64,7 @@ describe("ChatService", () => {
         LocalStrategy,
         JwtStrategy,
         RatingService,
+        StatusService,
       ],
       controllers: [ChatController, AuthController, OfferController],
     }).compile();
