@@ -1,54 +1,5 @@
 import { InputField } from "../util/InputForm";
 
-export const inputFieldsReg: InputField[] = [
-  {
-    label: "Vorname",
-    type: "text",
-  },
-  {
-    label: "Nachname",
-    type: "text",
-  },
-  {
-    label: "Geburtstag",
-    type: "date",
-  },
-  {
-    label: "Username",
-    type: "text",
-    inputProps: {
-      autoComplete: "off",
-      name: "username",
-    },
-  },
-  {
-    label: "E-Mail",
-    type: "text",
-    inputProps: {
-      autoComplete: "off",
-      type: "email",
-      name: "email",
-    },
-  },
-  {
-    label: "Passwort",
-    type: "text",
-    inputProps: {
-      autoComplete: "new-password",
-      type: "password",
-      name: "password",
-    },
-  },
-  {
-    label: "Passwort wiederholen",
-    type: "text",
-    inputProps: {
-      type: "password",
-      name: "password",
-    },
-  },
-];
-
 export const inputFieldsProfile: InputField[] = [
   {
     label: "Vorname",
