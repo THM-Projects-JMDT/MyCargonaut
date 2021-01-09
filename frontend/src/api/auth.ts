@@ -1,6 +1,10 @@
 import { buildApiUrl, fetchTimeOut } from "./util";
 
-export function fetchLogin(username: string, password: string) {
+export function getLogin() {
+  return fetchTimeOut(buildApiUrl("/auth/login"));
+}
+
+export function postLogin(username: string, password: string) {
   return fetchTimeOut(buildApiUrl("/auth/login"), {
     method: "POST",
     headers: {
@@ -10,6 +14,20 @@ export function fetchLogin(username: string, password: string) {
   });
 }
 
-export function fetchLogout() {
+export function postLogout() {
   return fetchTimeOut(buildApiUrl("/auth/logout"), { method: "POST" });
+}
+
+export function postRegister(user: {
+  password: string;
+  username: string;
+  firstName: string;
+  lastName: string;
+  birthday: string;
+  email: string;
+}) {
+  return fetchTimeOut(buildApiUrl("/auth/logout"), {
+    method: "POST",
+    body: JSON.stringify(user),
+  });
 }
