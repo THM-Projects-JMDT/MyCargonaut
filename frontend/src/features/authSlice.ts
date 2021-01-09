@@ -1,14 +1,15 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { getLogin, postLogin, postLogout } from "../api/auth";
 import { AppThunk } from "./store";
+import { getUserSuccess } from "./userSlice";
 
-export interface MeetingState {
+export interface AuthState {
   isLogedIn: boolean;
   isLoading: boolean;
   error: string | null;
 }
 
-const initialState: MeetingState = {
+const initialState: AuthState = {
   isLogedIn: false,
   isLoading: true,
   error: null,
@@ -41,8 +42,9 @@ export const login = (username: string, password: string): AppThunk => async (
   dispatch
 ) => {
   try {
-    await postLogin(username, password);
+    const user = await postLogin(username, password);
     dispatch(loginSuccess());
+    dispatch(getUserSuccess(user));
   } catch (err) {
     dispatch(loginFailure("Anmeldung Fehlgeschlagen"));
   }
@@ -57,8 +59,9 @@ export const logout = (): AppThunk => async (dispatch) => {
 
 export const authCheck = (): AppThunk => async (dispatch) => {
   try {
-    await getLogin();
+    const user = await getLogin();
     dispatch(loginSuccess());
+    dispatch(getUserSuccess(user));
   } catch (err) {
     dispatch(loginFailure("Session expired"));
   }
