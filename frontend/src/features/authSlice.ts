@@ -18,6 +18,9 @@ export const auth = createSlice({
   name: "auth",
   initialState,
   reducers: {
+    startLogin(state) {
+      state.isLoading = true;
+    },
     loginSuccess(state) {
       state.isLogedIn = true;
       state.isLoading = false;
@@ -33,7 +36,12 @@ export const auth = createSlice({
   },
 });
 
-export const { loginSuccess, loginFailure, logoutSuccess } = auth.actions;
+export const {
+  startLogin,
+  loginSuccess,
+  loginFailure,
+  logoutSuccess,
+} = auth.actions;
 
 export default auth.reducer;
 
@@ -41,6 +49,7 @@ export const login = (username: string, password: string): AppThunk => async (
   dispatch
 ) => {
   try {
+    dispatch(startLogin);
     await fetchLogin(username, password);
     dispatch(loginSuccess());
   } catch (err) {
