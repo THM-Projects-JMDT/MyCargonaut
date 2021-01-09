@@ -2,23 +2,34 @@ import React from "react";
 import store from "../features/store";
 import { Provider } from "react-redux";
 import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
-import { routes, routesArray } from "../routes";
+import { routes, routesArray, Route as RouteType } from "../routes";
 import { Header } from "./Header";
 import { ThemeProvider } from "@material-ui/core";
 import { theme } from "../assets/theme";
+import { ProtectedRouteBody } from "../util/ProtectedRouteBody";
 
 const App = () => {
+  const renderRoute = (r: RouteType) => (
+    <Route path={r.path} key={r.path} {...r.routeProps}>
+      <>
+        {r.protected ? (
+          <ProtectedRouteBody>
+            {<r.component {...r.props} />}
+          </ProtectedRouteBody>
+        ) : (
+          <>{<r.component {...r.props} />}</>
+        )}
+      </>
+    </Route>
+  );
+
   return (
     <Provider store={store}>
       <ThemeProvider theme={theme}>
         <BrowserRouter>
           <Header />
           <Switch>
-            {routesArray.map((r) => (
-              <Route path={r.path} key={r.path} {...r.routeProps}>
-                {<r.component {...r.props} />}
-              </Route>
-            ))}
+            {routesArray.map(renderRoute)}
             <Route>
               <Redirect to={routes.home.path} />
             </Route>
