@@ -25,10 +25,8 @@ export class UsersService {
     return newUser.save();
   }
 
-  async updateUser(userId: string, user: User) {
-    return this.userModel.findByIdAndUpdate(userId, user, {
-      new: true,
-    });
+  async updateUser(userId: string, updatedUser) {
+    return this.userModel.findByIdAndUpdate(userId, { $set: updatedUser });
   }
 
   async updateMoney(userId: string, coins: number) {

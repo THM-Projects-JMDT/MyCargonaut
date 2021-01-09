@@ -1,7 +1,7 @@
 import { User } from "../users/user";
 
 export interface Car {
-  owner: User;
+  owner: string;
   manufacturer: string;
   model: string;
   manufactureYear: number;

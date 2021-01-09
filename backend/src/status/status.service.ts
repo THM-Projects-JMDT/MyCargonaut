@@ -14,11 +14,10 @@ export class StatusService {
   ) {}
 
   async findByOffer(offerId: string) {
-    const offer = await this.offerModel.findById(offerId);
-    return this.statusModel.find({ offer: offer });
+    return this.statusModel.findOne({ offer: offerId }, { __v: 0 });
   }
 
-  async addStatus(status: Status) {
+  async addStatus(status) {
     const newStatus = new this.statusModel(status);
     return newStatus.save();
   }

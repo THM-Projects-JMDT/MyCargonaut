@@ -5,6 +5,7 @@ import { Offer } from "../offer/offer";
 import { ChatDocument } from "./chat.schema";
 import { Message } from "./message";
 import { OfferDocument } from "../offer/offer.schema";
+const ObjectId = require("mongoose").Types.ObjectId;
 
 @Injectable()
 export class ChatService {
@@ -14,17 +15,16 @@ export class ChatService {
   ) {}
 
   async findByOffer(offerId: string) {
-    const offer = await this.offerModel.findById(offerId);
-    return this.chatModel.find({ offer: offer });
+    return this.chatModel.find({ offer: offerId }, { __v: 0 });
   }
 
   async findById(messageId: string) {
-    return this.chatModel.findById(messageId);
+    return this.chatModel.findById(messageId, { __v: 0 });
   }
 
-  async updateMessage(messageId: string, message: Message) {
-    return this.chatModel.findByIdAndUpdate(messageId, message, {
-      new: true,
+  async updateMessage(messageId: string, updatedMessage) {
+    return this.chatModel.findByIdAndUpdate(messageId, {
+      $set: updatedMessage,
     });
   }
 

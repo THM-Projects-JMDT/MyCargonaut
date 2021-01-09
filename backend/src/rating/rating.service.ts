@@ -11,8 +11,8 @@ export class RatingService {
     @InjectModel("Rating") private readonly ratingModel: Model<RatingDocument>
   ) {}
 
-  async findByOffer(offer: Offer) {
-    return this.ratingModel.findOne({ offer: offer });
+  async findByOffer(offerId: string) {
+    return this.ratingModel.findOne({ offer: offerId }, { __v: 0 });
   }
 
   async addRating(rating: Rating) {

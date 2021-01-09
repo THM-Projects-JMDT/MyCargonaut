@@ -12,6 +12,6 @@ export interface Offer {
   seats: number | undefined;
   storageSpace: number | undefined;
   description: string;
-  provider: User | undefined;
-  customer: User | undefined;
+  provider: string | undefined;
+  customer: string | undefined;
 }

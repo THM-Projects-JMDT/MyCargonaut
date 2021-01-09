@@ -20,6 +20,11 @@ import { AuthController } from "../auth/auth.controller";
 import { AuthService } from "../auth/auth.service";
 import { LocalStrategy } from "../auth/strategies/local.strategy";
 import { JwtStrategy } from "../auth/strategies/jwt.strategy";
+import { RatingService } from "../rating/rating.service";
+import { Rating, RatingSchema } from "../rating/rating.schema";
+import { RatingController } from "../rating/rating.controller";
+import { Status, StatusSchema } from "../status/status.schema";
+import { StatusService } from "../status/status.service";
 
 describe("OfferService", () => {
   let userService: UsersService;
@@ -43,10 +48,21 @@ describe("OfferService", () => {
           inject: [ConfigService],
         }),
         ConfigModule,
-        MongooseModule.forFeature([{ name: Offer.name, schema: OfferSchema }]),
+        MongooseModule.forFeature([
+          { name: Status.name, schema: StatusSchema },
+          { name: Offer.name, schema: OfferSchema },
+          { name: Rating.name, schema: RatingSchema },
+        ]),
       ],
-      providers: [OfferService, AuthService, LocalStrategy, JwtStrategy],
-      controllers: [OfferController, AuthController],
+      providers: [
+        OfferService,
+        AuthService,
+        RatingService,
+        LocalStrategy,
+        JwtStrategy,
+        StatusService,
+      ],
+      controllers: [OfferController, AuthController, RatingController],
     }).compile();
 
     userService = moduleRef.get<UsersService>(UsersService);
@@ -152,7 +168,7 @@ describe("OfferService", () => {
       app
     );
     let response = await addOffer(app, localJwtToken, true);
-    response = await request(app.getHttpServer())
+    await request(app.getHttpServer())
       .put("/offer/" + response.body._id)
       .send({
         from: "Grünberg",
@@ -165,7 +181,12 @@ describe("OfferService", () => {
       })
       .set("Authorization", `Bearer ${localJwtToken}`)
       .expect(200);
-    expect(response.body.from).toBe("Grünberg");
+    response = await request(app.getHttpServer())
+      .get("/offer")
+      .send({ forOffer: true, forPrivate: true })
+      .set("Authorization", `Bearer ${localJwtToken}`)
+      .expect(200);
+    expect(response.body[0].from).toBe("Grünberg");
   });
 
   it(`book offer`, async () => {
@@ -200,6 +221,7 @@ describe("OfferService", () => {
     expect(response.body[0].orderDate).toBeDefined();
     expect(response.body[0].provider).toBe(user1.body._id);
     expect(response.body[0].customer).toBe(user2.body._id);
+    expect(response.body[0].tracking.state).toBe("Waiting");
   });
 
   afterAll(async () => {

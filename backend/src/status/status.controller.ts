@@ -9,18 +9,12 @@ import {
 } from "@nestjs/common";
 import { State } from "./status";
 import { JwtAuthGuard } from "../auth/guards/jwt-auth.guard";
-import { OfferService } from "../offer/offer.service";
 import { StatusService } from "./status.service";
-import { Offer } from "../offer/offer";
-import * as request from "supertest";
 
 @Controller("status")
 @UseGuards(JwtAuthGuard)
 export class StatusController {
-  constructor(
-    private readonly statusService: StatusService,
-    private readonly offerService: OfferService
-  ) {}
+  constructor(private readonly statusService: StatusService) {}
 
   @Get(":offerId")
   async getStatusByOfferId(@Param("offerId") offerId: string, @Request() req) {
@@ -34,9 +28,8 @@ export class StatusController {
     @Body("state") state: State,
     @Request() req
   ) {
-    const offer: Offer = await this.offerService.getOfferById(offerId);
     return this.statusService.addStatus({
-      offer: offer,
+      offer: offerId,
       state: state,
       text: text,
     });

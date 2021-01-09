@@ -41,9 +41,7 @@ export class ChatController {
     @Body("content") content: string | null,
     @Request() req
   ) {
-    const oldMessage = await this.chatService.findById(messageId);
-    return this.chatService.updateMessage(messageId, {
-      offer: oldMessage.offer,
+    await this.chatService.updateMessage(messageId, {
       content: content,
     });
   }
@@ -54,9 +52,8 @@ export class ChatController {
     @Body("content") content: string | null,
     @Request() req
   ) {
-    const offer: Offer = await this.offerService.getOfferById(offerId);
     return this.chatService.addMessage({
-      offer: offer,
+      offer: offerId,
       content: content,
     });
   }

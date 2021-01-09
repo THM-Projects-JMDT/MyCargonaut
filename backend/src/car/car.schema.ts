@@ -8,12 +8,10 @@ export type CarDocument = Car & Document;
 @Schema()
 export class Car {
   @Prop({
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
     required: true,
     index: true,
   })
-  owner: User;
+  owner: string;
 
   @Prop({ required: true })
   manufacturer: string;

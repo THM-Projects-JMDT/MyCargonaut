@@ -23,6 +23,8 @@ import { AuthService } from "../auth/auth.service";
 import { LocalStrategy } from "../auth/strategies/local.strategy";
 import { JwtStrategy } from "../auth/strategies/jwt.strategy";
 import { OfferController } from "../offer/offer.controller";
+import { Rating, RatingSchema } from "../rating/rating.schema";
+import { RatingService } from "../rating/rating.service";
 
 describe("ChatService", () => {
   let userService: UsersService;
@@ -49,6 +51,7 @@ describe("ChatService", () => {
         MongooseModule.forFeature([
           { name: Chat.name, schema: ChatSchema },
           { name: Offer.name, schema: OfferSchema },
+          { name: Rating.name, schema: RatingSchema },
         ]),
       ],
       providers: [
@@ -57,6 +60,7 @@ describe("ChatService", () => {
         AuthService,
         LocalStrategy,
         JwtStrategy,
+        RatingService,
       ],
       controllers: [ChatController, AuthController, OfferController],
     }).compile();

@@ -24,18 +24,14 @@ export class UserController {
     @Body("ppPath") ppPath: string | null,
     @Request() req
   ) {
-    const oldUser = await this.userService.findOneById(req.user.id);
-
-    return this.userService.updateUser(req.user.id, {
-      password: oldUser.password,
-      username: oldUser.username,
+    await this.userService.updateUser(req.user.id, {
       firstName: firstName,
       lastName: lastName,
-      cargoCoins: oldUser.cargoCoins,
-      birthday: oldUser.birthday,
       ppPath: ppPath,
       email: email,
     });
+
+    return this.userService.findOneById(req.user.id);
   }
 
   @Post(":moneyAmount")

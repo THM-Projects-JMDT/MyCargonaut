@@ -34,11 +34,11 @@ export class Offer {
   @Prop()
   description: string;
 
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: "User" })
-  provider: User;
+  @Prop()
+  provider: string;
 
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: "User" })
-  customer: User;
+  @Prop()
+  customer: string;
 }
 
 export const OfferSchema = SchemaFactory.createForClass(Offer);

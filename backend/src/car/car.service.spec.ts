@@ -126,7 +126,7 @@ describe("CarService", () => {
       })
       .set("Authorization", `Bearer ${localJwtToken}`)
       .expect(200);
-    expect(response.body.model).toBe("A10");
+    expect(response.body[0].model).toBe("A10");
   });
 
   it(`delete car`, async () => {

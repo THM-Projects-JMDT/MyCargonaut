@@ -36,16 +36,14 @@ export class CarController {
     @Body("storageSpace") storageSpace: number | null,
     @Request() req
   ) {
-    const user = await this.userService.findOneById(req.user.id);
-    const car = {
-      owner: user,
+    await this.carService.updateCar(carId, {
       manufacturer: manufacturer,
       model: model,
       manufactureYear: manufactureYear,
       seats: seats,
       storageSpace: storageSpace,
-    };
-    return this.carService.updateCar(carId, car);
+    });
+    return this.carService.findByUser(req.user.id);
   }
 
   @Post()
@@ -57,9 +55,8 @@ export class CarController {
     @Body("storageSpace") storageSpace: number | null,
     @Request() req
   ) {
-    const user = await this.userService.findOneById(req.user.id);
     return this.carService.addCar({
-      owner: user,
+      owner: req.user.id,
       manufacturer: manufacturer,
       model: model,
       manufactureYear: manufactureYear,
