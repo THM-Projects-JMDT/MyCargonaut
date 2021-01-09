@@ -7,6 +7,7 @@ import { Header } from "./Header";
 import { ThemeProvider } from "@material-ui/core";
 import { theme } from "../assets/theme";
 import { ProtectedRouteBody } from "../util/ProtectedRouteBody";
+import { AuthCheck } from "../util/AuthCheck";
 
 const App = () => {
   const renderRoute = (r: RouteType) => (
@@ -26,15 +27,17 @@ const App = () => {
   return (
     <Provider store={store}>
       <ThemeProvider theme={theme}>
-        <BrowserRouter>
-          <Header />
-          <Switch>
-            {routesArray.map(renderRoute)}
-            <Route>
-              <Redirect to={routes.home.path} />
-            </Route>
-          </Switch>
-        </BrowserRouter>
+        <AuthCheck>
+          <BrowserRouter>
+            <Header />
+            <Switch>
+              {routesArray.map(renderRoute)}
+              <Route>
+                <Redirect to={routes.home.path} />
+              </Route>
+            </Switch>
+          </BrowserRouter>
+        </AuthCheck>
       </ThemeProvider>
     </Provider>
   );
