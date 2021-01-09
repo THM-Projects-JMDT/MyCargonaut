@@ -5,9 +5,11 @@ import { CenterCard } from "../../util/CenterCard";
 import { CustomCard } from "../../util/CustomCard";
 import { InputForm } from "../../util/InputForm";
 import { inputFieldsReg } from "../../assets/inputFields";
+import { useNotLoggedIn } from "../../hooks/useNotLoggedIn";
 
 export const Registration = () => {
   const history = useHistory();
+  useNotLoggedIn();
 
   const handleRegistration = () => {
     //TODO Registration logic

@@ -1,23 +1,16 @@
-import React, { createRef, useEffect } from "react";
+import React, { createRef } from "react";
 import { CustomCard } from "../../util/CustomCard";
 import { InputForm } from "../../util/InputForm";
 import { CenterCard } from "../../util/CenterCard";
-import { useHistory } from "react-router-dom";
-import { routes } from "../../routes";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { login } from "../../features/authSlice";
-import { RootState } from "../../features/rootReducer";
+import { useNotLoggedIn } from "../../hooks/useNotLoggedIn";
 
 export const Login = () => {
-  const history = useHistory();
   const dispatch = useDispatch();
   const usernameRef = createRef<HTMLInputElement>();
   const passwordRef = createRef<HTMLInputElement>();
-  const logedIn = useSelector((state: RootState) => state.auth.isLogedIn);
-
-  useEffect(() => {
-    if (logedIn) history.push(routes.home.path);
-  }, [logedIn, history]);
+  useNotLoggedIn();
 
   const handleLogin = () => {
     const username = usernameRef.current?.value;
