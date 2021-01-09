@@ -26,8 +26,11 @@ export function postRegister(user: {
   birthday: string;
   email: string;
 }) {
-  return fetchTimeOut(buildApiUrl("/auth/logout"), {
+  return fetchTimeOut(buildApiUrl("/auth/register"), {
     method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
     body: JSON.stringify(user),
   });
 }
