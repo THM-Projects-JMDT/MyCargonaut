@@ -16,6 +16,7 @@ import { TrackingDetails } from "../../model/TrackingDetails";
 import { UserDetails } from "../../model/UserDetails";
 import { Offer } from "../Offer";
 import { useStyles } from "./OfferPage.style";
+import { OfferDummy } from "../Offer/OfferDummy";
 
 export interface OfferPageProps {
   show: "offers" | "requests";
@@ -248,6 +249,7 @@ export const OfferPage: React.FC<OfferPageProps> = ({ show }) => {
             </Tabs>
           </AppBar>
           <List>
+            {activeTab === 1 && <OfferDummy show={show} />}
             {displayList?.filter(predicate).map((o: any, idx: number) => (
               <ListItem key={idx}>
                 <Offer
