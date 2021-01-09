@@ -1,7 +1,10 @@
+import { User } from "../model/User";
 import { buildApiUrl, fetchTimeOut } from "./util";
 
 export function getLogin() {
-  return fetchTimeOut(buildApiUrl("/auth/login"));
+  return fetchTimeOut(buildApiUrl("/auth/login")).then((res) =>
+    res.json()
+  ) as Promise<User>;
 }
 
 export function postLogin(username: string, password: string) {
@@ -11,7 +14,7 @@ export function postLogin(username: string, password: string) {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({ username, password }),
-  });
+  }).then((res) => res.json()) as Promise<User>;
 }
 
 export function postLogout() {
