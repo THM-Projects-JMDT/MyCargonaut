@@ -16,7 +16,9 @@ export const NavElements: React.FC = () => {
   const logedIn = useSelector((state: RootState) => state.auth.isLogedIn);
   const dispatch = useDispatch();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const cargoCoinsBalance = 3000; // TODO: retrieve actual balance
+  const cargoCoinsBalance = useSelector(
+    (state: RootState) => state.user.user?.cargoCoins
+  );
   const history = useHistory();
   const [open, setOpen] = useState(false);
 
