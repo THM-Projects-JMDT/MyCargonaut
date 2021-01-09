@@ -95,23 +95,23 @@ describe("StatusService", () => {
     expect(response.body.state).toBe("Waiting");
   });
 
-  it(`get status`, async () => {
+  it(`get status delete status`, async () => {
     const [localJwtToken, username] = await loginAndGetJWTToken(
       userService,
       app
     );
     const offer = await addOffer(app, localJwtToken, true);
+
     await addStatus(app, localJwtToken, offer.body._id, "Waiting");
     let response = await request(app.getHttpServer())
       .get("/status/" + offer.body._id)
       .set("Authorization", `Bearer ${localJwtToken}`);
-    expect(response.body[0].state).toBe("Waiting");
+    expect(response.body.state).toBe("Waiting");
     await addStatus(app, localJwtToken, offer.body._id, "InProgress");
     response = await request(app.getHttpServer())
       .get("/status/" + offer.body._id)
       .set("Authorization", `Bearer ${localJwtToken}`);
-    expect(response.body[0].state).toBe("Waiting");
-    expect(response.body[1].state).toBe("InProgress");
+    expect(response.body.state).toBe("InProgress");
   });
 
   afterAll(async () => {

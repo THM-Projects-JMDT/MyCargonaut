@@ -28,6 +28,10 @@ export class StatusController {
     @Body("state") state: State,
     @Request() req
   ) {
+    const status = await this.statusService.findByOffer(offerId);
+    if (status != null) {
+      await this.statusService.deleteStatus(status._id);
+    }
     return this.statusService.addStatus({
       offer: offerId,
       state: state,

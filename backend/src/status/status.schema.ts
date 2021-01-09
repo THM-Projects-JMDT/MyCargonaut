@@ -9,6 +9,7 @@ export class Status {
   @Prop({
     required: true,
     index: true,
+    unique: true,
   })
   offer: string;
 

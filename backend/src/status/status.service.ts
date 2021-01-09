@@ -16,6 +16,9 @@ export class StatusService {
   async findByOffer(offerId: string) {
     return this.statusModel.findOne({ offer: offerId }, { __v: 0 });
   }
+  async deleteStatus(statusId) {
+    return this.statusModel.findByIdAndRemove(statusId);
+  }
 
   async addStatus(status) {
     const newStatus = new this.statusModel(status);
