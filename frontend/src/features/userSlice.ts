@@ -10,7 +10,7 @@ const initialState: UserState = {
 };
 
 export const user = createSlice({
-  name: "auth",
+  name: "user",
   initialState,
   reducers: {
     getUserSuccess(state, { payload }: PayloadAction<User>) {
