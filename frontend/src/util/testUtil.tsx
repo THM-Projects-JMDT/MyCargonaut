@@ -1,10 +1,14 @@
 // Inspired by https://dev.to/slawomirkolodziej/guide-testing-redux-connected-components-with-react-testing-library-and-jest-43j7
 
 import React from "react";
-import { render } from "@testing-library/react";
+import { render, RenderOptions } from "@testing-library/react";
 import { createStore } from "redux";
-import { Provider } from "react-redux";
+import { Provider, RootStateOrAny } from "react-redux";
 import reducer from "../features/rootReducer";
+
+export interface RenderOptionsWithState extends RenderOptions {
+  initalState?: RootStateOrAny;
+}
 
 export const renderWithState = (
   ui: React.ReactElement<
@@ -18,9 +22,9 @@ export const renderWithState = (
       > | null)
     | (new (props: any) => React.Component<any, any, any>)
   >,
-  { initialState, ...renderOptions }: any = {}
+  { initalState, ...renderOptions }: RenderOptionsWithState = {}
 ) => {
-  const store = createStore(reducer, initialState);
+  const store = createStore(reducer, initalState);
   const Wrapper: React.FC = ({ children }) => (
     <Provider store={store}>{children}</Provider>
   );
