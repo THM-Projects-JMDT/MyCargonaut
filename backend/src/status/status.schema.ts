@@ -1,16 +1,18 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { Document } from "mongoose";
-import * as mongoose from "mongoose";
-import { Offer } from "../offer/offer.schema";
 
 export type StatusDocument = Status & Document;
 
 @Schema()
 export class Status {
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: "Offer" })
-  owner: Offer;
+  @Prop({
+    required: true,
+    index: true,
+    unique: true,
+  })
+  offer: string;
 
-  @Prop()
+  @Prop({ required: true })
   state: "Waiting" | "InProgress" | "Delivered";
 
   @Prop()

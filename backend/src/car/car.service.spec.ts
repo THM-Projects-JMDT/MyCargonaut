@@ -3,6 +3,7 @@ import { CarService } from "./car.service";
 import { CarController } from "./car.controller";
 import {
   closeInMongodConnection,
+  loginAndGetJWTToken,
   rootMongooseTestModule,
 } from "../testUtil/MongooseTestModule";
 import { MongooseModule } from "@nestjs/mongoose";
@@ -19,23 +20,13 @@ import { AuthService } from "../auth/auth.service";
 import { AuthController } from "../auth/auth.controller";
 import { LocalStrategy } from "../auth/strategies/local.strategy";
 import { JwtStrategy } from "../auth/strategies/jwt.strategy";
+import { randomStringGenerator } from "@nestjs/common/utils/random-string-generator.util";
 
 describe("CarService", () => {
   let userService: UsersService;
   let service: CarService;
   let controller: CarController;
   let app: INestApplication;
-  let jwtToken: string;
-  const newUser = {
-    username: "admin",
-    password: "admin",
-    firstName: "Jannik",
-    lastName: "Lapp",
-    ppPath: "images/test.png",
-    birthday: new Date("11-09-1998"),
-    email: "jannik.lapp@mni.thm.de",
-    cargoCoins: 3000,
-  };
   const newCar = {
     manufacturer: "Test",
     model: "A20",
@@ -89,28 +80,87 @@ describe("CarService", () => {
   it("should be defined", () => {
     expect(controller).toBeDefined();
   });
-  it(`login`, async () => {
-    await userService.addUser(newUser);
-    const response = await request(app.getHttpServer())
-      .post("/auth/login")
-      .send({ username: "admin", password: "admin" })
-      .expect(201);
-    jwtToken = response.body.access_token;
-  });
-  /**
-   * test not correct jwt need change first
 
-  it(`add car`, () => {
-    return request(app.getHttpServer())
-      .post("/car")
-      .send(newCar)
-      .set("Authorization", `Bearer ${jwtToken}`)
-      .expect(500);
+  it(`add car`, async () => {
+    const [localJwtToken, username] = await loginAndGetJWTToken(
+      userService,
+      app
+    );
+    const response = await addCar(app, localJwtToken);
+    expect(response.body.model).toBe("A20");
   });
-   */
+  it(`get my cars`, async () => {
+    const [localJwtToken, username] = await loginAndGetJWTToken(
+      userService,
+      app
+    );
+    let response = await request(app.getHttpServer())
+      .get("/car")
+      .set("Authorization", `Bearer ${localJwtToken}`)
+      .expect(200);
+    expect(response.body.length).toBe(0);
+    await addCar(app, localJwtToken);
+    await addCar(app, localJwtToken);
+    response = await request(app.getHttpServer())
+      .get("/car")
+      .set("Authorization", `Bearer ${localJwtToken}`)
+      .expect(200);
+    expect(response.body.length).toBe(2);
+    expect(response.body[0].model).toBe("A20");
+  });
+
+  it(`edit car`, async () => {
+    const [localJwtToken, username] = await loginAndGetJWTToken(
+      userService,
+      app
+    );
+    let response = await addCar(app, localJwtToken);
+    response = await request(app.getHttpServer())
+      .put("/car/" + response.body._id)
+      .send({
+        manufacturer: randomStringGenerator(),
+        model: "A10",
+        manufactureYear: 2021,
+        seats: 4,
+        storageSpace: 500,
+      })
+      .set("Authorization", `Bearer ${localJwtToken}`)
+      .expect(200);
+    expect(response.body[0].model).toBe("A10");
+  });
+
+  it(`delete car`, async () => {
+    const [localJwtToken, username] = await loginAndGetJWTToken(
+      userService,
+      app
+    );
+    let response = await addCar(app, localJwtToken);
+    await request(app.getHttpServer())
+      .delete("/car/" + response.body._id)
+      .set("Authorization", `Bearer ${localJwtToken}`)
+      .expect(200);
+    response = await request(app.getHttpServer())
+      .get("/car")
+      .set("Authorization", `Bearer ${localJwtToken}`)
+      .expect(200);
+    expect(response.body.length).toBe(0);
+  });
 
   afterAll(async () => {
     await closeInMongodConnection();
     await app.close();
   });
 });
+
+export const addCar = async (app, localJwtToken) => {
+  return request(app.getHttpServer())
+    .post("/car")
+    .send({
+      manufacturer: randomStringGenerator(),
+      model: "A20",
+      manufactureYear: 2021,
+      seats: 4,
+      storageSpace: 500,
+    })
+    .set("Authorization", `Bearer ${localJwtToken}`);
+};

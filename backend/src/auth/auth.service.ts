@@ -13,9 +13,12 @@ export class AuthService {
 
   async getAuthenticatedUser(username: string, pass: string): Promise<any> {
     try {
-      const isLogedIn = await this.usersService.comparePassword(username, pass);
+      const isLoggedIn = await this.usersService.comparePassword(
+        username,
+        pass
+      );
 
-      if (!isLogedIn)
+      if (!isLoggedIn)
         throw new HttpException(
           "Wrong credentials provided",
           HttpStatus.BAD_REQUEST

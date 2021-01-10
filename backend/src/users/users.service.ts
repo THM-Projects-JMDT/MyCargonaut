@@ -25,20 +25,14 @@ export class UsersService {
     return newUser.save();
   }
 
-  async updateUser(userId: string, user: User) {
-    return this.userModel.findByIdAndUpdate(userId, user, {
-      new: true,
-    });
+  async updateUser(userId: string, updatedUser) {
+    return this.userModel.findByIdAndUpdate(userId, { $set: updatedUser });
   }
 
   async updateMoney(userId: string, coins: number) {
-    return await this.userModel.findByIdAndUpdate(userId, {
+    return this.userModel.findByIdAndUpdate(userId, {
       $inc: { cargoCoins: coins },
     });
-  }
-
-  async getAll() {
-    return await this.userModel.find().exec();
   }
 
   async hashPassword(password: string): Promise<string> {
@@ -47,13 +41,13 @@ export class UsersService {
 
   async comparePassword(
     username: string,
-    plantextPassword: string
+    planTextPassword: string
   ): Promise<boolean> {
     const user = await this.userModel.findOne(
       { username: username },
       { password: 1 }
     );
 
-    return user && compare(plantextPassword, user.password);
+    return user && compare(planTextPassword, user.password);
   }
 }

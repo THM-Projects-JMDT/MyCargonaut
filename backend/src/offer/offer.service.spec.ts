@@ -2,7 +2,9 @@ import { Test, TestingModule } from "@nestjs/testing";
 import { OfferService } from "./offer.service";
 import { OfferController } from "./offer.controller";
 import {
+  addOffer,
   closeInMongodConnection,
+  loginAndGetJWTToken,
   rootMongooseTestModule,
 } from "../testUtil/MongooseTestModule";
 import { MongooseModule } from "@nestjs/mongoose";
@@ -14,28 +16,21 @@ import { PassportModule } from "@nestjs/passport";
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import { JwtModule } from "@nestjs/jwt";
 import { UsersService } from "../users/users.service";
-import { UserController } from "../users/user.controller";
 import { AuthController } from "../auth/auth.controller";
 import { AuthService } from "../auth/auth.service";
 import { LocalStrategy } from "../auth/strategies/local.strategy";
 import { JwtStrategy } from "../auth/strategies/jwt.strategy";
+import { RatingService } from "../rating/rating.service";
+import { Rating, RatingSchema } from "../rating/rating.schema";
+import { RatingController } from "../rating/rating.controller";
+import { Status, StatusSchema } from "../status/status.schema";
+import { StatusService } from "../status/status.service";
 
 describe("OfferService", () => {
   let userService: UsersService;
   let service: OfferService;
   let controller: OfferController;
   let app: INestApplication;
-  let jwtToken: string;
-  const newUser = {
-    username: "admin",
-    password: "admin",
-    firstName: "Jannik",
-    lastName: "Lapp",
-    ppPath: "images/test.png",
-    birthday: new Date("11-09-1998"),
-    email: "jannik.lapp@mni.thm.de",
-    cargoCoins: 3000,
-  };
 
   beforeEach(async () => {
     const moduleRef: TestingModule = await Test.createTestingModule({
@@ -53,10 +48,21 @@ describe("OfferService", () => {
           inject: [ConfigService],
         }),
         ConfigModule,
-        MongooseModule.forFeature([{ name: Offer.name, schema: OfferSchema }]),
+        MongooseModule.forFeature([
+          { name: Status.name, schema: StatusSchema },
+          { name: Offer.name, schema: OfferSchema },
+          { name: Rating.name, schema: RatingSchema },
+        ]),
       ],
-      providers: [OfferService, AuthService, LocalStrategy, JwtStrategy],
-      controllers: [OfferController, AuthController],
+      providers: [
+        OfferService,
+        AuthService,
+        RatingService,
+        LocalStrategy,
+        JwtStrategy,
+        StatusService,
+      ],
+      controllers: [OfferController, AuthController, RatingController],
     }).compile();
 
     userService = moduleRef.get<UsersService>(UsersService);
@@ -73,14 +79,151 @@ describe("OfferService", () => {
   it("should be defined", () => {
     expect(controller).toBeDefined();
   });
-  it(`login`, async () => {
-    await userService.addUser(newUser);
-    const response = await request(app.getHttpServer())
-      .post("/auth/login")
-      .send({ username: "admin", password: "admin" })
-      .expect(201);
-    jwtToken = response.body.access_token;
+
+  it(`add offer`, async () => {
+    const [localJwtToken, username] = await loginAndGetJWTToken(
+      userService,
+      app
+    );
+    const response = await addOffer(app, localJwtToken, true);
+    expect(response.body.description).toBe("Test");
   });
+  it(`get my offers`, async () => {
+    const [localJwtToken, username] = await loginAndGetJWTToken(
+      userService,
+      app
+    );
+    let response = await request(app.getHttpServer())
+      .get("/offer")
+      .send({ forOffer: true, forPrivate: true })
+      .set("Authorization", `Bearer ${localJwtToken}`)
+      .expect(200);
+    expect(response.body.length).toBe(0);
+    await addOffer(app, localJwtToken, true);
+    await addOffer(app, localJwtToken, true);
+    await addOffer(app, localJwtToken, false);
+    response = await request(app.getHttpServer())
+      .get("/offer")
+      .send({ forOffer: true, forPrivate: true })
+      .set("Authorization", `Bearer ${localJwtToken}`)
+      .expect(200);
+    expect(response.body.length).toBe(2);
+    expect(response.body[0].from).toBe("Gießen");
+  });
+  it(`get all offers`, async () => {
+    const [localJwtToken, username] = await loginAndGetJWTToken(
+      userService,
+      app
+    );
+    const [localJwtToken2, username2] = await loginAndGetJWTToken(
+      userService,
+      app
+    );
+    await addOffer(app, localJwtToken, true);
+    await addOffer(app, localJwtToken2, true);
+    await addOffer(app, localJwtToken2, false);
+    let response = await request(app.getHttpServer())
+      .get("/offer")
+      .send({ forOffer: true, forPrivate: false })
+      .set("Authorization", `Bearer ${localJwtToken}`)
+      .expect(200);
+    expect(response.body.length).toBe(2);
+    await addOffer(app, localJwtToken2, true);
+    response = await request(app.getHttpServer())
+      .get("/offer")
+      .send({ forOffer: false, forPrivate: false })
+      .set("Authorization", `Bearer ${localJwtToken2}`)
+      .expect(200);
+    expect(response.body.length).toBe(1);
+  });
+
+  it(`delete offer`, async () => {
+    const [localJwtToken, username] = await loginAndGetJWTToken(
+      userService,
+      app
+    );
+    const offer = await addOffer(app, localJwtToken, true);
+    await addOffer(app, localJwtToken, true);
+    let response = await request(app.getHttpServer())
+      .get("/offer")
+      .send({ forOffer: true, forPrivate: true })
+      .set("Authorization", `Bearer ${localJwtToken}`)
+      .expect(200);
+    expect(response.body.length).toBe(2);
+    await request(app.getHttpServer())
+      .delete("/offer/" + offer.body._id)
+      .set("Authorization", `Bearer ${localJwtToken}`)
+      .expect(200);
+    response = await request(app.getHttpServer())
+      .get("/offer")
+      .send({ forOffer: true, forPrivate: true })
+      .set("Authorization", `Bearer ${localJwtToken}`)
+      .expect(200);
+    expect(response.body.length).toBe(1);
+  });
+
+  it(`edit offer`, async () => {
+    const [localJwtToken, username] = await loginAndGetJWTToken(
+      userService,
+      app
+    );
+    let response = await addOffer(app, localJwtToken, true);
+    await request(app.getHttpServer())
+      .put("/offer/" + response.body._id)
+      .send({
+        from: "Grünberg",
+        to: "Frankfurt",
+        service: "transport",
+        price: 50,
+        seats: 2,
+        storageSpace: 50,
+        description: "Test",
+      })
+      .set("Authorization", `Bearer ${localJwtToken}`)
+      .expect(200);
+    response = await request(app.getHttpServer())
+      .get("/offer")
+      .send({ forOffer: true, forPrivate: true })
+      .set("Authorization", `Bearer ${localJwtToken}`)
+      .expect(200);
+    expect(response.body[0].from).toBe("Grünberg");
+  });
+
+  it(`book offer`, async () => {
+    const [localJwtToken, username] = await loginAndGetJWTToken(
+      userService,
+      app
+    );
+    const [localJwtToken2, username2] = await loginAndGetJWTToken(
+      userService,
+      app
+    );
+    const user1 = await request(app.getHttpServer())
+      .get("/user")
+      .set("Authorization", `Bearer ${localJwtToken}`)
+      .expect(200);
+    const user2 = await request(app.getHttpServer())
+      .get("/user")
+      .set("Authorization", `Bearer ${localJwtToken2}`)
+      .expect(200);
+    const offer = await addOffer(app, localJwtToken, true);
+    await request(app.getHttpServer())
+      .post("/offer/bookOffer/" + offer.body._id)
+      .set("Authorization", `Bearer ${localJwtToken2}`)
+      .expect(201);
+
+    const response = await request(app.getHttpServer())
+      .get("/offer")
+      .send({ forOffer: true, forPrivate: true })
+      .set("Authorization", `Bearer ${localJwtToken}`)
+      .expect(200);
+    expect(response.body.length).toBe(1);
+    expect(response.body[0].orderDate).toBeDefined();
+    expect(response.body[0].provider).toBe(user1.body._id);
+    expect(response.body[0].customer).toBe(user2.body._id);
+    expect(response.body[0].tracking.state).toBe("Waiting");
+  });
+
   afterAll(async () => {
     await closeInMongodConnection();
     await app.close();

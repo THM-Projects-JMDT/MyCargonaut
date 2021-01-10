@@ -1,5 +1,3 @@
-import { User } from "../users/user";
-
 export type Service = "transport" | "rideShare";
 
 export interface Offer {
@@ -12,6 +10,6 @@ export interface Offer {
   seats: number | undefined;
   storageSpace: number | undefined;
   description: string;
-  provider: User | undefined;
-  customer: User | undefined;
+  provider: string | undefined;
+  customer: string | undefined;
 }

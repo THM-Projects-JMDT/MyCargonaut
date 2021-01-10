@@ -1,8 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
-import { Model } from "mongoose";
+import { Model, Schema } from "mongoose";
 import { CarDocument } from "./car.schema";
-import { User } from "../users/user";
 import { Car } from "./car";
 
 @Injectable()
@@ -11,8 +10,8 @@ export class CarService {
     @InjectModel("Car") private readonly carModel: Model<CarDocument>
   ) {}
 
-  async findByUser(user: User) {
-    return this.carModel.find({ owner: user });
+  async findByUser(userId: string) {
+    return this.carModel.find({ owner: userId }, { __v: 0 });
   }
 
   async addCar(car: Car) {
@@ -20,12 +19,10 @@ export class CarService {
     return newCar.save();
   }
 
-  async updateCar(carID: number, car: Car) {
-    return this.carModel.findByIdAndUpdate(carID, car, {
-      new: true,
-    });
+  async updateCar(carID: string, carUpdate) {
+    return this.carModel.findByIdAndUpdate(carID, { $set: carUpdate });
   }
-  async deleteCar(carId) {
+  async deleteCar(carId: string) {
     return this.carModel.findByIdAndRemove(carId);
   }
 }

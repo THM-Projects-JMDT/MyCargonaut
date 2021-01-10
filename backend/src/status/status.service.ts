@@ -13,12 +13,14 @@ export class StatusService {
     @InjectModel("Offer") private readonly offerModel: Model<OfferDocument>
   ) {}
 
-  async findByOffer(offerId: number) {
-    const offer = await this.offerModel.findById(offerId);
-    return this.statusModel.find({ owner: offer });
+  async findByOffer(offerId: string) {
+    return this.statusModel.findOne({ offer: offerId }, { __v: 0 });
+  }
+  async deleteStatus(statusId) {
+    return this.statusModel.findByIdAndRemove(statusId);
   }
 
-  async addStatus(status: Status) {
+  async addStatus(status) {
     const newStatus = new this.statusModel(status);
     return newStatus.save();
   }
