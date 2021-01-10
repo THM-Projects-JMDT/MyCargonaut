@@ -126,8 +126,8 @@ export class OfferController {
 
   @Get()
   async getOffers(
-    @Body("forOffer") forOffer: boolean,
-    @Body("forPrivate") forPrivate: boolean,
+    @Param("forOffer") forOffer: boolean,
+    @Param("forPrivate") forPrivate: boolean,
     @Request() req
   ) {
     let offerList;
