@@ -1,7 +1,7 @@
 import React from "react";
-import { render } from "@testing-library/react";
 import { Header } from "./index";
 import { BrowserRouter } from "react-router-dom";
+import { renderWithState } from "../../util/testUtil";
 
 const header = (
   <BrowserRouter>
@@ -10,7 +10,7 @@ const header = (
 );
 
 it("contains the logo with a link to the start page", () => {
-  const { getByTestId } = render(header);
+  const { getByTestId } = renderWithState(header);
   expect(getByTestId("logo").closest("a")).toHaveAttribute("href", "/");
 });
 

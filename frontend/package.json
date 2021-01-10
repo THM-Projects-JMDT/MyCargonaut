@@ -62,6 +62,8 @@
   "devDependencies": {
     "eslint-config-prettier": "^7.1.0",
     "eslint-plugin-prettier": "^3.3.0",
+    "fetch-mock-jest": "^1.5.1",
+    "node-fetch": "^2.6.1",
     "prettier": "^2.2.1"
   },
   "jest": {

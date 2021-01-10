@@ -10,12 +10,16 @@ import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 import { LinkButton } from "../../util/LinkButton";
 import { CargoCoinsDialog } from "../../util/CargoCoinsDialog";
 import { PasswordDialog } from "./PasswordDialog";
+import { useSelector } from "react-redux";
+import { RootState } from "../../features/rootReducer";
 
 export const Profile = () => {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
   const [openPw, setOpenPw] = useState(false);
-  const cargoCoinsBalance = 3000; // TODO: retrieve actual balance
+  const cargoCoinsBalance = useSelector(
+    (state: RootState) => state.user.user?.cargoCoins
+  );
 
   const handleOpen = () => {
     setOpen(true);
