@@ -69,9 +69,8 @@ export class AuthController {
       delete user.password; // TODO improve?
       return user;
     } catch {
-      // TODO may improve error msg
       throw new HttpException(
-        "Something went wrong",
+        "Cant register user",
         HttpStatus.INTERNAL_SERVER_ERROR
       );
     }

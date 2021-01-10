@@ -24,6 +24,7 @@ import ChatBubbleIcon from "@material-ui/icons/ChatBubble";
 import StarIcon from "@material-ui/icons/Star";
 import { UserDetails } from "../../model/UserDetails";
 import { OfferDetails } from "../../model/OfferDetails";
+import { RatingDialog } from "./RatingDialog";
 
 export interface OfferProps {
   provider?: UserDetails;
@@ -54,7 +55,8 @@ export const Offer: React.FC<OfferProps> = ({
   loggedInUserId,
 }) => {
   const classes = useStyles();
-  const [open, setOpen] = React.useState(false);
+  const [ratingOpen, setRatingOpen] = React.useState(false);
+  const [trackingOpen, setTrackingOpen] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
   const isPendingOffer = customer === undefined;
@@ -67,7 +69,7 @@ export const Offer: React.FC<OfferProps> = ({
 
   const handleTrackingClick = (event: any) => {
     event.stopPropagation();
-    setOpen(true);
+    setTrackingOpen(true);
   };
 
   const handleAvatarClick = (
@@ -161,8 +163,8 @@ export const Offer: React.FC<OfferProps> = ({
                   {offer.tracking && (
                     <TrackingDialog
                       tracking={offer.tracking}
-                      open={open}
-                      onClose={() => setOpen(false)}
+                      open={trackingOpen}
+                      onClose={() => setTrackingOpen(false)}
                     />
                   )}
                 </div>
@@ -214,13 +216,22 @@ export const Offer: React.FC<OfferProps> = ({
           </ListItemIcon>
           Chat
         </MenuItem>
-        <MenuItem onClick={() => {}}>
+        <MenuItem onClick={() => setRatingOpen(true)}>
           <ListItemIcon>
             <StarIcon />
           </ListItemIcon>
           Bewerten
         </MenuItem>
       </Menu>
+      <RatingDialog
+        open={ratingOpen}
+        onClose={() => setRatingOpen(false)}
+        username={
+          (loggedInUserId === customer?.id
+            ? provider?.username
+            : customer?.username) ?? ""
+        }
+      />
     </Accordion>
   );
 };

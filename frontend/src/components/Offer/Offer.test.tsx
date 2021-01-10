@@ -147,4 +147,23 @@ describe("offer does belong to logged in user", () => {
     expect(getByText("Bereit!")).toBeInTheDocument();
     expect(getByText(message)).toBeInTheDocument();
   });
+  it("displays rating modal correctly when rating button is clicked", () => {
+    const { getByText, getByTestId } = render(
+      <Offer
+        customer={userA}
+        provider={userB}
+        offer={{ ...offer, tracking }}
+        loggedInUserId={1}
+      />
+    );
+    expect(getByText("Bewerten")).toBeInTheDocument();
+    const ratingButton = getByText("Bewerten");
+    userEvent.click(ratingButton);
+    expect(
+      getByText("Bewertung für " + userB.username + ":")
+    ).toBeInTheDocument();
+    expect(getByTestId("rating")).toBeInTheDocument();
+    expect(getByText("Bestätigen")).toBeInTheDocument();
+    expect(getByText("Schließen")).toBeInTheDocument();
+  });
 });

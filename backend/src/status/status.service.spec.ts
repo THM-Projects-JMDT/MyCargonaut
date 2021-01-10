@@ -2,7 +2,9 @@ import { Test, TestingModule } from "@nestjs/testing";
 import { StatusService } from "./status.service";
 import { StatusController } from "./status.controller";
 import {
+  addOffer,
   closeInMongodConnection,
+  loginAndGetJWTToken,
   rootMongooseTestModule,
 } from "../testUtil/MongooseTestModule";
 import { MongooseModule } from "@nestjs/mongoose";
@@ -16,28 +18,19 @@ import { PassportModule } from "@nestjs/passport";
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import { JwtModule } from "@nestjs/jwt";
 import { UsersService } from "../users/users.service";
-import { UserController } from "../users/user.controller";
 import { AuthController } from "../auth/auth.controller";
 import { AuthService } from "../auth/auth.service";
 import { LocalStrategy } from "../auth/strategies/local.strategy";
 import { JwtStrategy } from "../auth/strategies/jwt.strategy";
+import { OfferController } from "../offer/offer.controller";
+import { Rating, RatingSchema } from "../rating/rating.schema";
+import { RatingService } from "../rating/rating.service";
 
 describe("StatusService", () => {
   let userService: UsersService;
   let service: StatusService;
   let controller: StatusController;
   let app: INestApplication;
-  let jwtToken: string;
-  const newUser = {
-    username: "admin",
-    password: "admin",
-    firstName: "Jannik",
-    lastName: "Lapp",
-    ppPath: "images/test.png",
-    birthday: new Date("11-09-1998"),
-    email: "jannik.lapp@mni.thm.de",
-    cargoCoins: 3000,
-  };
 
   beforeEach(async () => {
     const moduleRef: TestingModule = await Test.createTestingModule({
@@ -58,6 +51,7 @@ describe("StatusService", () => {
         MongooseModule.forFeature([
           { name: Status.name, schema: StatusSchema },
           { name: Offer.name, schema: OfferSchema },
+          { name: Rating.name, schema: RatingSchema },
         ]),
       ],
       providers: [
@@ -65,9 +59,10 @@ describe("StatusService", () => {
         OfferService,
         AuthService,
         LocalStrategy,
+        RatingService,
         JwtStrategy,
       ],
-      controllers: [StatusController, AuthController],
+      controllers: [StatusController, AuthController, OfferController],
     }).compile();
 
     userService = moduleRef.get<UsersService>(UsersService);
@@ -85,16 +80,57 @@ describe("StatusService", () => {
     expect(controller).toBeDefined();
   });
 
-  it(`login`, async () => {
-    await userService.addUser(newUser);
-    const response = await request(app.getHttpServer())
-      .post("/auth/login")
-      .send({ username: "admin", password: "admin" })
-      .expect(201);
-    jwtToken = response.body.access_token;
+  it(`add status`, async () => {
+    const [localJwtToken, username] = await loginAndGetJWTToken(
+      userService,
+      app
+    );
+    let response = await addOffer(app, localJwtToken, true);
+    response = await addStatus(
+      app,
+      localJwtToken,
+      response.body._id,
+      "Waiting"
+    );
+    expect(response.body.state).toBe("Waiting");
   });
+
+  it(`get status delete status`, async () => {
+    const [localJwtToken, username] = await loginAndGetJWTToken(
+      userService,
+      app
+    );
+    const offer = await addOffer(app, localJwtToken, true);
+
+    await addStatus(app, localJwtToken, offer.body._id, "Waiting");
+    let response = await request(app.getHttpServer())
+      .get("/status/" + offer.body._id)
+      .set("Authorization", `Bearer ${localJwtToken}`);
+    expect(response.body.state).toBe("Waiting");
+    await addStatus(app, localJwtToken, offer.body._id, "InProgress");
+    response = await request(app.getHttpServer())
+      .get("/status/" + offer.body._id)
+      .set("Authorization", `Bearer ${localJwtToken}`);
+    expect(response.body.state).toBe("InProgress");
+  });
+
   afterAll(async () => {
     await closeInMongodConnection();
     await app.close();
   });
 });
+
+export const addStatus = async (
+  app,
+  localJwtToken,
+  offerId: string,
+  state: string
+) => {
+  return request(app.getHttpServer())
+    .post("/status/" + offerId)
+    .send({
+      text: "komme morgen",
+      state: state,
+    })
+    .set("Authorization", `Bearer ${localJwtToken}`);
+};

@@ -22,30 +22,26 @@ export class UserController {
     @Body("lastName") lastName: string | null,
     @Body("email") email: string | null,
     @Body("ppPath") ppPath: string | null,
-    @Body("birthday") birthday: Date | null,
     @Request() req
   ) {
-    /* TODO
-    return this.userService.updateUser(req.user.id, {
-      password: password,
-      username: req.user.username,
+    await this.userService.updateUser(req.user.id, {
       firstName: firstName,
       lastName: lastName,
-      cargoCoins: req.user.cargoCoins,
-      birthday: birthday,
       ppPath: ppPath,
       email: email,
-    });*/
+    });
+
+    return this.userService.findOneById(req.user.id);
   }
 
-  @Post("addMoney/:moneyAmount")
+  @Post(":moneyAmount")
   async addMoney(@Param("moneyAmount") cargoCoins: string, @Request() req) {
-    return this.userService.updateMoney(req.user.id, Number(cargoCoins));
+    await this.userService.updateMoney(req.user.id, Number(cargoCoins));
+    return this.userService.findOneById(req.user.id);
   }
 
   @Get()
   async getUser(@Request() req) {
-    console.log(req.user);
     return this.userService.findOneById(req.user.id);
   }
 }
