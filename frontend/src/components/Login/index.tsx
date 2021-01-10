@@ -36,6 +36,7 @@ export const Login = () => {
         onKeyDown: handlePressEnter,
         autoComplete: "username",
         name: "username",
+        id: "username",
       },
     },
     {
@@ -47,6 +48,7 @@ export const Login = () => {
         autoComplete: "current-password",
         type: "password",
         name: "password",
+        id: "password",
       },
     },
   ];
