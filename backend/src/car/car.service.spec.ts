@@ -12,7 +12,7 @@ import { INestApplication } from "@nestjs/common";
 import { User, UserSchema } from "../users/user.schema";
 import * as request from "supertest";
 import { UsersService } from "../users/users.service";
-import { JwtModule } from "@nestjs/jwt";
+import { JwtModule, JwtService } from "@nestjs/jwt";
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import { UsersModule } from "../users/users.module";
 import { PassportModule } from "@nestjs/passport";
@@ -24,16 +24,10 @@ import { randomStringGenerator } from "@nestjs/common/utils/random-string-genera
 
 describe("CarService", () => {
   let userService: UsersService;
+  let jwtService: JwtService;
   let service: CarService;
   let controller: CarController;
   let app: INestApplication;
-  const newCar = {
-    manufacturer: "Test",
-    model: "A20",
-    manufactureYear: 2021,
-    seats: 4,
-    storageSpace: 500,
-  };
 
   beforeEach(async () => {
     const moduleRef: TestingModule = await Test.createTestingModule({
@@ -69,6 +63,7 @@ describe("CarService", () => {
     service = moduleRef.get<CarService>(CarService);
     controller = moduleRef.get<CarController>(CarController);
     userService = moduleRef.get<UsersService>(UsersService);
+    jwtService = moduleRef.get<JwtService>(JwtService);
 
     app = moduleRef.createNestApplication();
     await app.init();
@@ -84,6 +79,7 @@ describe("CarService", () => {
   it(`add car`, async () => {
     const [localJwtToken, username] = await loginAndGetJWTToken(
       userService,
+      jwtService,
       app
     );
     const response = await addCar(app, localJwtToken);
@@ -92,6 +88,7 @@ describe("CarService", () => {
   it(`get my cars`, async () => {
     const [localJwtToken, username] = await loginAndGetJWTToken(
       userService,
+      jwtService,
       app
     );
     let response = await request(app.getHttpServer())
@@ -112,6 +109,7 @@ describe("CarService", () => {
   it(`edit car`, async () => {
     const [localJwtToken, username] = await loginAndGetJWTToken(
       userService,
+      jwtService,
       app
     );
     let response = await addCar(app, localJwtToken);
@@ -132,6 +130,7 @@ describe("CarService", () => {
   it(`delete car`, async () => {
     const [localJwtToken, username] = await loginAndGetJWTToken(
       userService,
+      jwtService,
       app
     );
     let response = await addCar(app, localJwtToken);

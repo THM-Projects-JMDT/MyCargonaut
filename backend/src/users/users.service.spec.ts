@@ -12,7 +12,7 @@ import { INestApplication } from "@nestjs/common";
 import { UsersModule } from "./users.module";
 import { PassportModule } from "@nestjs/passport";
 import { ConfigModule, ConfigService } from "@nestjs/config";
-import { JwtModule } from "@nestjs/jwt";
+import { JwtModule, JwtService } from "@nestjs/jwt";
 import * as request from "supertest";
 import { AuthService } from "../auth/auth.service";
 import { LocalStrategy } from "../auth/strategies/local.strategy";
@@ -21,6 +21,7 @@ import { AuthController } from "../auth/auth.controller";
 
 describe("UsersService", () => {
   let service: UsersService;
+  let jwtService: JwtService;
   let controller: UserController;
   let app: INestApplication;
 
@@ -48,6 +49,7 @@ describe("UsersService", () => {
 
     service = moduleRef.get<UsersService>(UsersService);
     controller = moduleRef.get<UserController>(UserController);
+    jwtService = moduleRef.get<JwtService>(JwtService);
 
     app = moduleRef.createNestApplication();
     await app.init();
@@ -75,14 +77,22 @@ describe("UsersService", () => {
   });
 
   it("findOne works", async () => {
-    const [localJwtToken, username] = await loginAndGetJWTToken(service, app);
-    await loginAndGetJWTToken(service, app);
+    const [localJwtToken, username] = await loginAndGetJWTToken(
+      service,
+      jwtService,
+      app
+    );
+    await loginAndGetJWTToken(service, jwtService, app);
     const user = await service.findOne(username);
     expect(user.lastName).toBe("Test");
   });
 
   it(`get user`, async () => {
-    const [localJwtToken, username] = await loginAndGetJWTToken(service, app);
+    const [localJwtToken, username] = await loginAndGetJWTToken(
+      service,
+      jwtService,
+      app
+    );
     const response = await request(app.getHttpServer())
       .get("/user")
       .set("Authorization", `Bearer ${localJwtToken}`)
@@ -91,7 +101,11 @@ describe("UsersService", () => {
   });
 
   it(`edit user`, async () => {
-    const [localJwtToken, username] = await loginAndGetJWTToken(service, app);
+    const [localJwtToken, username] = await loginAndGetJWTToken(
+      service,
+      jwtService,
+      app
+    );
     const response = await request(app.getHttpServer())
       .put("/user")
       .send({
@@ -106,7 +120,11 @@ describe("UsersService", () => {
   });
 
   it(`addMoney`, async () => {
-    const [localJwtToken, username] = await loginAndGetJWTToken(service, app);
+    const [localJwtToken, username] = await loginAndGetJWTToken(
+      service,
+      jwtService,
+      app
+    );
     let response = await request(app.getHttpServer())
       .get("/user")
       .set("Authorization", `Bearer ${localJwtToken}`)
