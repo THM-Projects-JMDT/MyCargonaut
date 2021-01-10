@@ -45,7 +45,7 @@ export function useRegister() {
     try {
       await postRegister(user);
       history.push(routes.login.path);
-    } catch {}
+    } catch (e) {}
   };
 
   const inputFields: InputField[] = [
@@ -53,6 +53,7 @@ export function useRegister() {
       label: "Vorname",
       type: "text",
       inputProps: {
+        id: "firstname",
         inputRef: refs.fistNameRef,
       },
     },
@@ -60,6 +61,7 @@ export function useRegister() {
       label: "Nachname",
       type: "text",
       inputProps: {
+        id: "lastname",
         inputRef: refs.lastNameRef,
       },
     },
@@ -67,6 +69,7 @@ export function useRegister() {
       label: "Geburtstag",
       type: "date",
       dateProps: {
+        id: "birthday",
         onChange: (date) => {
           setDate(date);
         },
@@ -77,6 +80,7 @@ export function useRegister() {
       label: "Username",
       type: "text",
       inputProps: {
+        id: "username",
         autoComplete: "off",
         name: "username",
         inputRef: refs.usernameRef,
@@ -86,6 +90,7 @@ export function useRegister() {
       label: "E-Mail",
       type: "text",
       inputProps: {
+        id: "email",
         autoComplete: "off",
         type: "email",
         name: "email",
@@ -96,6 +101,7 @@ export function useRegister() {
       label: "Passwort",
       type: "text",
       inputProps: {
+        id: "password",
         autoComplete: "new-password",
         type: "password",
         name: "password",
@@ -106,6 +112,7 @@ export function useRegister() {
       label: "Passwort wiederholen",
       type: "text",
       inputProps: {
+        id: "repeat-password",
         type: "password",
         name: "password",
         inputRef: refs.repeatPasswordRef,
