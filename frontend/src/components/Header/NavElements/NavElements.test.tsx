@@ -1,8 +1,8 @@
 import React from "react";
-import { render } from "@testing-library/react";
 import { NavElements } from "./index";
 import { BrowserRouter } from "react-router-dom";
 import userEvent from "@testing-library/user-event";
+import { renderWithState } from "../../../util/testUtil";
 
 const nav = (
   <BrowserRouter>
@@ -18,7 +18,7 @@ it("displays the correct nav elements when logged in", () => {
 });
 
 it("displays the correct nav elements when logged out", () => {
-  const { getByText, getByTestId } = render(nav);
+  const { getByText, getByTestId } = renderWithState(nav);
   /*const logInButton = getByText("Login");
   userEvent.click(logInButton);*/
   const avatarButton = getByTestId("avatar-icon");

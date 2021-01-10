@@ -1,7 +1,8 @@
 import React from "react";
-import { fireEvent, render } from "@testing-library/react";
+import { fireEvent } from "@testing-library/react";
 import { BrowserRouter } from "react-router-dom";
 import { Registration } from "./index";
+import { renderWithState } from "../../util/testUtil";
 
 const mockHistoryPush = jest.fn();
 
@@ -19,7 +20,7 @@ const registration = (
 );
 
 it("push to the right location after registration", () => {
-  const { getByRole } = render(registration);
+  const { getByRole } = renderWithState(registration);
 
   fireEvent.click(getByRole("button"));
   expect(mockHistoryPush).toHaveBeenCalledWith("/login");
