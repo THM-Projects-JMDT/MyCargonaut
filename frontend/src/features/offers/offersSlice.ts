@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Offer } from "../../../../backend/src/offer/offer";
 import {
   addOffer,
+  bookOffer,
   getAllOffers,
   getPersonalOffers,
   OfferResponse,
@@ -63,6 +64,15 @@ export const fetchOffers = (): AppThunk => async (dispatch) => {
 export const putOffer = (offer: Offer): AppThunk => async (dispatch) => {
   try {
     await addOffer(offer);
+    dispatch(fetchOffers());
+  } catch (e) {
+    dispatch(getOffersFailure(e.toString()));
+  }
+};
+
+export const acceptOffers = (id: number): AppThunk => async (dispatch) => {
+  try {
+    await bookOffer(id);
     dispatch(fetchOffers());
   } catch (e) {
     dispatch(getOffersFailure(e.toString()));
