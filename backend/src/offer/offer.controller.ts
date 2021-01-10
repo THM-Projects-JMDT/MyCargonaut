@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Put,
+  Query,
   Request,
   UseGuards,
 } from "@nestjs/common";
@@ -125,20 +126,16 @@ export class OfferController {
   }
 
   @Get()
-  async getOffers(
-    @Param("forOffer") forOffer: boolean,
-    @Param("forPrivate") forPrivate: boolean,
-    @Request() req
-  ) {
+  async getOffers(@Query() query, @Request() req) {
     let offerList;
-    if (forOffer == true) {
-      if (forPrivate == true) {
+    if (query?.forOffer) {
+      if (query?.forPrivate) {
         offerList = await this.offerService.findAllOffersByUser(req.user.id);
       } else {
         offerList = await this.offerService.getAllOffers();
       }
     } else {
-      if (forPrivate == true) {
+      if (query?.forPrivate) {
         offerList = await this.offerService.findAllRequestsByUser(req.user.id);
       } else {
         offerList = await this.offerService.getAllRequests();
