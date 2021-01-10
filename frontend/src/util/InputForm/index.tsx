@@ -42,6 +42,7 @@ export const InputForm: React.FC<InputFormProps> = ({ inputFields }) => {
             variant="outlined"
             className={classes.input}
             required={field.required ?? true}
+            data-testid={field.inputProps?.id}
             {...field.inputProps}
           />
         );
@@ -55,6 +56,7 @@ export const InputForm: React.FC<InputFormProps> = ({ inputFields }) => {
             variant="outlined"
             required={field.required}
             onChange={() => {}}
+            data-testid={field.inputProps?.id}
             {...field.inputProps}
           >
             {field.items?.map((item) => (
@@ -76,6 +78,7 @@ export const InputForm: React.FC<InputFormProps> = ({ inputFields }) => {
                 setDate(date);
               }}
               value={date}
+              data-testid={field.dateProps?.id}
               {...field.dateProps}
             />
           </MuiPickersUtilsProvider>
