@@ -50,7 +50,7 @@ export class CarController {
   async addCar(
     @Body("manufacturer") manufacturer: string | null,
     @Body("model") model: string | null,
-    @Body("manufactureYear") manufactureYear: number | null,
+    @Body("manufactureYear") manufactureYear: Date | null,
     @Body("seats") seats: number | null,
     @Body("storageSpace") storageSpace: number | null,
     @Request() req
