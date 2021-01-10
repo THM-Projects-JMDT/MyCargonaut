@@ -1,10 +1,18 @@
 import { Box, Grid, IconButton, List, ListItem } from "@material-ui/core";
 import AddCircleIcon from "@material-ui/icons/AddCircle";
-import React from "react";
+import React, { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { fetchVehicles } from "../../features/vehicles/vehiclesSlice";
 import { Vehicle } from "./Vehicle";
 
 export const VehiclePage: React.FC = () => {
   // TODO: retrieve vehicles of logged in user
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(fetchVehicles());
+  }, [dispatch]);
+
   const vehicles = [
     {
       manufacturer: "Toyota",

@@ -17,6 +17,10 @@ import { UserDetails } from "../../model/UserDetails";
 import { Offer } from "../Offer";
 import { useStyles } from "./OfferPage.style";
 import { OfferDummy } from "../Offer/OfferDummy";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../features/rootReducer";
+import { fetchOffers } from "../../features/offers/offersSlice";
+import { fetchRequests } from "../../features/requests/requestsSlice";
 
 export interface OfferPageProps {
   show: "offers" | "requests";
@@ -122,6 +126,16 @@ export const OfferPage: React.FC<OfferPageProps> = ({ show }) => {
 
   const displayName = show === "offers" ? "Angebote" : "Anfragen";
   const loggedInUserId = 1; // TODO: retrieve from store
+
+  const dispatch = useDispatch();
+  const offersState = useSelector((state: RootState) =>
+    show === "offers" ? state.offers : state.requests
+  );
+
+  useEffect(() => {
+    if (show === "offers") dispatch(fetchOffers());
+    else dispatch(fetchRequests());
+  }, [dispatch, show]);
 
   const handleChange = (event: React.ChangeEvent<{}>, tab: number) => {
     setActiveTab(tab);
