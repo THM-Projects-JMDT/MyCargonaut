@@ -1,8 +1,8 @@
 import React from "react";
 import { NavElements } from "./index";
 import { BrowserRouter } from "react-router-dom";
-import userEvent from "@testing-library/user-event";
 import { renderWithState } from "../../../util/testUtil";
+import { RootStateOrAny } from "react-redux";
 
 const nav = (
   <BrowserRouter>
@@ -11,20 +11,22 @@ const nav = (
 );
 
 it("displays the correct nav elements when logged in", () => {
-  // TODO: adjust test when actual login logic is implemented
-  /*const { getByText, getByTestId } = render(nav);
-  const logInButton = getByText("Login");
-  userEvent.click(logInButton); */
+  const initalState: RootStateOrAny = {
+    auth: { isLogedIn: true },
+  };
+  const { getByText } = renderWithState(nav, { initalState });
+
+  expect(getByText("Anfragen")).toBeInTheDocument();
+  expect(getByText("Angebote")).toBeInTheDocument();
+  expect(getByText("Fahrzeuge")).toBeInTheDocument();
 });
 
 it("displays the correct nav elements when logged out", () => {
-  const { getByText, getByTestId } = renderWithState(nav);
-  /*const logInButton = getByText("Login");
-  userEvent.click(logInButton);*/
-  const avatarButton = getByTestId("avatar-icon");
-  userEvent.click(avatarButton);
-  const logOutButton = getByText("Logout");
-  userEvent.click(logOutButton);
+  const initalState: RootStateOrAny = {
+    auth: { isLogedIn: false },
+  };
+  const { getByText } = renderWithState(nav, { initalState });
+
   expect(getByText("Login")).toBeInTheDocument();
   expect(getByText("Registrieren")).toBeInTheDocument();
 });
