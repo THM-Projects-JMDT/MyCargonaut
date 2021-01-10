@@ -18,7 +18,7 @@ export class Car {
   model: string;
 
   @Prop({ required: true })
-  manufactureYear: number;
+  manufactureYear: Date;
 
   @Prop({ required: true })
   seats: number;

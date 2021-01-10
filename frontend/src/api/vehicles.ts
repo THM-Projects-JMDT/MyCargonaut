@@ -1,24 +1,21 @@
-import { Car } from "../../../backend/src/car/car";
+import { AddCar, Car } from "../model/Car";
+import { buildApiUrl, fetchTimeOut } from "./util";
 
 export const getVehicles = async (): Promise<Car[]> => {
-  return fetch("/api/v1/car", {
+  return fetchTimeOut(buildApiUrl("/car"), {
     headers: {
       "content-type": "application/json",
-      Authorization:
-        "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVmZmFlN2M4ZTY2YjE1MWVkMDE4ZjQ2YyIsImlhdCI6MTYxMDI4MTYzMSwiZXhwIjoxNjEwODAwMDMxfQ.pvD8SldGD2_6v1vOuCI_3Fn1AGmlAelnKBn8KQGbxOs",
     },
   }).then((res) => {
     return res.json();
   }) as Promise<Car[]>;
 };
 
-export const addVehicle = async (vehicle: Car): Promise<Car> => {
-  return fetch("/api/v1/car", {
+export const addVehicle = async (vehicle: AddCar): Promise<Car> => {
+  return fetchTimeOut(buildApiUrl("/car"), {
     method: "POST",
     headers: {
       "content-type": "application/json",
-      Authorization:
-        "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVmZmFlN2M4ZTY2YjE1MWVkMDE4ZjQ2YyIsImlhdCI6MTYxMDI4MTYzMSwiZXhwIjoxNjEwODAwMDMxfQ.pvD8SldGD2_6v1vOuCI_3Fn1AGmlAelnKBn8KQGbxOs",
     },
     body: JSON.stringify(vehicle),
   }).then((res) => {
@@ -26,13 +23,11 @@ export const addVehicle = async (vehicle: Car): Promise<Car> => {
   }) as Promise<Car>;
 };
 
-export const removeVehicle = async (id: number): Promise<void> => {
-  return fetch(`/api/v1/car/${id}`, {
+export const removeVehicle = async (id: string): Promise<void> => {
+  return fetchTimeOut(buildApiUrl(`/car/${id}`), {
     method: "DELETE",
     headers: {
       "content-type": "application/json",
-      Authorization:
-        "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVmZmFlN2M4ZTY2YjE1MWVkMDE4ZjQ2YyIsImlhdCI6MTYxMDI4MTYzMSwiZXhwIjoxNjEwODAwMDMxfQ.pvD8SldGD2_6v1vOuCI_3Fn1AGmlAelnKBn8KQGbxOs",
     },
   }).then((res) => {
     return res.json();

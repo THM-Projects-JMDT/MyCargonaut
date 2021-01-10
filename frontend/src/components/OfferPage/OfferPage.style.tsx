@@ -17,4 +17,7 @@ export const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(3),
     marginRight: theme.spacing(2),
   },
+  loadingBox: {
+    textAlign: "center",
+  },
 }));
