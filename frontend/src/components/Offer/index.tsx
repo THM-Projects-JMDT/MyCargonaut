@@ -30,7 +30,7 @@ export interface OfferProps {
   provider?: UserDetails;
   customer?: UserDetails;
   offer: OfferDetails;
-  loggedInUserId: number;
+  loggedInUserId: string;
 }
 
 export const renderService = (service: string) => {
@@ -196,7 +196,7 @@ export const Offer: React.FC<OfferProps> = ({
       <AccordionDetails className={classes.accordionDetails}>
         <Box ml={7} my={2}>
           <Typography variant="subtitle2">Beschreibung:</Typography>
-          <Typography>{offer.description}</Typography>
+          <Typography>{offer.description ?? "-"}</Typography>
         </Box>
       </AccordionDetails>
       <Menu
