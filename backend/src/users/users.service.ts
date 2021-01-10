@@ -16,7 +16,7 @@ export class UsersService {
   }
 
   async findOneById(id: string) {
-    return this.userModel.findById(id);
+    return this.userModel.findById(id, { __v: 0 });
   }
 
   async addUser(user: User) {

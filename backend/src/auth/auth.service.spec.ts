@@ -1,4 +1,4 @@
-import { JwtModule } from "@nestjs/jwt";
+import { JwtModule, JwtService } from "@nestjs/jwt";
 import { PassportModule } from "@nestjs/passport";
 import { Test, TestingModule } from "@nestjs/testing";
 import { UsersModule } from "../users/users.module";
@@ -18,6 +18,7 @@ import { UsersService } from "../users/users.service";
 describe("AuthService", () => {
   let userService: UsersService;
   let service: AuthService;
+  let jwtService: JwtService;
   let controller: AuthController;
   let app: INestApplication;
   let jwtToken: string;
@@ -56,6 +57,7 @@ describe("AuthService", () => {
     userService = moduleRef.get<UsersService>(UsersService);
     service = moduleRef.get<AuthService>(AuthService);
     controller = moduleRef.get<AuthController>(AuthController);
+    jwtService = moduleRef.get<JwtService>(JwtService);
 
     app = moduleRef.createNestApplication();
     await app.init();
@@ -81,7 +83,8 @@ describe("AuthService", () => {
       .post("/auth/login")
       .send({ username: "admin", password: "admin" })
       .expect(201);
-    jwtToken = res.body.access_token;
+    const payload = { id: res.body._id };
+    jwtToken = jwtService.sign(payload);
   });
 
   it(`logout with login before`, () => {

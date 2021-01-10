@@ -16,7 +16,7 @@ import * as request from "supertest";
 import { UsersModule } from "../users/users.module";
 import { PassportModule } from "@nestjs/passport";
 import { ConfigModule, ConfigService } from "@nestjs/config";
-import { JwtModule } from "@nestjs/jwt";
+import { JwtModule, JwtService } from "@nestjs/jwt";
 import { UsersService } from "../users/users.service";
 import { AuthController } from "../auth/auth.controller";
 import { AuthService } from "../auth/auth.service";
@@ -30,6 +30,7 @@ import { Status, StatusSchema } from "../status/status.schema";
 
 describe("ChatService", () => {
   let userService: UsersService;
+  let jwtService: JwtService;
   let service: ChatService;
   let controller: ChatController;
   let app: INestApplication;
@@ -72,6 +73,7 @@ describe("ChatService", () => {
     userService = moduleRef.get<UsersService>(UsersService);
     service = moduleRef.get<ChatService>(ChatService);
     controller = moduleRef.get<ChatController>(ChatController);
+    jwtService = moduleRef.get<JwtService>(JwtService);
 
     app = moduleRef.createNestApplication();
     await app.init();
@@ -87,6 +89,7 @@ describe("ChatService", () => {
   it(`add chat`, async () => {
     const [localJwtToken, username] = await loginAndGetJWTToken(
       userService,
+      jwtService,
       app
     );
     let response = await addOffer(app, localJwtToken, true);
@@ -97,6 +100,7 @@ describe("ChatService", () => {
   it(`get chat`, async () => {
     const [localJwtToken, username] = await loginAndGetJWTToken(
       userService,
+      jwtService,
       app
     );
     const offer = await addOffer(app, localJwtToken, true);

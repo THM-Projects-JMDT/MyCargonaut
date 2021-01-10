@@ -7,9 +7,9 @@ export interface Offer {
   orderDate: Date;
   service: Service;
   price: number;
-  seats: number | undefined;
-  storageSpace: number | undefined;
+  seats?: number;
+  storageSpace?: number;
   description: string;
-  provider: string | undefined;
-  customer: string | undefined;
+  provider?: string;
+  customer?: string;
 }

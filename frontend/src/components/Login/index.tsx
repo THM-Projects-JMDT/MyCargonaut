@@ -1,16 +1,24 @@
-import React from "react";
+import React, { createRef } from "react";
 import { CustomCard } from "../../util/CustomCard";
 import { InputForm } from "../../util/InputForm";
 import { CenterCard } from "../../util/CenterCard";
-import { useHistory } from "react-router-dom";
-import { routes } from "../../routes";
+import { useDispatch } from "react-redux";
+import { login } from "../../features/authSlice";
+import { useNotLoggedIn } from "../../hooks/useNotLoggedIn";
 
 export const Login = () => {
-  const history = useHistory();
+  const dispatch = useDispatch();
+  const usernameRef = createRef<HTMLInputElement>();
+  const passwordRef = createRef<HTMLInputElement>();
+  useNotLoggedIn();
 
   const handleLogin = () => {
-    //TODO Login logic
-    history.push(routes.home.path);
+    const username = usernameRef.current?.value;
+    const password = passwordRef.current?.value;
+
+    if (!username || !password) return;
+
+    dispatch(login(username, password));
   };
 
   const handlePressEnter = (e: React.KeyboardEvent<HTMLDivElement>) => {
@@ -24,19 +32,23 @@ export const Login = () => {
       label: "E-Mail/Username",
       type: "text",
       inputProps: {
+        inputRef: usernameRef,
         onKeyDown: handlePressEnter,
         autoComplete: "username",
         name: "username",
+        id: "username",
       },
     },
     {
       label: "Passwort",
       type: "text",
       inputProps: {
+        inputRef: passwordRef,
         onKeyDown: handlePressEnter,
         autoComplete: "current-password",
         type: "password",
         name: "password",
+        id: "password",
       },
     },
   ];

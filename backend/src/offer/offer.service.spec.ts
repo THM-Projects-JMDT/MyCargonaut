@@ -14,7 +14,7 @@ import * as request from "supertest";
 import { UsersModule } from "../users/users.module";
 import { PassportModule } from "@nestjs/passport";
 import { ConfigModule, ConfigService } from "@nestjs/config";
-import { JwtModule } from "@nestjs/jwt";
+import { JwtModule, JwtService } from "@nestjs/jwt";
 import { UsersService } from "../users/users.service";
 import { AuthController } from "../auth/auth.controller";
 import { AuthService } from "../auth/auth.service";
@@ -28,6 +28,7 @@ import { StatusService } from "../status/status.service";
 
 describe("OfferService", () => {
   let userService: UsersService;
+  let jwtService: JwtService;
   let service: OfferService;
   let controller: OfferController;
   let app: INestApplication;
@@ -68,6 +69,7 @@ describe("OfferService", () => {
     userService = moduleRef.get<UsersService>(UsersService);
     service = moduleRef.get<OfferService>(OfferService);
     controller = moduleRef.get<OfferController>(OfferController);
+    jwtService = moduleRef.get<JwtService>(JwtService);
 
     app = moduleRef.createNestApplication();
     await app.init();
@@ -83,6 +85,7 @@ describe("OfferService", () => {
   it(`add offer`, async () => {
     const [localJwtToken, username] = await loginAndGetJWTToken(
       userService,
+      jwtService,
       app
     );
     const response = await addOffer(app, localJwtToken, true);
@@ -91,6 +94,7 @@ describe("OfferService", () => {
   it(`get my offers`, async () => {
     const [localJwtToken, username] = await loginAndGetJWTToken(
       userService,
+      jwtService,
       app
     );
     let response = await request(app.getHttpServer())
@@ -113,10 +117,12 @@ describe("OfferService", () => {
   it(`get all offers`, async () => {
     const [localJwtToken, username] = await loginAndGetJWTToken(
       userService,
+      jwtService,
       app
     );
     const [localJwtToken2, username2] = await loginAndGetJWTToken(
       userService,
+      jwtService,
       app
     );
     await addOffer(app, localJwtToken, true);
@@ -140,6 +146,7 @@ describe("OfferService", () => {
   it(`delete offer`, async () => {
     const [localJwtToken, username] = await loginAndGetJWTToken(
       userService,
+      jwtService,
       app
     );
     const offer = await addOffer(app, localJwtToken, true);
@@ -165,6 +172,7 @@ describe("OfferService", () => {
   it(`edit offer`, async () => {
     const [localJwtToken, username] = await loginAndGetJWTToken(
       userService,
+      jwtService,
       app
     );
     let response = await addOffer(app, localJwtToken, true);
@@ -192,10 +200,12 @@ describe("OfferService", () => {
   it(`book offer`, async () => {
     const [localJwtToken, username] = await loginAndGetJWTToken(
       userService,
+      jwtService,
       app
     );
     const [localJwtToken2, username2] = await loginAndGetJWTToken(
       userService,
+      jwtService,
       app
     );
     const user1 = await request(app.getHttpServer())

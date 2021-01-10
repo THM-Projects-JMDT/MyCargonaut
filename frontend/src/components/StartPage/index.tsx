@@ -1,11 +1,13 @@
 import { Box, Slide, Zoom } from "@material-ui/core";
 import React, { useState } from "react";
 import truck from "../../assets/images/truck.svg";
+import { useNotLoggedIn } from "../../hooks/useNotLoggedIn";
 import { useStyles } from "./StartPage.style";
 
 export const StartPage = () => {
   const classes = useStyles();
   const [state, setState] = useState(false);
+  useNotLoggedIn();
 
   return (
     <div className={classes.root}>

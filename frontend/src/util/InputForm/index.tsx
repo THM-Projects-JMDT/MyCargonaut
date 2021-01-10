@@ -6,13 +6,18 @@ import {
   TextFieldProps,
 } from "@material-ui/core";
 import { useStyles } from "./InputForm.style";
-import { DatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
+import {
+  DatePicker,
+  DatePickerProps,
+  MuiPickersUtilsProvider,
+} from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
 import { de } from "date-fns/locale";
 
 export interface InputField {
   label: string;
   inputProps?: TextFieldProps;
+  dateProps?: DatePickerProps;
   type: string;
   items?: string[];
   required?: boolean;
@@ -37,18 +42,34 @@ export const InputForm: React.FC<InputFormProps> = ({ inputFields }) => {
             variant="outlined"
             className={classes.input}
             required={field.required ?? true}
+            data-testid={field.inputProps?.id}
+            {...field.inputProps}
+          />
+        );
+      case field.type === "multiline":
+        return (
+          <TextField
+            key={idx}
+            multiline
+            fullWidth
+            label={field.label}
+            variant="outlined"
+            className={classes.input}
+            required={field.required ?? true}
             {...field.inputProps}
           />
         );
       case field.type === "select":
         return (
           <TextField
+            key={idx}
             select
             className={classes.input}
             label={field.label}
             variant="outlined"
             required={field.required}
             onChange={() => {}}
+            data-testid={field.inputProps?.id}
             {...field.inputProps}
           >
             {field.items?.map((item) => (
@@ -58,13 +79,11 @@ export const InputForm: React.FC<InputFormProps> = ({ inputFields }) => {
         );
       case field.type === "date":
         return (
-          <MuiPickersUtilsProvider utils={DateFnsUtils} locale={de}>
+          <MuiPickersUtilsProvider key={idx} utils={DateFnsUtils} locale={de}>
             <DatePicker
               inputVariant="outlined"
               required={field.required}
               className={classes.input}
-              disablePast
-              disableToolbar
               variant="inline"
               format="dd.MM.yyy"
               label={field.label}
@@ -72,6 +91,8 @@ export const InputForm: React.FC<InputFormProps> = ({ inputFields }) => {
                 setDate(date);
               }}
               value={date}
+              data-testid={field.dateProps?.id}
+              {...field.dateProps}
             />
           </MuiPickersUtilsProvider>
         );

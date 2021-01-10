@@ -28,7 +28,7 @@ export const closeInMongodConnection = async () => {
   }
 };
 
-export const loginAndGetJWTToken = async (service, app) => {
+export const loginAndGetJWTToken = async (service, jwtService, app) => {
   const newUser = {
     username: randomStringGenerator(),
     password: "admin",
@@ -39,12 +39,11 @@ export const loginAndGetJWTToken = async (service, app) => {
     email: randomStringGenerator() + "@mni.thm.de",
     cargoCoins: 3000,
   };
-  await service.addUser(newUser);
-  const response = await request(app.getHttpServer())
-    .post("/auth/login")
-    .send({ username: newUser.username, password: "admin" })
-    .expect(201);
-  return [response.body.access_token, newUser.username];
+  const user = await service.addUser(newUser);
+
+  const payload = { id: user._id };
+  const token = jwtService.sign(payload);
+  return [token, newUser.username];
 };
 
 export const addOffer = async (app, localJwtToken, offer: boolean) => {
