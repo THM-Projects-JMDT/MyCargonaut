@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Car } from "../../../../backend/src/car/car";
 import { addVehicle, getVehicles, removeVehicle } from "../../api/vehicles";
+import { Car } from "../../model/Car";
 import { AppThunk } from "../store";
 
 export interface VehicleResponse extends Car {
@@ -63,7 +63,7 @@ export const putVehicle = (vehicle: Car): AppThunk => async (dispatch) => {
   }
 };
 
-export const deleteVehicle = (id: number): AppThunk => async (dispatch) => {
+export const deleteVehicle = (id: string): AppThunk => async (dispatch) => {
   try {
     await removeVehicle(id);
     dispatch(fetchVehicles());
