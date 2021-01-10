@@ -40,6 +40,19 @@ export const InputForm: React.FC<InputFormProps> = ({ inputFields }) => {
             {...field.inputProps}
           />
         );
+      case field.type === "multiline":
+        return (
+          <TextField
+            key={idx}
+            multiline
+            fullWidth
+            label={field.label}
+            variant="outlined"
+            className={classes.input}
+            required={field.required ?? true}
+            {...field.inputProps}
+          />
+        );
       case field.type === "select":
         return (
           <TextField

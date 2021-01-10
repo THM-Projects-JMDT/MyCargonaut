@@ -111,38 +111,6 @@ export const inputFieldsPassword = [
   },
 ];
 
-export const inputFieldOffer = [
-  {
-    label: "von",
-    type: "text",
-  },
-  {
-    label: "nach",
-    type: "text",
-  },
-  {
-    label: "Service",
-    type: "select",
-    items: [
-      "Mitfahrgelegenheit",
-      "Transport",
-      "Transport / Mitfahrgelegenheit",
-    ],
-  },
-  {
-    label: "Datum",
-    type: "date",
-  },
-  {
-    label: "Fahrzeug",
-    type: "text",
-  },
-  {
-    label: "Preis",
-    type: "text",
-  },
-];
-
 export const inputFieldRequest = [
   {
     label: "von",
