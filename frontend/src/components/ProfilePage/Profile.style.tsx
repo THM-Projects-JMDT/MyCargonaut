@@ -15,8 +15,8 @@ export const useStyles = makeStyles((theme) => ({
     display: "none",
   },
   avatar: {
-    width: "10vw",
-    height: "10vw",
+    width: "10vw !important",
+    height: "10vw !important",
   },
   content: {
     position: "absolute",

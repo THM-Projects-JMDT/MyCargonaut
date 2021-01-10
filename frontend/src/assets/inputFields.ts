@@ -1,53 +1,6 @@
-export const inputFieldsReg = [
-  {
-    label: "Vorname",
-    type: "text",
-  },
-  {
-    label: "Nachname",
-    type: "text",
-  },
-  {
-    label: "Geburtstag",
-    type: "date",
-  },
-  {
-    label: "Username",
-    type: "text",
-    inputProps: {
-      autoComplete: "off",
-      name: "username",
-    },
-  },
-  {
-    label: "E-Mail",
-    type: "text",
-    inputProps: {
-      autoComplete: "off",
-      type: "email",
-      name: "email",
-    },
-  },
-  {
-    label: "Passwort",
-    type: "text",
-    inputProps: {
-      autoComplete: "new-password",
-      type: "password",
-      name: "password",
-    },
-  },
-  {
-    label: "Passwort wiederholen",
-    type: "text",
-    inputProps: {
-      type: "password",
-      name: "password",
-    },
-  },
-];
+import { InputField } from "../util/InputForm";
 
-export const inputFieldsProfile = [
+export const inputFieldsProfile: InputField[] = [
   {
     label: "Vorname",
     type: "text",
@@ -59,7 +12,9 @@ export const inputFieldsProfile = [
   {
     label: "Geburtstag",
     type: "date",
-    inputProps: {
+    dateProps: {
+      value: new Date(),
+      onChange: () => {},
       disabled: true,
     },
   },
@@ -83,7 +38,7 @@ export const inputFieldsProfile = [
   },
 ];
 
-export const inputFieldsPassword = [
+export const inputFieldsPassword: InputField[] = [
   {
     label: "Altes Passwort eingeben",
     type: "text",
@@ -111,7 +66,39 @@ export const inputFieldsPassword = [
   },
 ];
 
-export const inputFieldRequest = [
+export const inputFieldOffer: InputField[] = [
+  {
+    label: "von",
+    type: "text",
+  },
+  {
+    label: "nach",
+    type: "text",
+  },
+  {
+    label: "Service",
+    type: "select",
+    items: [
+      "Mitfahrgelegenheit",
+      "Transport",
+      "Transport / Mitfahrgelegenheit",
+    ],
+  },
+  {
+    label: "Datum",
+    type: "date",
+  },
+  {
+    label: "Fahrzeug",
+    type: "text",
+  },
+  {
+    label: "Preis",
+    type: "text",
+  },
+];
+
+export const inputFieldRequest: InputField[] = [
   {
     label: "von",
     type: "text",

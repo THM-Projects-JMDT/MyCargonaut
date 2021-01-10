@@ -2,11 +2,15 @@ import { Action, combineReducers } from "@reduxjs/toolkit";
 import offersReducers from "./offers/offersSlice";
 import requestsReducers from "./requests/requestsSlice";
 import vehiclesReducers from "./vehicles/vehiclesSlice";
+import authReducer from "./authSlice";
+import userReducer from "./userSlice";
 
 const appReducer = combineReducers({
   offers: offersReducers,
   requests: requestsReducers,
   vehicles: vehiclesReducers,
+  auth: authReducer,
+  user: userReducer,
 });
 
 export type RootState = ReturnType<typeof appReducer>;

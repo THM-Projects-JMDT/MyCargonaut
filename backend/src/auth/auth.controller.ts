@@ -6,6 +6,7 @@ import {
   HttpStatus,
   Post,
   Request,
+  Res,
   UseGuards,
 } from "@nestjs/common";
 import { LocalAuthGuard } from "./guards/local-auth.guard";
@@ -22,22 +23,27 @@ export class AuthController {
 
   @UseGuards(JwtAuthGuard)
   @Get("login")
-  async checkLoginStatus(@Request() req): Promise<{ message: string }> {
-    return {
-      message: "You are already logged in",
-    };
+  async checkLoginStatus(@Request() req) {
+    return this.userService.findOneById(req.user.id);
   }
 
   @UseGuards(LocalAuthGuard)
   @Post("login")
-  async login(@Request() req) {
-    return this.authService.login(req.user);
+  async login(@Request() req, @Res({ passthrough: true }) response) {
+    response.setHeader(
+      "Set-Cookie",
+      this.authService.getCookieWithJwtToken(req.user._id)
+    );
+    return req.user;
   }
 
   @UseGuards(JwtAuthGuard)
   @Post("logout")
-  async logout(@Request() req): Promise<{ message: string }> {
-    req.user = null;
+  async logout(
+    @Request() req,
+    @Res({ passthrough: true }) response
+  ): Promise<{ message: string }> {
+    response.setHeader("Set-Cookie", this.authService.getCookieForLogOut());
     return {
       message: "You are logged out",
     };
