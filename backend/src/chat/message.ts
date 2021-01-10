@@ -1,6 +1,4 @@
-import { Offer } from "../offer/offer";
-
 export interface Message {
-  offer: Offer;
+  offer: string;
   content: string;
 }
