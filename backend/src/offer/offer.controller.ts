@@ -199,6 +199,6 @@ export const addStars = async (
   if (starList.length > 0) {
     return { ...offer, [tag]: average(starList) };
   } else {
-    return { ...offer, [tag]: undefined };
+    return offer;
   }
 };
