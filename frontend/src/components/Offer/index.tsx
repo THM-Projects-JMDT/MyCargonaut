@@ -211,7 +211,9 @@ export const Offer: React.FC<OfferProps> = ({
       <AccordionDetails className={classes.accordionDetails}>
         <Box ml={7} my={2}>
           <Typography variant="subtitle2">Beschreibung:</Typography>
-          <Typography>{offer.description ?? "-"}</Typography>
+          <Typography>
+            {offer.description ? offer.description.trim() : "-"}
+          </Typography>
         </Box>
       </AccordionDetails>
       <Menu
