@@ -104,7 +104,7 @@ export class OfferController {
       from: oldOffer.from,
       to: oldOffer.to,
       createDate: oldOffer.createDate,
-      orderDate: new Date(),
+      orderDate: oldOffer.orderDate,
       service: oldOffer.service,
       price: oldOffer.price,
       seats: oldOffer.seats,

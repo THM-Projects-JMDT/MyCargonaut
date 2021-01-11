@@ -11,21 +11,21 @@ import {
 } from "@material-ui/core";
 import React from "react";
 import { useStyles } from "./TrackingDialog.style";
-import { TrackingDetails } from "../../../model/TrackingDetails";
+import { State, Status } from "../../../../../backend/src/status/status";
 
 export interface TrackingDialogProps {
-  tracking: TrackingDetails;
+  tracking: Status;
   open: boolean;
   onClose: () => void;
 }
 
-export const getStepByState = (trackingState: string) => {
+export const getStepByState = (trackingState: State) => {
   switch (trackingState) {
-    case "waiting":
+    case "Waiting":
       return 0;
-    case "inProgress":
+    case "InProgress":
       return 1;
-    case "delivered":
+    case "Delivered":
       return 2;
   }
 };
@@ -65,20 +65,11 @@ export const TrackingDialog: React.FC<TrackingDialogProps> = ({
               <StepLabel>{activeStep === 2 ? "Fertig!" : ""}</StepLabel>
             </Step>
           </Stepper>
-          {tracking.lastMessage && (
+          {tracking.text && (
             <div className={classes.message}>
               <Typography variant="subtitle2">Letztes Update:</Typography>
-              <Typography className={classes.date} variant="subtitle1">
-                <i>{tracking.lastMessageDate?.toLocaleDateString() + " "}</i>
-                <i>
-                  {tracking.lastMessageDate?.toLocaleTimeString([], {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  })}
-                </i>
-              </Typography>
               <Typography>
-                <i>{tracking.lastMessage}</i>
+                <i>{tracking.text}</i>
               </Typography>
             </div>
           )}

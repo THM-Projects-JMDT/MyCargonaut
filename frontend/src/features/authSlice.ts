@@ -1,6 +1,5 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { Action, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { getLogin, postLogin, postLogout } from "../api/auth";
-import { resetApp } from "./rootReducer";
 import { AppThunk } from "./store";
 import { getUserSuccess } from "./userSlice";
 
@@ -10,11 +9,13 @@ export interface AuthState {
   error: string | null;
 }
 
-export const initialState: AuthState = {
+const initialState: AuthState = {
   isLogedIn: false,
   isLoading: true,
   error: null,
 };
+
+export const resetApp: Action = { type: "reset" };
 
 export const auth = createSlice({
   name: "auth",

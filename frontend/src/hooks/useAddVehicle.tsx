@@ -1,3 +1,4 @@
+import { isValid } from "date-fns";
 import { createRef, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { addVehicle } from "../api/vehicles";
@@ -18,20 +19,20 @@ export function useAddVehicle() {
   const [date, setDate] = useState<Date | null>(new Date());
 
   const validate = () =>
-    Object.values(refs).every((r) => getRefValue(r)) &&
-    date &&
+    Object.values(refs).every((r) => getRefValue(r).trim()) &&
+    isValid(date) &&
     Object.values(numRefs).every((r) => Number(getRefValue(r)));
 
   const handleAdd = async () => {
-    if (!validate()) return;
-
     const car = {
-      manufacturer: getRefValue(refs.manufacturer),
-      model: getRefValue(refs.model),
+      manufacturer: getRefValue(refs.manufacturer).trim(),
+      model: getRefValue(refs.model).trim(),
       seats: Number(getRefValue(numRefs.seats)),
       storageSpace: Number(getRefValue(numRefs.storageSpace)),
       manufactureYear: date ?? new Date(),
     };
+
+    if (!validate()) return;
 
     try {
       await addVehicle(car);

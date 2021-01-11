@@ -1,13 +1,15 @@
-import { TrackingDetails } from "./TrackingDetails";
+import { Service } from "../../../backend/src/offer/offer";
+import { Status } from "../../../backend/src/status/status";
 
 export interface OfferDetails {
+  id: string;
   from: string;
   to: string;
-  service: string; // TODO: use 'Service' type
+  service: Service;
   orderDate: Date;
   seats?: number;
   storageSpace?: number;
   price: number;
   description: string;
-  tracking?: TrackingDetails;
+  tracking?: Status;
 }

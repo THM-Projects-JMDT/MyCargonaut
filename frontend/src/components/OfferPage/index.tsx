@@ -38,6 +38,9 @@ export const OfferPage: React.FC<OfferPageProps> = ({ show }) => {
   const classes = useStyles();
 
   const displayName = show === "offers" ? "Angebote" : "Anfragen";
+  const loggedInUsername = useSelector(
+    (state: RootState) => state.user.user?.username
+  );
 
   const dispatch = useDispatch();
   const offersState = useSelector((state: RootState) => state.offers);
@@ -94,7 +97,6 @@ export const OfferPage: React.FC<OfferPageProps> = ({ show }) => {
   };
 
   const getDisplayList = () => {
-    console.log(activeTab === 0 ? "all" : "private");
     if (show === "offers") {
       if (offersState.isLoading) {
         return undefined;
@@ -186,6 +188,7 @@ export const OfferPage: React.FC<OfferPageProps> = ({ show }) => {
                 <ListItem key={id}>
                   <Offer
                     offer={{
+                      id: o._id,
                       from: o.from,
                       to: o.to,
                       service: o.service,
@@ -194,12 +197,13 @@ export const OfferPage: React.FC<OfferPageProps> = ({ show }) => {
                       seats: o.seats,
                       storageSpace: o.storageSpace,
                       description: o.description,
+                      tracking: o.tracking,
                     }}
                     customer={
                       o.customer
                         ? {
                             id: o.customer,
-                            username: o.customer,
+                            username: o?.customerUsername ?? "",
                             rating: o.customerRating,
                           }
                         : undefined
@@ -208,12 +212,12 @@ export const OfferPage: React.FC<OfferPageProps> = ({ show }) => {
                       o.provider
                         ? {
                             id: o.provider,
-                            username: o.provider,
+                            username: o?.providerUsername ?? "",
                             rating: o.providerRating,
                           }
                         : undefined
                     }
-                    loggedInUserId={"hey"}
+                    loggedInUsername={loggedInUsername ?? ""}
                   />
                 </ListItem>
               )) ?? (

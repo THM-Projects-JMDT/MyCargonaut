@@ -1,53 +1,39 @@
 import { Offer } from "../../../backend/src/offer/offer";
-import { TrackingDetails } from "../model/TrackingDetails";
+import { Stars } from "../../../backend/src/rating/rating";
+import { Status } from "../../../backend/src/status/status";
 import { fetchTimeOut } from "./util";
 
 export interface OfferResponse extends Offer {
-  customerRating?: number;
-  providerRating?: number;
-  trackingDetails?: TrackingDetails;
+  _id: string;
+  customerUsername?: string;
+  customerRating?: Stars;
+  providerRating?: Stars;
+  providerUsername?: string;
+  tracking?: Status;
 }
 
 export const getAllOffers = async (): Promise<OfferResponse[]> => {
-  return fetch("/api/v1/offer?forOffer=true", {
-    headers: {
-      Authorization:
-        "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVmZmFlN2M4ZTY2YjE1MWVkMDE4ZjQ2YyIsImlhdCI6MTYxMDI4MTYzMSwiZXhwIjoxNjEwODAwMDMxfQ.pvD8SldGD2_6v1vOuCI_3Fn1AGmlAelnKBn8KQGbxOs",
-    },
-  }).then((res) => {
+  return fetchTimeOut("/api/v1/offer?forOffer=true").then((res) => {
     return res.json();
   }) as Promise<OfferResponse[]>;
 };
 
 export const getAllRequests = async (): Promise<OfferResponse[]> => {
-  return fetch("/api/v1/offer", {
-    headers: {
-      Authorization:
-        "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVmZmFlN2M4ZTY2YjE1MWVkMDE4ZjQ2YyIsImlhdCI6MTYxMDI4MTYzMSwiZXhwIjoxNjEwODAwMDMxfQ.pvD8SldGD2_6v1vOuCI_3Fn1AGmlAelnKBn8KQGbxOs",
-    },
-  }).then((res) => {
+  return fetchTimeOut("/api/v1/offer").then((res) => {
     return res.json();
   }) as Promise<OfferResponse[]>;
 };
 
 export const getPersonalOffers = async (): Promise<OfferResponse[]> => {
-  return fetch("/api/v1/offer?forOffer=true&forPrivate=true", {
-    headers: {
-      Authorization:
-        "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVmZmFlN2M4ZTY2YjE1MWVkMDE4ZjQ2YyIsImlhdCI6MTYxMDI4MTYzMSwiZXhwIjoxNjEwODAwMDMxfQ.pvD8SldGD2_6v1vOuCI_3Fn1AGmlAelnKBn8KQGbxOs",
-    },
-  }).then((res) => {
-    return res.json();
-  }) as Promise<OfferResponse[]>;
+  return fetchTimeOut("/api/v1/offer?forOffer=true&forPrivate=true").then(
+    (res) => {
+      return res.json();
+    }
+  ) as Promise<OfferResponse[]>;
 };
 
 export const getPersonalRequests = async (): Promise<OfferResponse[]> => {
-  return fetch("/api/v1/offer?forPrivate=true", {
-    headers: {
-      Authorization:
-        "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVmZmFlN2M4ZTY2YjE1MWVkMDE4ZjQ2YyIsImlhdCI6MTYxMDI4MTYzMSwiZXhwIjoxNjEwODAwMDMxfQ.pvD8SldGD2_6v1vOuCI_3Fn1AGmlAelnKBn8KQGbxOs",
-    },
-  }).then((res) => {
+  return fetchTimeOut("/api/v1/offer?forPrivate=true").then((res) => {
     return res.json();
   }) as Promise<OfferResponse[]>;
 };
@@ -76,14 +62,20 @@ export const addRequest = async (request: Offer): Promise<OfferResponse> => {
   }) as Promise<OfferResponse>;
 };
 
-export const bookOffer = async (id: number): Promise<OfferResponse> => {
-  return fetch(`/api/v1/bookOffer/${id}`, {
+export const bookOffer = async (id: string): Promise<OfferResponse> => {
+  return fetch(`/api/v1/offer/bookOffer/${id}`, {
     method: "POST",
-    headers: {
-      Authorization:
-        "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVmZmFlN2M4ZTY2YjE1MWVkMDE4ZjQ2YyIsImlhdCI6MTYxMDI4MTYzMSwiZXhwIjoxNjEwODAwMDMxfQ.pvD8SldGD2_6v1vOuCI_3Fn1AGmlAelnKBn8KQGbxOs",
-    },
   }).then((res) => {
     return res.json();
   }) as Promise<OfferResponse>;
+};
+
+export const addRating = async (id: string, stars: Stars): Promise<void> => {
+  fetch(`/api/v1/rating/${id}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ rating: stars, text: "" }),
+  });
 };
