@@ -122,7 +122,7 @@ describe("ChatService", () => {
     const offer = await addOffer(app, localJwtToken, true);
     await addChat(app, localJwtToken, offer.body._id, "Hi");
     await addChat(app, localJwtToken2, offer.body._id, "Hallo");
-    let response = await request(app.getHttpServer())
+    const response = await request(app.getHttpServer())
       .get("/chat/" + offer.body._id)
       .set("Authorization", `Bearer ${localJwtToken}`);
     expect(response.body.length).toBe(2);
