@@ -131,7 +131,7 @@ describe("UsersService", () => {
       .expect(200);
     expect(response.body.cargoCoins).toBe(3000);
     response = await request(app.getHttpServer())
-      .post("/user/20")
+      .post("/user/addMoney/20")
       .set("Authorization", `Bearer ${localJwtToken}`)
       .expect(201);
     expect(response.body.cargoCoins).toBe(3020);
