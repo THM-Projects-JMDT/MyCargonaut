@@ -25,6 +25,7 @@ import { Rating, RatingSchema } from "../rating/rating.schema";
 import { RatingController } from "../rating/rating.controller";
 import { Status, StatusSchema } from "../status/status.schema";
 import { StatusService } from "../status/status.service";
+import { randomStringGenerator } from "@nestjs/common/utils/random-string-generator.util";
 
 describe("OfferService", () => {
   let userService: UsersService;
@@ -177,6 +178,15 @@ describe("OfferService", () => {
       jwtService,
       app
     );
+    const offer = await addOffer(app, localJwtToken, true);
+    await request(app.getHttpServer())
+      .post("/offer/bookOffer/" + offer.body._id)
+      .set("Authorization", `Bearer ${localJwtToken2}`)
+      .expect(201);
+    const response = await request(app.getHttpServer())
+      .get("/offer?forOffer=true&forPrivate=true")
+      .set("Authorization", `Bearer ${localJwtToken}`)
+      .expect(200);
     const user1 = await request(app.getHttpServer())
       .get("/user")
       .set("Authorization", `Bearer ${localJwtToken}`)
@@ -185,21 +195,48 @@ describe("OfferService", () => {
       .get("/user")
       .set("Authorization", `Bearer ${localJwtToken2}`)
       .expect(200);
-    const offer = await addOffer(app, localJwtToken, true);
-    await request(app.getHttpServer())
-      .post("/offer/bookOffer/" + offer.body._id)
-      .set("Authorization", `Bearer ${localJwtToken2}`)
-      .expect(201);
 
-    const response = await request(app.getHttpServer())
-      .get("/offer?forOffer=true&forPrivate=true")
-      .set("Authorization", `Bearer ${localJwtToken}`)
-      .expect(200);
     expect(response.body.length).toBe(1);
     expect(response.body[0].orderDate).toBeDefined();
     expect(response.body[0].provider).toBe(user1.body._id);
     expect(response.body[0].customer).toBe(user2.body._id);
+    expect(user1.body.cargoCoins).toBe(3050);
+    expect(user2.body.cargoCoins).toBe(2950);
     expect(response.body[0].tracking.state).toBe("Waiting");
+  });
+
+  it(`book offer with no money`, async () => {
+    const newUser = {
+      username: randomStringGenerator(),
+      password: "admin",
+      firstName: "Test",
+      lastName: "Test",
+      ppPath: "images/test.png",
+      birthday: new Date("11-09-1998"),
+      email: randomStringGenerator() + "@mni.thm.de",
+      cargoCoins: 0,
+    };
+    const user = await userService.addUser(newUser);
+
+    const payload = { id: user._id };
+    const localJwtToken2 = jwtService.sign(payload);
+
+    const offer = await addOffer(app, localJwtToken, true);
+    await request(app.getHttpServer())
+      .post("/offer/bookOffer/" + offer.body._id)
+      .set("Authorization", `Bearer ${localJwtToken2}`)
+      .expect(400);
+    const user1 = await request(app.getHttpServer())
+      .get("/user")
+      .set("Authorization", `Bearer ${localJwtToken}`)
+      .expect(200);
+    const user2 = await request(app.getHttpServer())
+      .get("/user")
+      .set("Authorization", `Bearer ${localJwtToken2}`)
+      .expect(200);
+
+    expect(user1.body.cargoCoins).toBe(3000);
+    expect(user2.body.cargoCoins).toBe(0);
   });
 
   afterAll(async () => {

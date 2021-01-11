@@ -3,6 +3,8 @@ import {
   Controller,
   Delete,
   Get,
+  HttpException,
+  HttpStatus,
   Param,
   Post,
   Put,
@@ -118,6 +120,18 @@ export class OfferController {
       newOffer.customer = req.user.id;
       newOffer.provider = oldOffer.provider;
     }
+
+    const customerUser = await this.userService.findOneById(newOffer.customer);
+    if (customerUser.cargoCoins >= newOffer.price) {
+      await this.userService.updateMoney(newOffer.customer, 0 - newOffer.price);
+      await this.userService.updateMoney(newOffer.provider, newOffer.price);
+    } else {
+      throw new HttpException(
+        "Not enaught Cargo Coins",
+        HttpStatus.BAD_REQUEST
+      );
+    }
+
     await this.statusService.addStatus({
       offer: offerId,
       state: "Waiting",
