@@ -74,7 +74,9 @@ export const InputForm: React.FC<InputFormProps> = ({ inputFields }) => {
             {...field.inputProps}
           >
             {field.items?.map((item) => (
-              <MenuItem value={item}>{item}</MenuItem>
+              <MenuItem key={item} value={item}>
+                {item}
+              </MenuItem>
             ))}
           </TextField>
         );
