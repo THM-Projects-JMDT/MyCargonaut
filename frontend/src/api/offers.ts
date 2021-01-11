@@ -4,8 +4,10 @@ import { fetchTimeOut } from "./util";
 
 export interface OfferResponse extends Offer {
   _id: string;
+  customerUsername?: string;
   customerRating?: number;
   providerRating?: number;
+  providerUsername?: string;
   trackingDetails?: TrackingDetails;
 }
 
