@@ -66,7 +66,7 @@ export class OfferController {
     @Body("isOffer") isOffer: boolean,
     @Body("from") from: string | null,
     @Body("to") to: string | null,
-    @Body("date") date: Date | null,
+    @Body("orderDate") orderDate: Date | null,
     @Body("service") service: Service | null,
     @Body("price") price: number | null,
     @Body("storageSpace") storageSpace: number | null,
@@ -78,7 +78,7 @@ export class OfferController {
       from: from,
       to: to,
       createDate: new Date(),
-      orderDate: undefined,
+      orderDate: orderDate,
       service: service,
       price: price,
       seats: seats,
@@ -188,7 +188,7 @@ export const addStars = async (
   tag
 ) => {
   const personalOffers = await offerService.findAllOffersByUser(user);
-  let starList = [];
+  const starList = [];
   for (let j = 0; j < personalOffers.length; j++) {
     const rating = await ratingService.findByOffer(user);
     if (rating != undefined) {
