@@ -70,7 +70,7 @@ export const putOffer = (offer: Offer): AppThunk => async (dispatch) => {
   }
 };
 
-export const acceptOffers = (id: number): AppThunk => async (dispatch) => {
+export const acceptOffers = (id: string): AppThunk => async (dispatch) => {
   try {
     await bookOffer(id);
     dispatch(fetchOffers());

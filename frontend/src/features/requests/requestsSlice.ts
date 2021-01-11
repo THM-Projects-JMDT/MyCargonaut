@@ -70,7 +70,7 @@ export const putRequest = (request: Offer): AppThunk => async (dispatch) => {
   }
 };
 
-export const acceptRequest = (id: number): AppThunk => async (dispatch) => {
+export const acceptRequest = (id: string): AppThunk => async (dispatch) => {
   try {
     await bookOffer(id);
     dispatch(fetchRequests());

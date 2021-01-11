@@ -59,13 +59,9 @@ export const addRequest = async (request: Offer): Promise<OfferResponse> => {
   }) as Promise<OfferResponse>;
 };
 
-export const bookOffer = async (id: number): Promise<OfferResponse> => {
-  return fetch(`/api/v1/bookOffer/${id}`, {
+export const bookOffer = async (id: string): Promise<OfferResponse> => {
+  return fetch(`/api/v1/offer/bookOffer/${id}`, {
     method: "POST",
-    headers: {
-      Authorization:
-        "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVmZmIzYWJkOTNhZmYyNDdlOWU5ZjMwOSIsImlhdCI6MTYxMDMwMDg3NCwiZXhwIjoxNjYyMTQwODc0fQ.3E5hF_EBt6TSvcNTkI7SBPeQP7cgjlaGoBPIBdPY6Kc",
-    },
   }).then((res) => {
     return res.json();
   }) as Promise<OfferResponse>;
