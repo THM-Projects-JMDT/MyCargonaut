@@ -118,13 +118,13 @@ describe("OfferService", () => {
     await addOffer(app, localJwtToken2, true);
     await addOffer(app, localJwtToken2, false);
     let response = await request(app.getHttpServer())
-      .get("/offer?forOffer=true&forPrivate=false")
+      .get("/offer?forOffer=true")
       .set("Authorization", `Bearer ${localJwtToken}`)
       .expect(200);
     expect(response.body.length).toBe(2);
     await addOffer(app, localJwtToken2, false);
     response = await request(app.getHttpServer())
-      .get("/offer?forOffer=false&forPrivate=false")
+      .get("/offer")
       .set("Authorization", `Bearer ${localJwtToken}`)
       .expect(200);
     expect(response.body.length).toBe(2);
