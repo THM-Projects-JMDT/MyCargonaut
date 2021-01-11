@@ -69,6 +69,7 @@ export const InputForm: React.FC<InputFormProps> = ({ inputFields }) => {
             variant="outlined"
             required={field.required}
             onChange={() => {}}
+            defaultValue=""
             data-testid={field.inputProps?.id}
             {...field.inputProps}
           >

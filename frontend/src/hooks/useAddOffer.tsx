@@ -118,6 +118,7 @@ export function useAddOffer(isOffer: boolean) {
       type: "select",
       items: ["Mitfahrgelegenheit", "Transport"],
       inputProps: {
+        defaultValue: "Mitfahrgelegenheit",
         inputRef: requiredRefs.serviceRef,
       },
     },
