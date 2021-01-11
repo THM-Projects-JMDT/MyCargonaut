@@ -196,6 +196,7 @@ export const OfferPage: React.FC<OfferPageProps> = ({ show }) => {
                       seats: o.seats,
                       storageSpace: o.storageSpace,
                       description: o.description,
+                      tracking: o.trackingDetails,
                     }}
                     customer={
                       o.customer

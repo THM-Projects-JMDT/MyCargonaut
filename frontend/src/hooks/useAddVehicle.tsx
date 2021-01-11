@@ -1,8 +1,9 @@
-import { createRef, RefObject, useState } from "react";
+import { createRef, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { addVehicle } from "../api/vehicles";
 import { routes } from "../routes";
 import { InputField } from "../util/InputForm";
+import { getRefValue } from "../util/InputForm/inputFormUtils";
 
 export function useAddVehicle() {
   const history = useHistory();
@@ -15,9 +16,6 @@ export function useAddVehicle() {
     storageSpace: createRef<HTMLInputElement>(),
   };
   const [date, setDate] = useState<Date | null>(new Date());
-
-  const getRefValue = (ref: RefObject<HTMLInputElement>) =>
-    ref.current?.value ?? "";
 
   const validate = () =>
     Object.values(refs).every((r) => getRefValue(r)) &&
