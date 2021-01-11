@@ -1,5 +1,6 @@
 import { Offer } from "../../../backend/src/offer/offer";
 import { TrackingDetails } from "../model/TrackingDetails";
+import { fetchTimeOut } from "./util";
 
 export interface OfferResponse extends Offer {
   customerRating?: number;
@@ -52,10 +53,10 @@ export const getPersonalRequests = async (): Promise<OfferResponse[]> => {
 };
 
 export const addOffer = async (offer: Offer): Promise<OfferResponse> => {
-  return fetch("/api/v1/addOffer", {
+  return fetchTimeOut("/api/v1/offer/addOffer", {
+    method: "POST",
     headers: {
-      Authorization:
-        "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVmZmFlN2M4ZTY2YjE1MWVkMDE4ZjQ2YyIsImlhdCI6MTYxMDI4MTYzMSwiZXhwIjoxNjEwODAwMDMxfQ.pvD8SldGD2_6v1vOuCI_3Fn1AGmlAelnKBn8KQGbxOs",
+      "Content-Type": "application/json",
     },
     body: JSON.stringify({ ...offer, isOffer: true }),
   }).then((res) => {
@@ -64,10 +65,10 @@ export const addOffer = async (offer: Offer): Promise<OfferResponse> => {
 };
 
 export const addRequest = async (request: Offer): Promise<OfferResponse> => {
-  return fetch("/api/v1/addOffer", {
+  return fetchTimeOut("/api/v1/offer/addOffer", {
+    method: "POST",
     headers: {
-      Authorization:
-        "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVmZmFlN2M4ZTY2YjE1MWVkMDE4ZjQ2YyIsImlhdCI6MTYxMDI4MTYzMSwiZXhwIjoxNjEwODAwMDMxfQ.pvD8SldGD2_6v1vOuCI_3Fn1AGmlAelnKBn8KQGbxOs",
+      "Content-Type": "application/json",
     },
     body: JSON.stringify(request),
   }).then((res) => {
