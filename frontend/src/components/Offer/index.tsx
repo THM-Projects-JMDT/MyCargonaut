@@ -175,6 +175,8 @@ export const Offer: React.FC<OfferProps> = ({
                   </Button>
                   {offer.tracking && (
                     <TrackingDialog
+                      offerId={offer.id}
+                      role={isCustomer ? "customer" : "provider"}
                       tracking={offer.tracking}
                       open={trackingOpen}
                       onClose={() => setTrackingOpen(false)}
