@@ -8,6 +8,7 @@ import { RootState } from "../features/rootReducer";
 import { routes } from "../routes";
 import { InputField } from "../util/InputForm";
 import { getRefValue } from "../util/InputForm/inputFormUtils";
+import { isValid } from "date-fns";
 
 export function useAddOffer(isOffer: boolean) {
   const history = useHistory();
@@ -28,7 +29,7 @@ export function useAddOffer(isOffer: boolean) {
 
   const validate = () =>
     Object.values(requiredRefs).every((r) => getRefValue(r).trim()) &&
-    date &&
+    isValid(date) &&
     (isOffer
       ? Number(getRefValue(numRefs.priceRef))
       : Object.values(numRefs).every((r) => Number(getRefValue(r))));

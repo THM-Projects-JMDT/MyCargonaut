@@ -1,3 +1,4 @@
+import { isValid } from "date-fns";
 import { createRef, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { addVehicle } from "../api/vehicles";
@@ -19,7 +20,7 @@ export function useAddVehicle() {
 
   const validate = () =>
     Object.values(refs).every((r) => getRefValue(r).trim()) &&
-    date &&
+    isValid(date) &&
     Object.values(numRefs).every((r) => Number(getRefValue(r)));
 
   const handleAdd = async () => {

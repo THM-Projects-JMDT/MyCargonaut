@@ -1,3 +1,4 @@
+import { isValid } from "date-fns";
 import { createRef, RefObject, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
@@ -27,7 +28,7 @@ export function useRegister() {
     ref.current?.value ?? "";
 
   const validate = () =>
-    Object.values(refs).every((r) => getRefValue(r).trim()) && date;
+    Object.values(refs).every((r) => getRefValue(r).trim()) && isValid(date);
 
   const validatePassword = () => {
     const password = getRefValue(refs.passwordRef);
