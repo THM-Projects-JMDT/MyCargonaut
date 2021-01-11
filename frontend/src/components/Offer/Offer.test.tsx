@@ -3,10 +3,12 @@ import { render } from "@testing-library/react";
 import { Offer, renderService } from "./index";
 import userEvent from "@testing-library/user-event";
 import { OfferDetails } from "../../model/OfferDetails";
-import { TrackingDetails } from "../../model/TrackingDetails";
 import { UserDetails } from "../../model/UserDetails";
+import { Status } from "../../../../backend/src/status/status";
+import { renderWithState } from "../../util/testUtil";
 
 const offer: OfferDetails = {
+  id: "1",
   from: "Giessen",
   to: "Frankfurt",
   orderDate: new Date("2021-01-01T10:20:30Z"),
@@ -29,16 +31,16 @@ const userB: UserDetails = {
   rating: 4,
 };
 
-const tracking: TrackingDetails = {
-  state: "waiting",
-  lastMessage: "bin noch daheim",
-  lastMessageDate: new Date(),
+const tracking: Status = {
+  offer: "1",
+  state: "Waiting",
+  text: "bin noch daheim",
 };
 
 describe("general tests", () => {
   it("displays general offer details", () => {
-    const { getByText } = render(
-      <Offer customer={userA} offer={offer} loggedInUserId="3" />
+    const { getByText } = renderWithState(
+      <Offer customer={userA} offer={offer} loggedInUsername="user" />
     );
     expect(getByText(offer.from)).toBeInTheDocument();
     expect(getByText(offer.to)).toBeInTheDocument();
@@ -49,21 +51,21 @@ describe("general tests", () => {
     expect(getByText(offer.description)).toBeInTheDocument();
   });
   it("displays only number of seats when service is 'rideShare'", () => {
-    const { getByText } = render(
+    const { getByText } = renderWithState(
       <Offer
         customer={userA}
         offer={{ ...offer, service: "rideShare" }}
-        loggedInUserId="3"
+        loggedInUsername="user"
       />
     );
     expect(getByText(String(offer.seats))).toBeInTheDocument();
   });
   it("displays only storage space when service is 'transport'", () => {
-    const { getByText } = render(
+    const { getByText } = renderWithState(
       <Offer
         customer={userA}
         offer={{ ...offer, service: "transport" }}
-        loggedInUserId="3"
+        loggedInUsername="user"
       />
     );
     expect(getByText(String(offer.storageSpace) + " l")).toBeInTheDocument();
@@ -72,15 +74,15 @@ describe("general tests", () => {
 
 describe("offer does not belong to logged in user", () => {
   it("displays correct elements when there is no provider yet ('pending request')", () => {
-    const { getByText, getByTestId } = render(
-      <Offer customer={userA} offer={offer} loggedInUserId="3" />
+    const { getByText, getByTestId } = renderWithState(
+      <Offer customer={userA} offer={offer} loggedInUsername="user" />
     );
     expect(getByText(userA.username)).toBeInTheDocument();
     expect(getByTestId("check-circle-icon")).toBeInTheDocument();
   });
   it("displays correct values there is no customer yet ('pending offer')", () => {
-    const { getByText, getByTestId } = render(
-      <Offer provider={userA} offer={offer} loggedInUserId="3" />
+    const { getByText, getByTestId } = renderWithState(
+      <Offer provider={userA} offer={offer} loggedInUsername="user" />
     );
     expect(getByText(userA.username)).toBeInTheDocument();
     expect(getByTestId("check-circle-icon")).toBeInTheDocument();
@@ -89,28 +91,28 @@ describe("offer does not belong to logged in user", () => {
 
 describe("offer does belong to logged in user", () => {
   it("displays correct elements when user is customer and there is no provider yet", () => {
-    const { getByText, queryByText, queryByTestId } = render(
-      <Offer customer={userA} offer={offer} loggedInUserId="1" />
+    const { getByText, queryByText, queryByTestId } = renderWithState(
+      <Offer customer={userA} offer={offer} loggedInUsername="david_98" />
     );
     expect(queryByText(userA.username)).not.toBeInTheDocument();
     expect(queryByTestId("check-circle-icon")).not.toBeInTheDocument();
     expect(getByText("OFFEN")).toBeInTheDocument();
   });
   it("displays correct elements when user is provider and there is no customer yet", () => {
-    const { getByText, queryByText, queryByTestId } = render(
-      <Offer provider={userA} offer={offer} loggedInUserId="1" />
+    const { getByText, queryByText, queryByTestId } = renderWithState(
+      <Offer provider={userA} offer={offer} loggedInUsername="david_98" />
     );
     expect(queryByText(userA.username)).not.toBeInTheDocument();
     expect(queryByTestId("check-circle-icon")).not.toBeInTheDocument();
     expect(getByText("OFFEN")).toBeInTheDocument();
   });
   it("displays correct elements when user is customer and there is a provider", () => {
-    const { getByText, queryByText, queryByTestId } = render(
+    const { getByText, queryByText, queryByTestId } = renderWithState(
       <Offer
         customer={userA}
         provider={userB}
         offer={offer}
-        loggedInUserId="1"
+        loggedInUsername="david_98"
       />
     );
     expect(queryByText(userA.username)).not.toBeInTheDocument();
@@ -119,12 +121,12 @@ describe("offer does belong to logged in user", () => {
     expect(getByText(userB.username)).toBeInTheDocument();
   });
   it("displays correct elements when user is provider and there is a a customer", () => {
-    const { getByText, queryByText, queryByTestId } = render(
+    const { getByText, queryByText, queryByTestId } = renderWithState(
       <Offer
         customer={userA}
         provider={userB}
         offer={offer}
-        loggedInUserId="1"
+        loggedInUsername="david_98"
       />
     );
     expect(queryByText(userA.username)).not.toBeInTheDocument();
@@ -133,27 +135,27 @@ describe("offer does belong to logged in user", () => {
     expect(getByText(userB.username)).toBeInTheDocument();
   });
   it("displays tracking information when offer has customer and provider", () => {
-    const { getByText } = render(
+    const { getByText } = renderWithState(
       <Offer
         customer={userA}
         provider={userB}
         offer={{ ...offer, tracking }}
-        loggedInUserId="1"
+        loggedInUsername="david_98"
       />
     );
     const trackingButton = getByText("IN BEARBEITUNG");
-    const message = String(tracking?.lastMessage);
+    const message = String(tracking?.text);
     userEvent.click(trackingButton);
     expect(getByText("Bereit!")).toBeInTheDocument();
     expect(getByText(message)).toBeInTheDocument();
   });
   it("displays rating modal correctly when rating button is clicked", () => {
-    const { getByText, getByTestId } = render(
+    const { getByText, getByTestId } = renderWithState(
       <Offer
         customer={userA}
         provider={userB}
         offer={{ ...offer, tracking }}
-        loggedInUserId="1"
+        loggedInUsername="david_98"
       />
     );
     expect(getByText("Bewerten")).toBeInTheDocument();
