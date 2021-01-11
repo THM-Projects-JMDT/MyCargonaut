@@ -1,5 +1,5 @@
 import { Service } from "../../../backend/src/offer/offer";
-import { TrackingDetails } from "./TrackingDetails";
+import { Status } from "../../../backend/src/status/status";
 
 export interface OfferDetails {
   id: string;
@@ -11,5 +11,5 @@ export interface OfferDetails {
   storageSpace?: number;
   price: number;
   description: string;
-  tracking?: TrackingDetails;
+  tracking?: Status;
 }

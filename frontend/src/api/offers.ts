@@ -1,14 +1,15 @@
 import { Offer } from "../../../backend/src/offer/offer";
-import { TrackingDetails } from "../model/TrackingDetails";
+import { Stars } from "../../../backend/src/rating/rating";
+import { Status } from "../../../backend/src/status/status";
 import { fetchTimeOut } from "./util";
 
 export interface OfferResponse extends Offer {
   _id: string;
   customerUsername?: string;
-  customerRating?: number;
-  providerRating?: number;
+  customerRating?: Stars;
+  providerRating?: Stars;
   providerUsername?: string;
-  trackingDetails?: TrackingDetails;
+  tracking?: Status;
 }
 
 export const getAllOffers = async (): Promise<OfferResponse[]> => {
