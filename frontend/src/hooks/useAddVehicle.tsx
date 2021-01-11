@@ -53,7 +53,9 @@ export function useAddVehicle() {
       type: "date",
       dateProps: {
         id: "manufactureYear",
+        views: ["year"],
         value: date,
+        format: "yyyy",
         onChange: (date) => {
           setDate(date);
         },

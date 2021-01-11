@@ -1,11 +1,16 @@
 import { createRef, RefObject, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { postRegister } from "../api/auth";
+import { RootState } from "../features/rootReducer";
+import { putUser } from "../features/userSlice";
 import { routes } from "../routes";
 import { InputField } from "../util/InputForm";
 
 export function useRegister() {
   const history = useHistory();
+  const dispatch = useDispatch();
+  const user = useSelector((state: RootState) => state.user.user);
   const refs = {
     fistNameRef: createRef<HTMLInputElement>(),
     lastNameRef: createRef<HTMLInputElement>(),
@@ -14,7 +19,9 @@ export function useRegister() {
     passwordRef: createRef<HTMLInputElement>(),
     repeatPasswordRef: createRef<HTMLInputElement>(),
   };
-  const [date, setDate] = useState<Date | null>(new Date());
+  const [date, setDate] = useState<Date | null>(
+    user ? user.birthday : new Date()
+  );
 
   const getRefValue = (ref: RefObject<HTMLInputElement>) =>
     ref.current?.value ?? "";
@@ -28,6 +35,18 @@ export function useRegister() {
     if (!password || !repeatPassword) return false;
 
     return password === repeatPassword;
+  };
+
+  const handleUpdate = async () => {
+    const user = {
+      firstName: getRefValue(refs.fistNameRef),
+      lastName: getRefValue(refs.lastNameRef),
+      email: getRefValue(refs.emailRef),
+    };
+
+    try {
+      await dispatch(putUser(user));
+    } catch (e) {}
   };
 
   const handleRegister = async () => {
@@ -55,6 +74,7 @@ export function useRegister() {
       inputProps: {
         id: "firstname",
         inputRef: refs.fistNameRef,
+        defaultValue: user?.firstName,
       },
     },
     {
@@ -63,6 +83,7 @@ export function useRegister() {
       inputProps: {
         id: "lastname",
         inputRef: refs.lastNameRef,
+        defaultValue: user?.lastName,
       },
     },
     {
@@ -74,6 +95,7 @@ export function useRegister() {
           setDate(date);
         },
         value: date,
+        disabled: !!user,
       },
     },
     {
@@ -84,6 +106,8 @@ export function useRegister() {
         autoComplete: "off",
         name: "username",
         inputRef: refs.usernameRef,
+        defaultValue: user?.username,
+        disabled: !!user,
       },
     },
     {
@@ -95,29 +119,34 @@ export function useRegister() {
         type: "email",
         name: "email",
         inputRef: refs.emailRef,
+        defaultValue: user?.email,
       },
     },
-    {
-      label: "Passwort",
-      type: "text",
-      inputProps: {
-        id: "password",
-        autoComplete: "new-password",
-        type: "password",
-        name: "password",
-        inputRef: refs.passwordRef,
-      },
-    },
-    {
-      label: "Passwort wiederholen",
-      type: "text",
-      inputProps: {
-        id: "repeat-password",
-        type: "password",
-        name: "password",
-        inputRef: refs.repeatPasswordRef,
-      },
-    },
+    ...(!user
+      ? [
+          {
+            label: "Passwort",
+            type: "text",
+            inputProps: {
+              id: "password",
+              autoComplete: "new-password",
+              type: "password",
+              name: "password",
+              inputRef: refs.passwordRef,
+            },
+          },
+          {
+            label: "Passwort wiederholen",
+            type: "text",
+            inputProps: {
+              id: "repeat-password",
+              type: "password",
+              name: "password",
+              inputRef: refs.repeatPasswordRef,
+            },
+          },
+        ]
+      : []),
   ];
 
   return {
@@ -125,5 +154,6 @@ export function useRegister() {
     validate,
     validatePassword,
     handleRegister,
+    handleUpdate,
   };
 }

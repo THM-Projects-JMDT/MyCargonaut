@@ -5,7 +5,7 @@ export interface OfferDetails {
   from: string;
   to: string;
   service: string; // TODO: use 'Service' type
-  date: Date;
+  orderDate: Date;
   seats?: number;
   storageSpace?: number;
   price: number;

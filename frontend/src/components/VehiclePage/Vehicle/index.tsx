@@ -44,7 +44,7 @@ export const Vehicle: React.FC<VehicleProps> = ({
           <Typography>{model}</Typography>
         </GridElement>
         <GridElement header="Baujahr">
-          <Typography>{manufactureYear.toLocaleDateString()}</Typography>
+          <Typography>{manufactureYear.getFullYear()}</Typography>
         </GridElement>
         <GridElement header="Freie Sitze">
           <Typography>{seats}</Typography>

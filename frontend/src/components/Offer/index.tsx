@@ -112,7 +112,7 @@ export const Offer: React.FC<OfferProps> = ({
             {typography(renderService(offer.service))}
           </GridElement>
           <GridElement header="Datum:">
-            {typography(offer.date.toLocaleDateString())}
+            {typography(offer.orderDate.toLocaleDateString())}
           </GridElement>
           {offer.service === "rideShare" ? (
             <GridElement header="Sitze:">

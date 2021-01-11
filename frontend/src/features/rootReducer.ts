@@ -4,6 +4,7 @@ import requestsReducers from "./requests/requestsSlice";
 import vehiclesReducers from "./vehicles/vehiclesSlice";
 import authReducer from "./authSlice";
 import userReducer from "./userSlice";
+import { RootStateOrAny } from "react-redux";
 
 const appReducer = combineReducers({
   offers: offersReducers,
@@ -15,8 +16,15 @@ const appReducer = combineReducers({
 
 export type RootState = ReturnType<typeof appReducer>;
 
-const rootReducer = (state: RootState | undefined, action: Action) => {
-  if (action.type === "reset") state = undefined;
+const rootReducer = (state: RootState | RootStateOrAny, action: Action) => {
+  if (action.type === "reset")
+    state = {
+      auth: {
+        isLoading: false,
+        isLogedIn: false,
+        error: null,
+      },
+    };
 
   return appReducer(state, action);
 };
