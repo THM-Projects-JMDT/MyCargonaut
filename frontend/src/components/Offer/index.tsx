@@ -229,16 +229,19 @@ export const Offer: React.FC<OfferProps> = ({
           </ListItemIcon>
           Chat
         </MenuItem>
-        <MenuItem onClick={() => setRatingOpen(true)}>
-          <ListItemIcon>
-            <StarIcon />
-          </ListItemIcon>
-          Bewerten
-        </MenuItem>
+        {isCustomer && (
+          <MenuItem onClick={() => setRatingOpen(true)}>
+            <ListItemIcon>
+              <StarIcon />
+            </ListItemIcon>
+            Bewerten
+          </MenuItem>
+        )}
       </Menu>
       <RatingDialog
         open={ratingOpen}
         onClose={() => setRatingOpen(false)}
+        offerId={offer.id}
         username={
           (loggedInUsername === customer?.username
             ? provider?.username

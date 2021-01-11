@@ -69,3 +69,13 @@ export const bookOffer = async (id: string): Promise<OfferResponse> => {
     return res.json();
   }) as Promise<OfferResponse>;
 };
+
+export const addRating = async (id: string, stars: Stars): Promise<void> => {
+  fetch(`/api/v1/rating/${id}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ rating: stars, text: "" }),
+  });
+};
