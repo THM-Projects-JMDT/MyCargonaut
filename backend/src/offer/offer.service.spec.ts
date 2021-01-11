@@ -2,7 +2,9 @@ import { Test, TestingModule } from "@nestjs/testing";
 import { OfferService } from "./offer.service";
 import { OfferController } from "./offer.controller";
 import {
+  addChat,
   addOffer,
+  addRating,
   closeInMongodConnection,
   loginAndGetJWTToken,
   rootMongooseTestModule,
@@ -236,6 +238,47 @@ describe("OfferService", () => {
 
     expect(user1.body.cargoCoins).toBe(3000);
     expect(user2.body.cargoCoins).toBe(0);
+  });
+  it(`average rating test`, async () => {
+    const [localJwtToken2, username2] = await loginAndGetJWTToken(
+      userService,
+      jwtService,
+      app
+    );
+    const offer = await addOffer(app, localJwtToken, true);
+    let response = await request(app.getHttpServer())
+      .get("/offer?forOffer=true&forPrivate=false")
+      .set("Authorization", `Bearer ${localJwtToken2}`)
+      .expect(200);
+    expect(response.body[0].providerStars).toBe(undefined);
+    await request(app.getHttpServer())
+      .post("/offer/bookOffer/" + offer.body._id)
+      .set("Authorization", `Bearer ${localJwtToken2}`)
+      .expect(201);
+    await addRating(app, localJwtToken2, offer.body._id);
+    const offer2 = await addOffer(app, localJwtToken, true);
+    response = await request(app.getHttpServer())
+      .get("/offer?forOffer=true&forPrivate=false")
+      .set("Authorization", `Bearer ${localJwtToken2}`)
+      .expect(200);
+    expect(response.body[0].providerStars).toBe(5);
+    await request(app.getHttpServer())
+      .post("/offer/bookOffer/" + offer2.body._id)
+      .set("Authorization", `Bearer ${localJwtToken2}`)
+      .expect(201);
+    await request(app.getHttpServer())
+      .post("/rating/" + offer2.body._id)
+      .send({
+        text: "okay",
+        rating: 3,
+      })
+      .set("Authorization", `Bearer ${localJwtToken}`);
+    await addOffer(app, localJwtToken, true);
+    response = await request(app.getHttpServer())
+      .get("/offer?forOffer=true&forPrivate=false")
+      .set("Authorization", `Bearer ${localJwtToken2}`)
+      .expect(200);
+    expect(response.body[0].providerStars).toBe(4);
   });
 
   afterAll(async () => {
