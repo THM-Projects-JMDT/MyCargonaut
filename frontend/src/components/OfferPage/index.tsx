@@ -197,13 +197,13 @@ export const OfferPage: React.FC<OfferPageProps> = ({ show }) => {
                       seats: o.seats,
                       storageSpace: o.storageSpace,
                       description: o.description,
-                      tracking: o.trackingDetails,
+                      tracking: o.tracking,
                     }}
                     customer={
                       o.customer
                         ? {
                             id: o.customer,
-                            username: "david", // TODO: o.customerUsername
+                            username: o?.customerUsername ?? "",
                             rating: o.customerRating,
                           }
                         : undefined
@@ -212,7 +212,7 @@ export const OfferPage: React.FC<OfferPageProps> = ({ show }) => {
                       o.provider
                         ? {
                             id: o.provider,
-                            username: "cargo_98", // TODO: o.customerUsername
+                            username: o?.providerUsername ?? "",
                             rating: o.providerRating,
                           }
                         : undefined
