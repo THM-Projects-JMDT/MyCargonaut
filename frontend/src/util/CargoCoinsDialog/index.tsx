@@ -4,6 +4,8 @@ import { CustomCard } from "../CustomCard";
 import { Dialog, DialogTitle, IconButton, Typography } from "@material-ui/core";
 import { CargoCoins } from "../CargoCoins";
 import CloseIcon from "@material-ui/icons/Close";
+import { useDispatch } from "react-redux";
+import { fetchAddMoney } from "../../features/userSlice";
 
 export interface CargoCoinsDialogProps {
   open: boolean;
@@ -15,9 +17,15 @@ export const CargoCoinsDialog: React.FC<CargoCoinsDialogProps> = ({
   setOpen,
 }) => {
   const classes = useStyles();
+  const dispatch = useDispatch();
 
   const handleClose = () => {
     setOpen(false);
+  };
+
+  const handleAddMoney = (moneyAmount: string) => () => {
+    handleClose();
+    dispatch(fetchAddMoney(moneyAmount));
   };
 
   const cardContent = [
@@ -74,7 +82,7 @@ export const CargoCoinsDialog: React.FC<CargoCoinsDialogProps> = ({
             buttonText="KAUFEN"
             heading="100 CargoCoins"
             content={cardContent[0]}
-            event={() => {}}
+            event={handleAddMoney("100")}
             headingProps={{ variant: "h4", align: "center" }}
           />
         </div>
@@ -83,7 +91,7 @@ export const CargoCoinsDialog: React.FC<CargoCoinsDialogProps> = ({
             buttonText="KAUFEN"
             heading="500  CargoCoins"
             content={cardContent[1]}
-            event={() => {}}
+            event={handleAddMoney("500")}
             headingProps={{ variant: "h4", align: "center" }}
           />
         </div>
@@ -92,7 +100,7 @@ export const CargoCoinsDialog: React.FC<CargoCoinsDialogProps> = ({
             buttonText="KAUFEN"
             heading="1000  CargoCoins"
             content={cardContent[2]}
-            event={() => {}}
+            event={handleAddMoney("1000")}
             headingProps={{ variant: "h4", align: "center" }}
           />
         </div>
