@@ -7,7 +7,7 @@ import {
 } from "@material-ui/core";
 import { useStyles } from "./InputForm.style";
 import {
-  DatePicker,
+  KeyboardDatePicker,
   DatePickerProps,
   MuiPickersUtilsProvider,
 } from "@material-ui/pickers";
@@ -46,6 +46,19 @@ export const InputForm: React.FC<InputFormProps> = ({ inputFields }) => {
             {...field.inputProps}
           />
         );
+      case field.type === "multiline":
+        return (
+          <TextField
+            key={idx}
+            multiline
+            fullWidth
+            label={field.label}
+            variant="outlined"
+            className={classes.input}
+            required={field.required ?? true}
+            {...field.inputProps}
+          />
+        );
       case field.type === "select":
         return (
           <TextField
@@ -56,23 +69,27 @@ export const InputForm: React.FC<InputFormProps> = ({ inputFields }) => {
             variant="outlined"
             required={field.required}
             onChange={() => {}}
+            defaultValue=""
             data-testid={field.inputProps?.id}
             {...field.inputProps}
           >
             {field.items?.map((item) => (
-              <MenuItem value={item}>{item}</MenuItem>
+              <MenuItem key={item} value={item}>
+                {item}
+              </MenuItem>
             ))}
           </TextField>
         );
       case field.type === "date":
         return (
           <MuiPickersUtilsProvider key={idx} utils={DateFnsUtils} locale={de}>
-            <DatePicker
+            <KeyboardDatePicker
+              allowKeyboardControl
               inputVariant="outlined"
               required={field.required}
               className={classes.input}
               variant="inline"
-              format="dd.MM.yyy"
+              format="dd.MM.yyyy"
               label={field.label}
               onChange={(date) => {
                 setDate(date);

@@ -8,6 +8,7 @@ import { ProfilePage } from "./components/ProfilePage";
 import { VehiclePage } from "./components/VehiclePage";
 import { AddRequestPage } from "./components/AddRequestPage";
 import { AddOfferPage } from "./components/AddOfferPage";
+import { AddVehiclePage } from "./components/AddVehiclePage";
 
 export interface Route {
   path: string;
@@ -49,6 +50,7 @@ export const routes: Routes = {
   vehicles: {
     path: "/vehicles",
     protected: true,
+    routeProps: { exact: true },
     component: VehiclePage,
   },
   offers: {
@@ -74,6 +76,11 @@ export const routes: Routes = {
     path: "/offers/create",
     protected: true,
     component: AddOfferPage,
+  },
+  addVehicle: {
+    path: "/vehicles/create",
+    protected: true,
+    component: AddVehiclePage,
   },
 };
 

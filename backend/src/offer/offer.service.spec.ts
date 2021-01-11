@@ -25,6 +25,7 @@ import { Rating, RatingSchema } from "../rating/rating.schema";
 import { RatingController } from "../rating/rating.controller";
 import { Status, StatusSchema } from "../status/status.schema";
 import { StatusService } from "../status/status.service";
+import { randomStringGenerator } from "@nestjs/common/utils/random-string-generator.util";
 
 describe("OfferService", () => {
   let userService: UsersService;
@@ -32,6 +33,8 @@ describe("OfferService", () => {
   let service: OfferService;
   let controller: OfferController;
   let app: INestApplication;
+  let localJwtToken;
+  let username;
 
   beforeEach(async () => {
     const moduleRef: TestingModule = await Test.createTestingModule({
@@ -73,6 +76,10 @@ describe("OfferService", () => {
 
     app = moduleRef.createNestApplication();
     await app.init();
+
+    const result = await loginAndGetJWTToken(userService, jwtService, app);
+    localJwtToken = result[0];
+    username = result[1];
   });
 
   it("should be defined", () => {
@@ -83,23 +90,12 @@ describe("OfferService", () => {
   });
 
   it(`add offer`, async () => {
-    const [localJwtToken, username] = await loginAndGetJWTToken(
-      userService,
-      jwtService,
-      app
-    );
     const response = await addOffer(app, localJwtToken, true);
     expect(response.body.description).toBe("Test");
   });
   it(`get my offers`, async () => {
-    const [localJwtToken, username] = await loginAndGetJWTToken(
-      userService,
-      jwtService,
-      app
-    );
     let response = await request(app.getHttpServer())
-      .get("/offer")
-      .send({ forOffer: true, forPrivate: true })
+      .get("/offer?forOffer=true&forPrivate=true")
       .set("Authorization", `Bearer ${localJwtToken}`)
       .expect(200);
     expect(response.body.length).toBe(0);
@@ -107,19 +103,13 @@ describe("OfferService", () => {
     await addOffer(app, localJwtToken, true);
     await addOffer(app, localJwtToken, false);
     response = await request(app.getHttpServer())
-      .get("/offer")
-      .send({ forOffer: true, forPrivate: true })
+      .get("/offer?forOffer=true&forPrivate=true")
       .set("Authorization", `Bearer ${localJwtToken}`)
       .expect(200);
     expect(response.body.length).toBe(2);
     expect(response.body[0].from).toBe("Gießen");
   });
   it(`get all offers`, async () => {
-    const [localJwtToken, username] = await loginAndGetJWTToken(
-      userService,
-      jwtService,
-      app
-    );
     const [localJwtToken2, username2] = await loginAndGetJWTToken(
       userService,
       jwtService,
@@ -129,31 +119,23 @@ describe("OfferService", () => {
     await addOffer(app, localJwtToken2, true);
     await addOffer(app, localJwtToken2, false);
     let response = await request(app.getHttpServer())
-      .get("/offer")
-      .send({ forOffer: true, forPrivate: false })
+      .get("/offer?forOffer=true")
       .set("Authorization", `Bearer ${localJwtToken}`)
       .expect(200);
     expect(response.body.length).toBe(2);
-    await addOffer(app, localJwtToken2, true);
+    await addOffer(app, localJwtToken2, false);
     response = await request(app.getHttpServer())
       .get("/offer")
-      .send({ forOffer: false, forPrivate: false })
-      .set("Authorization", `Bearer ${localJwtToken2}`)
+      .set("Authorization", `Bearer ${localJwtToken}`)
       .expect(200);
-    expect(response.body.length).toBe(1);
+    expect(response.body.length).toBe(2);
   });
 
   it(`delete offer`, async () => {
-    const [localJwtToken, username] = await loginAndGetJWTToken(
-      userService,
-      jwtService,
-      app
-    );
     const offer = await addOffer(app, localJwtToken, true);
     await addOffer(app, localJwtToken, true);
     let response = await request(app.getHttpServer())
-      .get("/offer")
-      .send({ forOffer: true, forPrivate: true })
+      .get("/offer?forOffer=true&forPrivate=true")
       .set("Authorization", `Bearer ${localJwtToken}`)
       .expect(200);
     expect(response.body.length).toBe(2);
@@ -162,19 +144,13 @@ describe("OfferService", () => {
       .set("Authorization", `Bearer ${localJwtToken}`)
       .expect(200);
     response = await request(app.getHttpServer())
-      .get("/offer")
-      .send({ forOffer: true, forPrivate: true })
+      .get("/offer?forOffer=true&forPrivate=true")
       .set("Authorization", `Bearer ${localJwtToken}`)
       .expect(200);
     expect(response.body.length).toBe(1);
   });
 
   it(`edit offer`, async () => {
-    const [localJwtToken, username] = await loginAndGetJWTToken(
-      userService,
-      jwtService,
-      app
-    );
     let response = await addOffer(app, localJwtToken, true);
     await request(app.getHttpServer())
       .put("/offer/" + response.body._id)
@@ -190,24 +166,27 @@ describe("OfferService", () => {
       .set("Authorization", `Bearer ${localJwtToken}`)
       .expect(200);
     response = await request(app.getHttpServer())
-      .get("/offer")
-      .send({ forOffer: true, forPrivate: true })
+      .get("/offer?forOffer=true&forPrivate=true")
       .set("Authorization", `Bearer ${localJwtToken}`)
       .expect(200);
     expect(response.body[0].from).toBe("Grünberg");
   });
 
   it(`book offer`, async () => {
-    const [localJwtToken, username] = await loginAndGetJWTToken(
-      userService,
-      jwtService,
-      app
-    );
     const [localJwtToken2, username2] = await loginAndGetJWTToken(
       userService,
       jwtService,
       app
     );
+    const offer = await addOffer(app, localJwtToken, true);
+    await request(app.getHttpServer())
+      .post("/offer/bookOffer/" + offer.body._id)
+      .set("Authorization", `Bearer ${localJwtToken2}`)
+      .expect(201);
+    const response = await request(app.getHttpServer())
+      .get("/offer?forOffer=true&forPrivate=true")
+      .set("Authorization", `Bearer ${localJwtToken}`)
+      .expect(200);
     const user1 = await request(app.getHttpServer())
       .get("/user")
       .set("Authorization", `Bearer ${localJwtToken}`)
@@ -216,21 +195,47 @@ describe("OfferService", () => {
       .get("/user")
       .set("Authorization", `Bearer ${localJwtToken2}`)
       .expect(200);
+
+    expect(response.body.length).toBe(1);
+    expect(response.body[0].provider).toBe(user1.body._id);
+    expect(response.body[0].customer).toBe(user2.body._id);
+    expect(user1.body.cargoCoins).toBe(3050);
+    expect(user2.body.cargoCoins).toBe(2950);
+    expect(response.body[0].tracking.state).toBe("Waiting");
+  });
+
+  it(`book offer with no money`, async () => {
+    const newUser = {
+      username: randomStringGenerator(),
+      password: "admin",
+      firstName: "Test",
+      lastName: "Test",
+      ppPath: "images/test.png",
+      birthday: new Date("11-09-1998"),
+      email: randomStringGenerator() + "@mni.thm.de",
+      cargoCoins: 0,
+    };
+    const user = await userService.addUser(newUser);
+
+    const payload = { id: user._id };
+    const localJwtToken2 = jwtService.sign(payload);
+
     const offer = await addOffer(app, localJwtToken, true);
     await request(app.getHttpServer())
       .post("/offer/bookOffer/" + offer.body._id)
       .set("Authorization", `Bearer ${localJwtToken2}`)
-      .expect(201);
-
-    const response = await request(app.getHttpServer())
-      .get("/offer")
-      .send({ forOffer: true, forPrivate: true })
+      .expect(400);
+    const user1 = await request(app.getHttpServer())
+      .get("/user")
       .set("Authorization", `Bearer ${localJwtToken}`)
       .expect(200);
-    expect(response.body.length).toBe(1);
-    expect(response.body[0].provider).toBe(user1.body._id);
-    expect(response.body[0].customer).toBe(user2.body._id);
-    expect(response.body[0].tracking.state).toBe("Waiting");
+    const user2 = await request(app.getHttpServer())
+      .get("/user")
+      .set("Authorization", `Bearer ${localJwtToken2}`)
+      .expect(200);
+
+    expect(user1.body.cargoCoins).toBe(3000);
+    expect(user2.body.cargoCoins).toBe(0);
   });
 
   afterAll(async () => {

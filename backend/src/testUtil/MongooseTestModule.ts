@@ -61,3 +61,55 @@ export const addOffer = async (app, localJwtToken, offer: boolean) => {
     })
     .set("Authorization", `Bearer ${localJwtToken}`);
 };
+
+export const addCar = async (app, localJwtToken) => {
+  return request(app.getHttpServer())
+    .post("/car")
+    .send({
+      manufacturer: randomStringGenerator(),
+      model: "A20",
+      manufactureYear: 2021,
+      seats: 4,
+      storageSpace: 500,
+    })
+    .set("Authorization", `Bearer ${localJwtToken}`);
+};
+
+export const addChat = async (
+  app,
+  localJwtToken,
+  offerId: string,
+  content: string
+) => {
+  return request(app.getHttpServer())
+    .post("/chat/" + offerId)
+    .send({
+      content: content,
+    })
+    .set("Authorization", `Bearer ${localJwtToken}`);
+};
+
+export const addRating = async (app, localJwtToken, offerId: string) => {
+  return request(app.getHttpServer())
+    .post("/rating/" + offerId)
+    .send({
+      text: "Alles Top",
+      rating: 5,
+    })
+    .set("Authorization", `Bearer ${localJwtToken}`);
+};
+
+export const addStatus = async (
+  app,
+  localJwtToken,
+  offerId: string,
+  state: string
+) => {
+  return request(app.getHttpServer())
+    .post("/status/" + offerId)
+    .send({
+      text: "komme morgen",
+      state: state,
+    })
+    .set("Authorization", `Bearer ${localJwtToken}`);
+};

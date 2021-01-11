@@ -2,8 +2,7 @@ import React, { useState } from "react";
 import Button from "@material-ui/core/Button";
 import { useStyles } from "./Profile.style";
 import { Avatar, Box, IconButton } from "@material-ui/core";
-import { InputForm } from "../../util/InputForm";
-import { inputFieldsProfile } from "../../assets/inputFields";
+import { InputField, InputForm } from "../../util/InputForm";
 import EditIcon from "@material-ui/icons/Edit";
 import { CargoCoins } from "../../util/CargoCoins";
 import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
@@ -13,7 +12,11 @@ import { PasswordDialog } from "./PasswordDialog";
 import { useSelector } from "react-redux";
 import { RootState } from "../../features/rootReducer";
 
-export const Profile = () => {
+export interface ProfileProps {
+  inputFields: InputField[];
+}
+
+export const Profile: React.FC<ProfileProps> = ({ inputFields }) => {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
   const [openPw, setOpenPw] = useState(false);
@@ -67,7 +70,7 @@ export const Profile = () => {
           </div>
         </div>
       </div>
-      <InputForm inputFields={inputFieldsProfile} />
+      <InputForm inputFields={inputFields} />
       <input
         accept="image/*"
         className={classes.input}

@@ -8,9 +8,9 @@ import {
   RenderOptions,
   SelectorMatcherOptions,
 } from "@testing-library/react";
-import { createStore } from "redux";
 import { Provider, RootStateOrAny } from "react-redux";
-import reducer from "../features/rootReducer";
+import { configureStore } from "@reduxjs/toolkit";
+import rootReducer from "../features/rootReducer";
 
 export interface RenderOptionsWithState extends RenderOptions {
   initalState?: RootStateOrAny;
@@ -30,7 +30,11 @@ export const renderWithState = (
   >,
   { initalState, ...renderOptions }: RenderOptionsWithState = {}
 ) => {
-  const store = createStore(reducer, initalState);
+  const store = configureStore({
+    reducer: rootReducer,
+    preloadedState: initalState,
+  });
+
   const Wrapper: React.FC = ({ children }) => (
     <Provider store={store}>{children}</Provider>
   );

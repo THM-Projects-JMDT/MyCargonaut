@@ -2,6 +2,7 @@ import {
   AppBar,
   Box,
   Button,
+  CircularProgress,
   Grid,
   List,
   ListItem,
@@ -10,106 +11,22 @@ import {
   Tabs,
   TextField,
 } from "@material-ui/core";
-import React, { useCallback, useEffect } from "react";
-import { OfferDetails } from "../../model/OfferDetails";
-import { TrackingDetails } from "../../model/TrackingDetails";
-import { UserDetails } from "../../model/UserDetails";
+import React, { useEffect } from "react";
 import { Offer } from "../Offer";
 import { useStyles } from "./OfferPage.style";
 import { OfferDummy } from "../Offer/OfferDummy";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../features/rootReducer";
+import { fetchOffers } from "../../features/offers/offersSlice";
+import { fetchRequests } from "../../features/requests/requestsSlice";
+import { OfferResponse } from "../../api/offers";
 
 export interface OfferPageProps {
   show: "offers" | "requests";
 }
 
-const offerDetails: OfferDetails = {
-  from: "Giessen",
-  to: "Frankfurt",
-  date: new Date("2021-01-01T10:20:30Z"),
-  service: "rideShare",
-  price: 100,
-  seats: 1,
-  storageSpace: 400,
-  description: "Fahre von Gießen nach Frankfurt, kann eine Person mitnehmen",
-};
-
-const userA: UserDetails = {
-  id: 1,
-  username: "david_98",
-  rating: 5,
-};
-
-const userB: UserDetails = {
-  id: 2,
-  username: "cargo_98",
-  rating: 4,
-};
-
-const tracking: TrackingDetails = {
-  state: "waiting",
-  lastMessage: "bin noch daheim",
-  lastMessageDate: new Date(),
-};
-
-// no customer
-const pendingOffers = [
-  {
-    offer: offerDetails,
-    provider: userB,
-  },
-  {
-    offer: offerDetails,
-    provider: userB,
-  },
-  {
-    offer: offerDetails,
-    provider: userB,
-  },
-];
-
-// no provider
-const pendingRequests = [
-  {
-    offer: offerDetails,
-    customer: userB,
-  },
-  {
-    offer: offerDetails,
-    customer: userB,
-  },
-  {
-    offer: offerDetails,
-    customer: userB,
-  },
-];
-
-const myOffers = [
-  {
-    offer: { ...offerDetails },
-    provider: userA,
-  },
-  {
-    offer: { ...offerDetails, tracking },
-    provider: userA,
-    customer: userB,
-  },
-];
-
-const myRequests = [
-  {
-    offer: { ...offerDetails },
-    customer: userA,
-  },
-  {
-    offer: { ...offerDetails, tracking },
-    customer: userA,
-    provider: userB,
-  },
-];
-
 export const OfferPage: React.FC<OfferPageProps> = ({ show }) => {
   const [activeTab, setActiveTab] = React.useState(0);
-  const [displayList, setDisplayList] = React.useState<any[] | undefined>([]);
   const [service, setService] = React.useState<string>("both");
   const [filter, setFilter] = React.useState({
     from: "",
@@ -121,26 +38,25 @@ export const OfferPage: React.FC<OfferPageProps> = ({ show }) => {
   const classes = useStyles();
 
   const displayName = show === "offers" ? "Angebote" : "Anfragen";
-  const loggedInUserId = 1; // TODO: retrieve from store
-
-  const handleChange = (event: React.ChangeEvent<{}>, tab: number) => {
-    setActiveTab(tab);
-    setDisplayList(getOffers(tab));
-  };
-
-  // all of the following variables can be removed when backend backend communication is implemented
-
-  const getOffers = useCallback(
-    (tab: number) => {
-      if (tab === 0) {
-        return show === "offers" ? pendingOffers : pendingRequests; // TODO: fetch from server
-      }
-      if (tab === 1) {
-        return show === "offers" ? myOffers : myRequests; // TODO: fetch from server
-      }
-    },
-    [show]
+  const loggedInUsername = useSelector(
+    (state: RootState) => state.user.user?.username
   );
+
+  const dispatch = useDispatch();
+  const offersState = useSelector((state: RootState) => state.offers);
+  const requestsState = useSelector((state: RootState) => state.requests);
+
+  useEffect(() => {
+    if (show === "offers") {
+      dispatch(fetchOffers());
+    } else {
+      dispatch(fetchRequests());
+    }
+  }, [dispatch, show]);
+
+  const handleTabChange = (event: React.ChangeEvent<{}>, tab: number) => {
+    setActiveTab(tab);
+  };
 
   const handleServiceFilterChange = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -172,17 +88,33 @@ export const OfferPage: React.FC<OfferPageProps> = ({ show }) => {
     setService("both");
   };
 
-  const predicate = (o: any) => {
+  const predicate = (o: OfferResponse) => {
     return (
-      (!filter.from || o.offer.from.toLowerCase() === filter.from) &&
-      (!filter.to || o.offer.to.toLowerCase() === filter.to) &&
-      (filter.service === "both" || o.offer.service === filter.service)
+      (!filter.from || o.from.toLowerCase() === filter.from) &&
+      (!filter.to || o.to.toLowerCase() === filter.to) &&
+      (filter.service === "both" || o.service === filter.service)
     );
   };
 
-  useEffect(() => {
-    setDisplayList(getOffers(0));
-  }, [getOffers]);
+  const getDisplayList = () => {
+    if (show === "offers") {
+      if (offersState.isLoading) {
+        return undefined;
+      }
+      return activeTab === 0
+        ? offersState.allOffers
+        : offersState.personalOffers;
+    }
+    if (show === "requests") {
+      if (requestsState.isLoading) {
+        return undefined;
+      }
+      return activeTab === 0
+        ? requestsState.allRequests
+        : requestsState.personalRequests;
+    }
+    return undefined;
+  };
 
   return (
     <Box mt={2}>
@@ -242,7 +174,7 @@ export const OfferPage: React.FC<OfferPageProps> = ({ show }) => {
               indicatorColor="primary"
               color="primary"
               value={activeTab}
-              onChange={handleChange}
+              onChange={handleTabChange}
             >
               <Tab label={"Alle " + displayName} fullWidth />
               <Tab label={"Meine " + displayName} fullWidth />
@@ -250,16 +182,49 @@ export const OfferPage: React.FC<OfferPageProps> = ({ show }) => {
           </AppBar>
           <List>
             {activeTab === 1 && <OfferDummy show={show} />}
-            {displayList?.filter(predicate).map((o: any, idx: number) => (
-              <ListItem key={idx}>
-                <Offer
-                  offer={o.offer}
-                  customer={o.customer}
-                  provider={o.provider}
-                  loggedInUserId={loggedInUserId}
-                />
-              </ListItem>
-            ))}
+            {getDisplayList()
+              ?.filter(predicate)
+              .map((o: OfferResponse, id: number) => (
+                <ListItem key={id}>
+                  <Offer
+                    offer={{
+                      id: o._id,
+                      from: o.from,
+                      to: o.to,
+                      service: o.service,
+                      price: o.price,
+                      orderDate: new Date(o.orderDate),
+                      seats: o.seats,
+                      storageSpace: o.storageSpace,
+                      description: o.description,
+                      tracking: o.tracking,
+                    }}
+                    customer={
+                      o.customer
+                        ? {
+                            id: o.customer,
+                            username: o?.customerUsername ?? "",
+                            rating: o.customerRating,
+                          }
+                        : undefined
+                    }
+                    provider={
+                      o.provider
+                        ? {
+                            id: o.provider,
+                            username: o?.providerUsername ?? "",
+                            rating: o.providerRating,
+                          }
+                        : undefined
+                    }
+                    loggedInUsername={loggedInUsername ?? ""}
+                  />
+                </ListItem>
+              )) ?? (
+              <Box className={classes.loadingBox} mt={5}>
+                <CircularProgress />
+              </Box>
+            )}
           </List>
         </Grid>
         <Grid item xs={2} />

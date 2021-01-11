@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { Action, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { getLogin, postLogin, postLogout } from "../api/auth";
 import { AppThunk } from "./store";
 import { getUserSuccess } from "./userSlice";
@@ -14,6 +14,8 @@ const initialState: AuthState = {
   isLoading: true,
   error: null,
 };
+
+export const resetApp: Action = { type: "reset" };
 
 export const auth = createSlice({
   name: "auth",
@@ -53,6 +55,7 @@ export const login = (username: string, password: string): AppThunk => async (
 export const logout = (): AppThunk => async (dispatch) => {
   try {
     await postLogout();
+    dispatch(resetApp);
     dispatch(logoutSuccess());
   } catch (err) {}
 };
