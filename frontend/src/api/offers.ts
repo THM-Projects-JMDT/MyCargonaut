@@ -9,45 +9,27 @@ export interface OfferResponse extends Offer {
 }
 
 export const getAllOffers = async (): Promise<OfferResponse[]> => {
-  return fetch("/api/v1/offer?forOffer=true", {
-    headers: {
-      Authorization:
-        "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVmZmFlN2M4ZTY2YjE1MWVkMDE4ZjQ2YyIsImlhdCI6MTYxMDI4MTYzMSwiZXhwIjoxNjEwODAwMDMxfQ.pvD8SldGD2_6v1vOuCI_3Fn1AGmlAelnKBn8KQGbxOs",
-    },
-  }).then((res) => {
+  return fetchTimeOut("/api/v1/offer?forOffer=true").then((res) => {
     return res.json();
   }) as Promise<OfferResponse[]>;
 };
 
 export const getAllRequests = async (): Promise<OfferResponse[]> => {
-  return fetch("/api/v1/offer", {
-    headers: {
-      Authorization:
-        "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVmZmFlN2M4ZTY2YjE1MWVkMDE4ZjQ2YyIsImlhdCI6MTYxMDI4MTYzMSwiZXhwIjoxNjEwODAwMDMxfQ.pvD8SldGD2_6v1vOuCI_3Fn1AGmlAelnKBn8KQGbxOs",
-    },
-  }).then((res) => {
+  return fetchTimeOut("/api/v1/offer").then((res) => {
     return res.json();
   }) as Promise<OfferResponse[]>;
 };
 
 export const getPersonalOffers = async (): Promise<OfferResponse[]> => {
-  return fetch("/api/v1/offer?forOffer=true&forPrivate=true", {
-    headers: {
-      Authorization:
-        "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVmZmFlN2M4ZTY2YjE1MWVkMDE4ZjQ2YyIsImlhdCI6MTYxMDI4MTYzMSwiZXhwIjoxNjEwODAwMDMxfQ.pvD8SldGD2_6v1vOuCI_3Fn1AGmlAelnKBn8KQGbxOs",
-    },
-  }).then((res) => {
-    return res.json();
-  }) as Promise<OfferResponse[]>;
+  return fetchTimeOut("/api/v1/offer?forOffer=true&forPrivate=true").then(
+    (res) => {
+      return res.json();
+    }
+  ) as Promise<OfferResponse[]>;
 };
 
 export const getPersonalRequests = async (): Promise<OfferResponse[]> => {
-  return fetch("/api/v1/offer?forPrivate=true", {
-    headers: {
-      Authorization:
-        "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVmZmFlN2M4ZTY2YjE1MWVkMDE4ZjQ2YyIsImlhdCI6MTYxMDI4MTYzMSwiZXhwIjoxNjEwODAwMDMxfQ.pvD8SldGD2_6v1vOuCI_3Fn1AGmlAelnKBn8KQGbxOs",
-    },
-  }).then((res) => {
+  return fetchTimeOut("/api/v1/offer?forPrivate=true").then((res) => {
     return res.json();
   }) as Promise<OfferResponse[]>;
 };
@@ -81,7 +63,7 @@ export const bookOffer = async (id: number): Promise<OfferResponse> => {
     method: "POST",
     headers: {
       Authorization:
-        "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVmZmFlN2M4ZTY2YjE1MWVkMDE4ZjQ2YyIsImlhdCI6MTYxMDI4MTYzMSwiZXhwIjoxNjEwODAwMDMxfQ.pvD8SldGD2_6v1vOuCI_3Fn1AGmlAelnKBn8KQGbxOs",
+        "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVmZmIzYWJkOTNhZmYyNDdlOWU5ZjMwOSIsImlhdCI6MTYxMDMwMDg3NCwiZXhwIjoxNjYyMTQwODc0fQ.3E5hF_EBt6TSvcNTkI7SBPeQP7cgjlaGoBPIBdPY6Kc",
     },
   }).then((res) => {
     return res.json();
