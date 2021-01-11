@@ -25,6 +25,9 @@ import StarIcon from "@material-ui/icons/Star";
 import { UserDetails } from "../../model/UserDetails";
 import { OfferDetails } from "../../model/OfferDetails";
 import { RatingDialog } from "./RatingDialog";
+import { useDispatch } from "react-redux";
+import { acceptOffers } from "../../features/offers/offersSlice";
+import { acceptRequest } from "../../features/requests/requestsSlice";
 
 export interface OfferProps {
   provider?: UserDetails;
@@ -67,6 +70,8 @@ export const Offer: React.FC<OfferProps> = ({
   const isCustomer = loggedInUsername === customer?.username;
   const isMyOffer = isProvider || isCustomer;
 
+  const dispatch = useDispatch();
+
   const handleTrackingClick = (event: any) => {
     event.stopPropagation();
     setTrackingOpen(true);
@@ -77,6 +82,17 @@ export const Offer: React.FC<OfferProps> = ({
   ) => {
     event.stopPropagation();
     setAnchorEl(event.currentTarget);
+  };
+
+  const handleCheckbuttonClick = (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    event.stopPropagation();
+    if (isPendingOffer) {
+      dispatch(acceptOffers(offer.id));
+    } else {
+      dispatch(acceptRequest(offer.id));
+    }
   };
 
   const handleAvatarMenuClose = () => {
@@ -134,10 +150,7 @@ export const Offer: React.FC<OfferProps> = ({
           {!isMyOffer && isPending ? (
             <GridElement>
               <Box mt={2}>
-                <IconButton
-                  color="primary"
-                  onClick={(event) => event.stopPropagation()}
-                >
+                <IconButton color="primary" onClick={handleCheckbuttonClick}>
                   <CheckCircle
                     data-testid="check-circle-icon"
                     fontSize="large"
