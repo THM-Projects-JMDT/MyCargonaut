@@ -1,12 +1,13 @@
-import { createRef, RefObject, useState } from "react";
+import { createRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { Car } from "../../../backend/src/car/car";
+import { Car } from "../model/Car";
 import { Offer, Service } from "../../../backend/src/offer/offer";
 import { addOffer, addRequest } from "../api/offers";
 import { RootState } from "../features/rootReducer";
 import { routes } from "../routes";
 import { InputField } from "../util/InputForm";
+import { getRefValue } from "../util/InputForm/inputFormUtils";
 
 export function useAddOffer(isOffer: boolean) {
   const history = useHistory();
@@ -24,10 +25,6 @@ export function useAddOffer(isOffer: boolean) {
   const vehilceRef = createRef<HTMLInputElement>();
   const [date, setDate] = useState<Date | null>(new Date());
   const vehicles = useSelector((state: RootState) => state.vehicles.vehicles);
-
-  //AUSLAGERN
-  const getRefValue = (ref: RefObject<HTMLInputElement>) =>
-    ref.current?.value ?? "";
 
   const validate = () =>
     Object.values(requiredRefs).every((r) => getRefValue(r)) && date;
@@ -96,14 +93,14 @@ export function useAddOffer(isOffer: boolean) {
       label: "von",
       type: "text",
       inputProps: {
-        inputRef: requiredRefs.toRef,
+        inputRef: requiredRefs.fromRef,
       },
     },
     {
       label: "nach",
       type: "text",
       inputProps: {
-        inputRef: requiredRefs.fromRef,
+        inputRef: requiredRefs.toRef,
       },
     },
     {

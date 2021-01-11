@@ -38,7 +38,6 @@ export const OfferPage: React.FC<OfferPageProps> = ({ show }) => {
   const classes = useStyles();
 
   const displayName = show === "offers" ? "Angebote" : "Anfragen";
-  const loggedInUserId = 1;
 
   const dispatch = useDispatch();
   const offersState = useSelector((state: RootState) => state.offers);
