@@ -27,10 +27,11 @@ export function useAddOffer(isOffer: boolean) {
   const vehicles = useSelector((state: RootState) => state.vehicles.vehicles);
 
   const validate = () =>
-    Object.values(requiredRefs).every((r) => getRefValue(r)) && date;
-
-  const validateNumRefs = () =>
-    Object.values(numRefs).every((r) => !isNaN(Number(getRefValue(r))));
+    Object.values(requiredRefs).every((r) => getRefValue(r).trim()) &&
+    date &&
+    (isOffer
+      ? Number(getRefValue(numRefs.priceRef))
+      : Object.values(numRefs).every((r) => Number(getRefValue(r))));
 
   const getService = (service: string) => {
     switch (service) {
@@ -60,9 +61,11 @@ export function useAddOffer(isOffer: boolean) {
   const handleAddOffer = async () => {
     const { seats, storageSpace } = getVehicleInfo(getRefValue(vehilceRef));
 
+    if (!validate()) return;
+
     const offer: Offer = {
-      from: getRefValue(requiredRefs.fromRef),
-      to: getRefValue(requiredRefs.toRef),
+      from: getRefValue(requiredRefs.fromRef).trim(),
+      to: getRefValue(requiredRefs.toRef).trim(),
       createDate: new Date(),
       orderDate: date ?? new Date(),
       service: getService(getRefValue(requiredRefs.serviceRef)) as Service,
@@ -71,11 +74,8 @@ export function useAddOffer(isOffer: boolean) {
       storageSpace: isOffer
         ? storageSpace
         : Number(getRefValue(numRefs.storageSpaceRef)),
-      description: getRefValue(descriptionRef),
+      description: getRefValue(descriptionRef).trim(),
     };
-    console.log(offer);
-
-    if (!validate() || !validateNumRefs()) return;
 
     try {
       if (isOffer) {
@@ -118,6 +118,7 @@ export function useAddOffer(isOffer: boolean) {
       type: "select",
       items: ["Mitfahrgelegenheit", "Transport"],
       inputProps: {
+        defaultValue: "Mitfahrgelegenheit",
         inputRef: requiredRefs.serviceRef,
       },
     },
@@ -127,6 +128,7 @@ export function useAddOffer(isOffer: boolean) {
             label: "Sitze",
             type: "text",
             inputProps: {
+              type: "number",
               inputRef: numRefs.seatsRef,
             },
           },
@@ -134,6 +136,7 @@ export function useAddOffer(isOffer: boolean) {
             label: "Stauraum",
             type: "text",
             inputProps: {
+              type: "number",
               inputRef: numRefs.storageSpaceRef,
             },
           },
@@ -143,6 +146,7 @@ export function useAddOffer(isOffer: boolean) {
       label: "Preis",
       type: "text",
       inputProps: {
+        type: "number",
         inputRef: numRefs.priceRef,
       },
     },

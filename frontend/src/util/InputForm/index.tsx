@@ -69,11 +69,14 @@ export const InputForm: React.FC<InputFormProps> = ({ inputFields }) => {
             variant="outlined"
             required={field.required}
             onChange={() => {}}
+            defaultValue=""
             data-testid={field.inputProps?.id}
             {...field.inputProps}
           >
             {field.items?.map((item) => (
-              <MenuItem value={item}>{item}</MenuItem>
+              <MenuItem key={item} value={item}>
+                {item}
+              </MenuItem>
             ))}
           </TextField>
         );
