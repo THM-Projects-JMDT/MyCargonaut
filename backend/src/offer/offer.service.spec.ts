@@ -98,8 +98,7 @@ describe("OfferService", () => {
       app
     );
     let response = await request(app.getHttpServer())
-      .get("/offer")
-      .send({ forOffer: true, forPrivate: true })
+      .get("/offer?forOffer=true&forPrivate=true")
       .set("Authorization", `Bearer ${localJwtToken}`)
       .expect(200);
     expect(response.body.length).toBe(0);
@@ -107,8 +106,7 @@ describe("OfferService", () => {
     await addOffer(app, localJwtToken, true);
     await addOffer(app, localJwtToken, false);
     response = await request(app.getHttpServer())
-      .get("/offer")
-      .send({ forOffer: true, forPrivate: true })
+      .get("/offer?forOffer=true&forPrivate=true")
       .set("Authorization", `Bearer ${localJwtToken}`)
       .expect(200);
     expect(response.body.length).toBe(2);
@@ -129,18 +127,16 @@ describe("OfferService", () => {
     await addOffer(app, localJwtToken2, true);
     await addOffer(app, localJwtToken2, false);
     let response = await request(app.getHttpServer())
-      .get("/offer")
-      .send({ forOffer: true, forPrivate: false })
+      .get("/offer?forOffer=true&forPrivate=false")
       .set("Authorization", `Bearer ${localJwtToken}`)
       .expect(200);
     expect(response.body.length).toBe(2);
-    await addOffer(app, localJwtToken2, true);
+    await addOffer(app, localJwtToken2, false);
     response = await request(app.getHttpServer())
-      .get("/offer")
-      .send({ forOffer: false, forPrivate: false })
-      .set("Authorization", `Bearer ${localJwtToken2}`)
+      .get("/offer?forOffer=false&forPrivate=false")
+      .set("Authorization", `Bearer ${localJwtToken}`)
       .expect(200);
-    expect(response.body.length).toBe(1);
+    expect(response.body.length).toBe(2);
   });
 
   it(`delete offer`, async () => {
@@ -152,8 +148,7 @@ describe("OfferService", () => {
     const offer = await addOffer(app, localJwtToken, true);
     await addOffer(app, localJwtToken, true);
     let response = await request(app.getHttpServer())
-      .get("/offer")
-      .send({ forOffer: true, forPrivate: true })
+      .get("/offer?forOffer=true&forPrivate=true")
       .set("Authorization", `Bearer ${localJwtToken}`)
       .expect(200);
     expect(response.body.length).toBe(2);
@@ -162,8 +157,7 @@ describe("OfferService", () => {
       .set("Authorization", `Bearer ${localJwtToken}`)
       .expect(200);
     response = await request(app.getHttpServer())
-      .get("/offer")
-      .send({ forOffer: true, forPrivate: true })
+      .get("/offer?forOffer=true&forPrivate=true")
       .set("Authorization", `Bearer ${localJwtToken}`)
       .expect(200);
     expect(response.body.length).toBe(1);
@@ -190,8 +184,7 @@ describe("OfferService", () => {
       .set("Authorization", `Bearer ${localJwtToken}`)
       .expect(200);
     response = await request(app.getHttpServer())
-      .get("/offer")
-      .send({ forOffer: true, forPrivate: true })
+      .get("/offer?forOffer=true&forPrivate=true")
       .set("Authorization", `Bearer ${localJwtToken}`)
       .expect(200);
     expect(response.body[0].from).toBe("Grünberg");
@@ -223,8 +216,7 @@ describe("OfferService", () => {
       .expect(201);
 
     const response = await request(app.getHttpServer())
-      .get("/offer")
-      .send({ forOffer: true, forPrivate: true })
+      .get("/offer?forOffer=true&forPrivate=true")
       .set("Authorization", `Bearer ${localJwtToken}`)
       .expect(200);
     expect(response.body.length).toBe(1);
