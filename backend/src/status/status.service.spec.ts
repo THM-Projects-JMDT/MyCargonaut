@@ -3,6 +3,7 @@ import { StatusService } from "./status.service";
 import { StatusController } from "./status.controller";
 import {
   addOffer,
+  addStatus,
   closeInMongodConnection,
   loginAndGetJWTToken,
   rootMongooseTestModule,
@@ -32,6 +33,8 @@ describe("StatusService", () => {
   let service: StatusService;
   let controller: StatusController;
   let app: INestApplication;
+  let localJwtToken;
+  let username;
 
   beforeEach(async () => {
     const moduleRef: TestingModule = await Test.createTestingModule({
@@ -73,6 +76,10 @@ describe("StatusService", () => {
 
     app = moduleRef.createNestApplication();
     await app.init();
+
+    const result = await loginAndGetJWTToken(userService, jwtService, app);
+    localJwtToken = result[0];
+    username = result[1];
   });
 
   it("should be defined", () => {
@@ -83,11 +90,6 @@ describe("StatusService", () => {
   });
 
   it(`add status`, async () => {
-    const [localJwtToken, username] = await loginAndGetJWTToken(
-      userService,
-      jwtService,
-      app
-    );
     let response = await addOffer(app, localJwtToken, true);
     response = await addStatus(
       app,
@@ -99,11 +101,6 @@ describe("StatusService", () => {
   });
 
   it(`get status delete status`, async () => {
-    const [localJwtToken, username] = await loginAndGetJWTToken(
-      userService,
-      jwtService,
-      app
-    );
     const offer = await addOffer(app, localJwtToken, true);
 
     await addStatus(app, localJwtToken, offer.body._id, "Waiting");
@@ -123,18 +120,3 @@ describe("StatusService", () => {
     await app.close();
   });
 });
-
-export const addStatus = async (
-  app,
-  localJwtToken,
-  offerId: string,
-  state: string
-) => {
-  return request(app.getHttpServer())
-    .post("/status/" + offerId)
-    .send({
-      text: "komme morgen",
-      state: state,
-    })
-    .set("Authorization", `Bearer ${localJwtToken}`);
-};

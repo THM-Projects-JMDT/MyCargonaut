@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Put,
+  Query,
   Request,
   UseGuards,
 } from "@nestjs/common";
@@ -65,7 +66,7 @@ export class OfferController {
     @Body("isOffer") isOffer: boolean,
     @Body("from") from: string | null,
     @Body("to") to: string | null,
-    @Body("date") date: Date | null,
+    @Body("orderDate") orderDate: Date | null,
     @Body("service") service: Service | null,
     @Body("price") price: number | null,
     @Body("storageSpace") storageSpace: number | null,
@@ -77,7 +78,7 @@ export class OfferController {
       from: from,
       to: to,
       createDate: new Date(),
-      orderDate: undefined,
+      orderDate: orderDate,
       service: service,
       price: price,
       seats: seats,
@@ -101,7 +102,7 @@ export class OfferController {
       from: oldOffer.from,
       to: oldOffer.to,
       createDate: oldOffer.createDate,
-      orderDate: new Date(),
+      orderDate: oldOffer.orderDate,
       service: oldOffer.service,
       price: oldOffer.price,
       seats: oldOffer.seats,
@@ -125,20 +126,16 @@ export class OfferController {
   }
 
   @Get()
-  async getOffers(
-    @Body("forOffer") forOffer: boolean,
-    @Body("forPrivate") forPrivate: boolean,
-    @Request() req
-  ) {
+  async getOffers(@Query() query, @Request() req) {
     let offerList;
-    if (forOffer == true) {
-      if (forPrivate == true) {
+    if (query?.forOffer == "true") {
+      if (query?.forPrivate == "true") {
         offerList = await this.offerService.findAllOffersByUser(req.user.id);
       } else {
         offerList = await this.offerService.getAllOffers();
       }
     } else {
-      if (forPrivate == true) {
+      if (query?.forPrivate == "true") {
         offerList = await this.offerService.findAllRequestsByUser(req.user.id);
       } else {
         offerList = await this.offerService.getAllRequests();
@@ -156,6 +153,8 @@ export class OfferController {
           offerList[i].provider,
           "providerStars"
         );
+        const user = await this.userService.findOneById(offerList[i].provider);
+        offerList[i] = { ...offerList[i], providerUsername: user.username };
       }
 
       if (offerList[i].customer != undefined) {
@@ -166,6 +165,8 @@ export class OfferController {
           offerList[i].customer,
           "customerStars"
         );
+        const user = await this.userService.findOneById(offerList[i].customer);
+        offerList[i] = { ...offerList[i], customerUsername: user.username };
       }
       if (
         offerList[i].provider != undefined &&
@@ -191,7 +192,7 @@ export const addStars = async (
   tag
 ) => {
   const personalOffers = await offerService.findAllOffersByUser(user);
-  let starList = [];
+  const starList = [];
   for (let j = 0; j < personalOffers.length; j++) {
     const rating = await ratingService.findByOffer(user);
     if (rating != undefined) {

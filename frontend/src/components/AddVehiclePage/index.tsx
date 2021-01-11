@@ -1,19 +1,19 @@
 import React from "react";
+import { useAddVehicle } from "../../hooks/useAddVehicle";
 import { CenterCard } from "../../util/CenterCard";
 import { CustomCard } from "../../util/CustomCard";
 import { InputForm } from "../../util/InputForm";
-import { useAddOffer } from "../../hooks/useAddOffer";
 
-export const AddOfferPage: React.FC = () => {
-  const { inputFields, handleAddOffer } = useAddOffer(true);
+export const AddVehiclePage: React.FC = () => {
+  const { inputFields, handleAdd } = useAddVehicle();
 
   return (
     <CenterCard>
       <CustomCard
-        heading="Angebot hinzufügen"
+        heading="Fahrzeug hinzufügen"
         buttonText="HINZUFÜGEN"
         content={<InputForm inputFields={inputFields}></InputForm>}
-        event={handleAddOffer}
+        event={handleAdd}
       ></CustomCard>
     </CenterCard>
   );

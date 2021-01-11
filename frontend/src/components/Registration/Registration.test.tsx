@@ -22,17 +22,17 @@ const registration = (
 
 it("push to the right location after registration", async () => {
   fetchMock.post("/api/v1/auth/register", "ok");
-  const { getByRole, getByTestId } = renderWithState(registration);
+  const { getByText, getByTestId } = renderWithState(registration);
 
   setInputValue(getByTestId, "firstname", "Test");
   setInputValue(getByTestId, "lastname", "Test");
-  setInputValue(getByTestId, "birthday", "2020-02-05");
+  setInputValue(getByTestId, "birthday", "05.02.2020");
   setInputValue(getByTestId, "username", "test");
   setInputValue(getByTestId, "email", "test@test.de");
   setInputValue(getByTestId, "password", "1234");
   setInputValue(getByTestId, "repeat-password", "1234");
 
-  fireEvent.click(getByRole("button"));
+  fireEvent.click(getByText("REGISTRIEREN"));
   await waitFor(() => expect(fetchMock).toHaveFetchedTimes(1));
   expect(mockHistoryPush).toHaveBeenCalledWith("/login");
 });

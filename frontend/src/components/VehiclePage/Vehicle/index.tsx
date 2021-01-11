@@ -1,14 +1,17 @@
 import { Card, Grid, IconButton, Typography } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
 import React from "react";
+import { useDispatch } from "react-redux";
+import { deleteVehicle } from "../../../features/vehicles/vehiclesSlice";
 import { GridElement } from "../../../util/GridElement";
 import { VehicleIcon } from "../../../util/VehicleIcon";
 import { useStyles } from "./Vehicle.style";
 
 export interface VehicleProps {
+  id: string;
   manufacturer: string;
   model: string;
-  manufactureYear: number;
+  manufactureYear: Date;
   seats: number;
   storageSpace: number;
 }
@@ -19,8 +22,15 @@ export const Vehicle: React.FC<VehicleProps> = ({
   manufactureYear,
   seats,
   storageSpace,
+  id,
 }) => {
   const classes = useStyles();
+  const dispatch = useDispatch();
+
+  const handleDelete = () => {
+    dispatch(deleteVehicle(id));
+  };
+
   return (
     <Card className={classes.root}>
       <Grid container alignItems="center" className={classes.grid}>
@@ -34,7 +44,7 @@ export const Vehicle: React.FC<VehicleProps> = ({
           <Typography>{model}</Typography>
         </GridElement>
         <GridElement header="Baujahr">
-          <Typography>{manufactureYear}</Typography>
+          <Typography>{manufactureYear.getFullYear()}</Typography>
         </GridElement>
         <GridElement header="Freie Sitze">
           <Typography>{seats}</Typography>
@@ -44,7 +54,7 @@ export const Vehicle: React.FC<VehicleProps> = ({
         </GridElement>
         <GridElement>
           <div className={classes.leftBorder}>
-            <IconButton className={classes.deleteButton}>
+            <IconButton className={classes.deleteButton} onClick={handleDelete}>
               <DeleteIcon fontSize="large" />
             </IconButton>
           </div>
