@@ -2,6 +2,7 @@ import { Test, TestingModule } from "@nestjs/testing";
 import { CarService } from "./car.service";
 import { CarController } from "./car.controller";
 import {
+  addCar,
   closeInMongodConnection,
   loginAndGetJWTToken,
   rootMongooseTestModule,
@@ -28,6 +29,8 @@ describe("CarService", () => {
   let service: CarService;
   let controller: CarController;
   let app: INestApplication;
+  let localJwtToken;
+  let username;
 
   beforeEach(async () => {
     const moduleRef: TestingModule = await Test.createTestingModule({
@@ -67,6 +70,10 @@ describe("CarService", () => {
 
     app = moduleRef.createNestApplication();
     await app.init();
+
+    const result = await loginAndGetJWTToken(userService, jwtService, app);
+    localJwtToken = result[0];
+    username = result[1];
   });
 
   it("should be defined", () => {
@@ -77,20 +84,10 @@ describe("CarService", () => {
   });
 
   it(`add car`, async () => {
-    const [localJwtToken, username] = await loginAndGetJWTToken(
-      userService,
-      jwtService,
-      app
-    );
     const response = await addCar(app, localJwtToken);
     expect(response.body.model).toBe("A20");
   });
   it(`get my cars`, async () => {
-    const [localJwtToken, username] = await loginAndGetJWTToken(
-      userService,
-      jwtService,
-      app
-    );
     let response = await request(app.getHttpServer())
       .get("/car")
       .set("Authorization", `Bearer ${localJwtToken}`)
@@ -107,11 +104,6 @@ describe("CarService", () => {
   });
 
   it(`edit car`, async () => {
-    const [localJwtToken, username] = await loginAndGetJWTToken(
-      userService,
-      jwtService,
-      app
-    );
     let response = await addCar(app, localJwtToken);
     response = await request(app.getHttpServer())
       .put("/car/" + response.body._id)
@@ -128,11 +120,6 @@ describe("CarService", () => {
   });
 
   it(`delete car`, async () => {
-    const [localJwtToken, username] = await loginAndGetJWTToken(
-      userService,
-      jwtService,
-      app
-    );
     let response = await addCar(app, localJwtToken);
     await request(app.getHttpServer())
       .delete("/car/" + response.body._id)
@@ -150,16 +137,3 @@ describe("CarService", () => {
     await app.close();
   });
 });
-
-export const addCar = async (app, localJwtToken) => {
-  return request(app.getHttpServer())
-    .post("/car")
-    .send({
-      manufacturer: randomStringGenerator(),
-      model: "A20",
-      manufactureYear: 2021,
-      seats: 4,
-      storageSpace: 500,
-    })
-    .set("Authorization", `Bearer ${localJwtToken}`);
-};

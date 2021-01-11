@@ -128,14 +128,14 @@ export class OfferController {
   @Get()
   async getOffers(@Query() query, @Request() req) {
     let offerList;
-    if (query?.forOffer) {
-      if (query?.forPrivate) {
+    if (query?.forOffer == "true") {
+      if (query?.forPrivate == "true") {
         offerList = await this.offerService.findAllOffersByUser(req.user.id);
       } else {
         offerList = await this.offerService.getAllOffers();
       }
     } else {
-      if (query?.forPrivate) {
+      if (query?.forPrivate == "true") {
         offerList = await this.offerService.findAllRequestsByUser(req.user.id);
       } else {
         offerList = await this.offerService.getAllRequests();
@@ -153,6 +153,8 @@ export class OfferController {
           offerList[i].provider,
           "providerStars"
         );
+        const user = await this.userService.findOneById(offerList[i].provider);
+        offerList[i] = { ...offerList[i], providerUsername: user.username };
       }
 
       if (offerList[i].customer != undefined) {
@@ -163,6 +165,8 @@ export class OfferController {
           offerList[i].customer,
           "customerStars"
         );
+        const user = await this.userService.findOneById(offerList[i].customer);
+        offerList[i] = { ...offerList[i], customerUsername: user.username };
       }
       if (
         offerList[i].provider != undefined &&

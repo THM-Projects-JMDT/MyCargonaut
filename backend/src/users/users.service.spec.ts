@@ -24,6 +24,8 @@ describe("UsersService", () => {
   let jwtService: JwtService;
   let controller: UserController;
   let app: INestApplication;
+  let localJwtToken;
+  let username;
 
   beforeEach(async () => {
     const moduleRef: TestingModule = await Test.createTestingModule({
@@ -53,6 +55,10 @@ describe("UsersService", () => {
 
     app = moduleRef.createNestApplication();
     await app.init();
+
+    const result = await loginAndGetJWTToken(service, jwtService, app);
+    localJwtToken = result[0];
+    username = result[1];
   });
 
   it("should be defined", () => {
@@ -77,22 +83,12 @@ describe("UsersService", () => {
   });
 
   it("findOne works", async () => {
-    const [localJwtToken, username] = await loginAndGetJWTToken(
-      service,
-      jwtService,
-      app
-    );
     await loginAndGetJWTToken(service, jwtService, app);
     const user = await service.findOne(username);
     expect(user.lastName).toBe("Test");
   });
 
   it(`get user`, async () => {
-    const [localJwtToken, username] = await loginAndGetJWTToken(
-      service,
-      jwtService,
-      app
-    );
     const response = await request(app.getHttpServer())
       .get("/user")
       .set("Authorization", `Bearer ${localJwtToken}`)
@@ -101,11 +97,6 @@ describe("UsersService", () => {
   });
 
   it(`edit user`, async () => {
-    const [localJwtToken, username] = await loginAndGetJWTToken(
-      service,
-      jwtService,
-      app
-    );
     const response = await request(app.getHttpServer())
       .put("/user")
       .send({
@@ -120,11 +111,6 @@ describe("UsersService", () => {
   });
 
   it(`addMoney`, async () => {
-    const [localJwtToken, username] = await loginAndGetJWTToken(
-      service,
-      jwtService,
-      app
-    );
     let response = await request(app.getHttpServer())
       .get("/user")
       .set("Authorization", `Bearer ${localJwtToken}`)

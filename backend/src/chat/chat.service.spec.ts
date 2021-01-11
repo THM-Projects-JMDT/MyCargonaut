@@ -2,6 +2,7 @@ import { Test, TestingModule } from "@nestjs/testing";
 import { ChatService } from "./chat.service";
 import { ChatController } from "./chat.controller";
 import {
+  addChat,
   addOffer,
   closeInMongodConnection,
   loginAndGetJWTToken,
@@ -34,6 +35,8 @@ describe("ChatService", () => {
   let service: ChatService;
   let controller: ChatController;
   let app: INestApplication;
+  let localJwtToken;
+  let username;
 
   beforeEach(async () => {
     const moduleRef: TestingModule = await Test.createTestingModule({
@@ -77,6 +80,10 @@ describe("ChatService", () => {
 
     app = moduleRef.createNestApplication();
     await app.init();
+
+    const result = await loginAndGetJWTToken(userService, jwtService, app);
+    localJwtToken = result[0];
+    username = result[1];
   });
 
   it("should be defined", () => {
@@ -87,22 +94,12 @@ describe("ChatService", () => {
   });
 
   it(`add chat`, async () => {
-    const [localJwtToken, username] = await loginAndGetJWTToken(
-      userService,
-      jwtService,
-      app
-    );
     let response = await addOffer(app, localJwtToken, true);
     response = await addChat(app, localJwtToken, response.body._id, "Hi");
     expect(response.body.content).toBe("Hi");
   });
 
   it(`get chat`, async () => {
-    const [localJwtToken, username] = await loginAndGetJWTToken(
-      userService,
-      jwtService,
-      app
-    );
     const offer = await addOffer(app, localJwtToken, true);
     await addChat(app, localJwtToken, offer.body._id, "Hi");
     let response = await request(app.getHttpServer())
@@ -122,17 +119,3 @@ describe("ChatService", () => {
     await app.close();
   });
 });
-
-export const addChat = async (
-  app,
-  localJwtToken,
-  offerId: string,
-  content: string
-) => {
-  return request(app.getHttpServer())
-    .post("/chat/" + offerId)
-    .send({
-      content: content,
-    })
-    .set("Authorization", `Bearer ${localJwtToken}`);
-};
