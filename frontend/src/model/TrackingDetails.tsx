@@ -1,5 +1,5 @@
+import { State } from "../../../backend/src/status/status";
 export interface TrackingDetails {
-  state: string; // TODO: use 'TrackingState" type
-  lastMessage?: string;
-  lastMessageDate?: Date;
+  state: State;
+  text?: string;
 }
