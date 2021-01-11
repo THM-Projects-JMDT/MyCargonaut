@@ -5,6 +5,7 @@ import {
   DialogActions,
   DialogContent,
   Divider,
+  Typography,
 } from "@material-ui/core";
 import React from "react";
 
@@ -26,9 +27,11 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
     onClose();
   };
   return (
-    <Dialog open={open} onClose={onClose}>
+    <Dialog open={open} onClick={(event) => event.stopPropagation()}>
       <DialogContent>
-        <Box m={3}>{text}</Box>
+        <Box m={3}>
+          <Typography>{text}</Typography>
+        </Box>
       </DialogContent>
       <Divider />
       <DialogActions>
