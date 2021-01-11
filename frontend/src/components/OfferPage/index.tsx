@@ -38,7 +38,9 @@ export const OfferPage: React.FC<OfferPageProps> = ({ show }) => {
   const classes = useStyles();
 
   const displayName = show === "offers" ? "Angebote" : "Anfragen";
-  const loggedInUserId = 1;
+  const loggedInUsername = useSelector(
+    (state: RootState) => state.user.user?.username
+  );
 
   const dispatch = useDispatch();
   const offersState = useSelector((state: RootState) => state.offers);
@@ -95,7 +97,6 @@ export const OfferPage: React.FC<OfferPageProps> = ({ show }) => {
   };
 
   const getDisplayList = () => {
-    console.log(activeTab === 0 ? "all" : "private");
     if (show === "offers") {
       if (offersState.isLoading) {
         return undefined;
@@ -200,7 +201,7 @@ export const OfferPage: React.FC<OfferPageProps> = ({ show }) => {
                       o.customer
                         ? {
                             id: o.customer,
-                            username: o.customer,
+                            username: "david", // TODO: o.customerUsername
                             rating: o.customerRating,
                           }
                         : undefined
@@ -209,12 +210,12 @@ export const OfferPage: React.FC<OfferPageProps> = ({ show }) => {
                       o.provider
                         ? {
                             id: o.provider,
-                            username: o.provider,
+                            username: "cargo_98", // TODO: o.customerUsername
                             rating: o.providerRating,
                           }
                         : undefined
                     }
-                    loggedInUserId={"hey"}
+                    loggedInUsername={loggedInUsername ?? ""}
                   />
                 </ListItem>
               )) ?? (

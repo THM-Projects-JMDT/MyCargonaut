@@ -30,7 +30,7 @@ export interface OfferProps {
   provider?: UserDetails;
   customer?: UserDetails;
   offer: OfferDetails;
-  loggedInUserId: string;
+  loggedInUsername: string;
 }
 
 export const renderService = (service: string) => {
@@ -52,7 +52,7 @@ export const Offer: React.FC<OfferProps> = ({
   offer,
   provider,
   customer,
-  loggedInUserId,
+  loggedInUsername,
 }) => {
   const classes = useStyles();
   const [ratingOpen, setRatingOpen] = React.useState(false);
@@ -63,8 +63,8 @@ export const Offer: React.FC<OfferProps> = ({
   const isPendingRequest = provider === undefined;
   const isPending = isPendingOffer || isPendingRequest;
 
-  const isProvider = loggedInUserId === provider?.id;
-  const isCustomer = loggedInUserId === customer?.id;
+  const isProvider = loggedInUsername === provider?.username;
+  const isCustomer = loggedInUsername === customer?.username;
   const isMyOffer = isProvider || isCustomer;
 
   const handleTrackingClick = (event: any) => {
@@ -227,7 +227,7 @@ export const Offer: React.FC<OfferProps> = ({
         open={ratingOpen}
         onClose={() => setRatingOpen(false)}
         username={
-          (loggedInUserId === customer?.id
+          (loggedInUsername === customer?.username
             ? provider?.username
             : customer?.username) ?? ""
         }
