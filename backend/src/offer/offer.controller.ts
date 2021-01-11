@@ -128,7 +128,7 @@ export class OfferController {
     } else {
       throw new HttpException(
         "Not enaught Cargo Coins",
-        HttpStatus.INTERNAL_SERVER_ERROR
+        HttpStatus.BAD_REQUEST
       );
     }
 

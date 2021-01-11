@@ -225,7 +225,7 @@ describe("OfferService", () => {
     await request(app.getHttpServer())
       .post("/offer/bookOffer/" + offer.body._id)
       .set("Authorization", `Bearer ${localJwtToken2}`)
-      .expect(500);
+      .expect(400);
     const user1 = await request(app.getHttpServer())
       .get("/user")
       .set("Authorization", `Bearer ${localJwtToken}`)
