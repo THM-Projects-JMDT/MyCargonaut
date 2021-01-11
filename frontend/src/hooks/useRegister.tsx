@@ -1,3 +1,4 @@
+import { isValid } from "date-fns";
 import { createRef, RefObject, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
@@ -27,7 +28,7 @@ export function useRegister() {
     ref.current?.value ?? "";
 
   const validate = () =>
-    Object.values(refs).every((r) => getRefValue(r)) && date;
+    Object.values(refs).every((r) => getRefValue(r).trim()) && isValid(date);
 
   const validatePassword = () => {
     const password = getRefValue(refs.passwordRef);
@@ -39,13 +40,15 @@ export function useRegister() {
 
   const handleUpdate = async () => {
     const user = {
-      firstName: getRefValue(refs.fistNameRef),
-      lastName: getRefValue(refs.lastNameRef),
-      email: getRefValue(refs.emailRef),
+      firstName: getRefValue(refs.fistNameRef).trim(),
+      lastName: getRefValue(refs.lastNameRef).trim(),
+      email: getRefValue(refs.emailRef).trim(),
     };
 
+    if (!user.firstName || !user.lastName || !user.email) return;
+
     try {
-      await dispatch(putUser(user));
+      dispatch(putUser(user));
     } catch (e) {}
   };
 
@@ -53,12 +56,12 @@ export function useRegister() {
     if (!validate() || !validatePassword()) return;
 
     const user = {
-      firstName: getRefValue(refs.fistNameRef),
-      lastName: getRefValue(refs.lastNameRef),
+      firstName: getRefValue(refs.fistNameRef).trim(),
+      lastName: getRefValue(refs.lastNameRef).trim(),
       birthday: date?.toDateString() ?? "",
-      username: getRefValue(refs.usernameRef),
-      email: getRefValue(refs.emailRef),
-      password: getRefValue(refs.passwordRef),
+      username: getRefValue(refs.usernameRef).trim(),
+      email: getRefValue(refs.emailRef).trim(),
+      password: getRefValue(refs.passwordRef).trim(),
     };
 
     try {

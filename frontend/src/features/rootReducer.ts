@@ -29,6 +29,4 @@ const rootReducer = (state: RootState | RootStateOrAny, action: Action) => {
   return appReducer(state, action);
 };
 
-export const resetApp: Action = { type: "reset" };
-
 export default rootReducer;
