@@ -32,6 +32,8 @@ describe("OfferService", () => {
   let service: OfferService;
   let controller: OfferController;
   let app: INestApplication;
+  let localJwtToken;
+  let username;
 
   beforeEach(async () => {
     const moduleRef: TestingModule = await Test.createTestingModule({
@@ -73,6 +75,10 @@ describe("OfferService", () => {
 
     app = moduleRef.createNestApplication();
     await app.init();
+
+    const result = await loginAndGetJWTToken(userService, jwtService, app);
+    localJwtToken = result[0];
+    username = result[1];
   });
 
   it("should be defined", () => {
@@ -83,20 +89,10 @@ describe("OfferService", () => {
   });
 
   it(`add offer`, async () => {
-    const [localJwtToken, username] = await loginAndGetJWTToken(
-      userService,
-      jwtService,
-      app
-    );
     const response = await addOffer(app, localJwtToken, true);
     expect(response.body.description).toBe("Test");
   });
   it(`get my offers`, async () => {
-    const [localJwtToken, username] = await loginAndGetJWTToken(
-      userService,
-      jwtService,
-      app
-    );
     let response = await request(app.getHttpServer())
       .get("/offer?forOffer=true&forPrivate=true")
       .set("Authorization", `Bearer ${localJwtToken}`)
@@ -113,11 +109,6 @@ describe("OfferService", () => {
     expect(response.body[0].from).toBe("Gießen");
   });
   it(`get all offers`, async () => {
-    const [localJwtToken, username] = await loginAndGetJWTToken(
-      userService,
-      jwtService,
-      app
-    );
     const [localJwtToken2, username2] = await loginAndGetJWTToken(
       userService,
       jwtService,
@@ -140,11 +131,6 @@ describe("OfferService", () => {
   });
 
   it(`delete offer`, async () => {
-    const [localJwtToken, username] = await loginAndGetJWTToken(
-      userService,
-      jwtService,
-      app
-    );
     const offer = await addOffer(app, localJwtToken, true);
     await addOffer(app, localJwtToken, true);
     let response = await request(app.getHttpServer())
@@ -164,11 +150,6 @@ describe("OfferService", () => {
   });
 
   it(`edit offer`, async () => {
-    const [localJwtToken, username] = await loginAndGetJWTToken(
-      userService,
-      jwtService,
-      app
-    );
     let response = await addOffer(app, localJwtToken, true);
     await request(app.getHttpServer())
       .put("/offer/" + response.body._id)
@@ -191,11 +172,6 @@ describe("OfferService", () => {
   });
 
   it(`book offer`, async () => {
-    const [localJwtToken, username] = await loginAndGetJWTToken(
-      userService,
-      jwtService,
-      app
-    );
     const [localJwtToken2, username2] = await loginAndGetJWTToken(
       userService,
       jwtService,
