@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { postAddMony } from "../api/user";
+import { postAddMoney, updateUser } from "../api/user";
 import { User } from "../model/User";
 import { AppThunk } from "./store";
 
@@ -29,7 +29,18 @@ export const fetchAddMoney = (moneyAmount: string): AppThunk => async (
   dispatch
 ) => {
   try {
-    const user = await postAddMony(moneyAmount);
+    const user = await postAddMoney(moneyAmount);
     dispatch(getUserSuccess(user));
+  } catch (err) {}
+};
+
+export const putUser = (user: {
+  firstName: string;
+  lastName: string;
+  email: string;
+}): AppThunk => async (dispatch) => {
+  try {
+    const updatedUser = await updateUser(user);
+    dispatch(getUserSuccess(updatedUser));
   } catch (err) {}
 };

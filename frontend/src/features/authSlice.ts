@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { getLogin, postLogin, postLogout } from "../api/auth";
+import { resetApp } from "./rootReducer";
 import { AppThunk } from "./store";
 import { getUserSuccess } from "./userSlice";
 
@@ -9,7 +10,7 @@ export interface AuthState {
   error: string | null;
 }
 
-const initialState: AuthState = {
+export const initialState: AuthState = {
   isLogedIn: false,
   isLoading: true,
   error: null,
@@ -53,6 +54,7 @@ export const login = (username: string, password: string): AppThunk => async (
 export const logout = (): AppThunk => async (dispatch) => {
   try {
     await postLogout();
+    dispatch(resetApp);
     dispatch(logoutSuccess());
   } catch (err) {}
 };
