@@ -191,7 +191,7 @@ export const addStars = async (
   const personalOffers = await offerService.findAllOffersByUser(user);
   const starList = [];
   for (let j = 0; j < personalOffers.length; j++) {
-    const rating = await ratingService.findByOffer(user);
+    const rating = await ratingService.findByOffer(personalOffers[j]._id);
     if (rating != undefined) {
       starList.push(rating.rating);
     }
