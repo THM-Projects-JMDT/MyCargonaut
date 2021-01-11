@@ -190,7 +190,7 @@ export const OfferPage: React.FC<OfferPageProps> = ({ show }) => {
                       to: o.to,
                       service: o.service,
                       price: o.price,
-                      date: new Date(),
+                      orderDate: new Date(),
                       seats: o.seats,
                       storageSpace: o.storageSpace,
                       description: o.description,
