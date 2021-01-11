@@ -50,6 +50,7 @@ export class ChatController {
     return this.chatService.addMessage({
       offer: offerId.trim(),
       content: content.trim(),
+      user: req.user.id,
     });
   }
 }
