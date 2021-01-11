@@ -153,6 +153,8 @@ export class OfferController {
           offerList[i].provider,
           "providerStars"
         );
+        const user = await this.userService.findOneById(offerList[i].provider);
+        offerList[i] = { ...offerList[i], providerUsername: user.username };
       }
 
       if (offerList[i].customer != undefined) {
@@ -163,6 +165,8 @@ export class OfferController {
           offerList[i].customer,
           "customerStars"
         );
+        const user = await this.userService.findOneById(offerList[i].customer);
+        offerList[i] = { ...offerList[i], customerUsername: user.username };
       }
       if (
         offerList[i].provider != undefined &&
