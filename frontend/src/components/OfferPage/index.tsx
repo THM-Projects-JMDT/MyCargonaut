@@ -188,6 +188,7 @@ export const OfferPage: React.FC<OfferPageProps> = ({ show }) => {
                 <ListItem key={id}>
                   <Offer
                     offer={{
+                      id: o._id,
                       from: o.from,
                       to: o.to,
                       service: o.service,

@@ -3,6 +3,7 @@ import { TrackingDetails } from "../model/TrackingDetails";
 import { fetchTimeOut } from "./util";
 
 export interface OfferResponse extends Offer {
+  _id: string;
   customerRating?: number;
   providerRating?: number;
   trackingDetails?: TrackingDetails;
