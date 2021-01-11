@@ -128,14 +128,15 @@ export class OfferController {
   @Get()
   async getOffers(@Query() query, @Request() req) {
     let offerList;
-    if (query?.forOffer) {
-      if (query?.forPrivate) {
+    console.log(query);
+    if (query?.forOffer == "true") {
+      if (query?.forPrivate == "true") {
         offerList = await this.offerService.findAllOffersByUser(req.user.id);
       } else {
         offerList = await this.offerService.getAllOffers();
       }
     } else {
-      if (query?.forPrivate) {
+      if (query?.forPrivate == "true") {
         offerList = await this.offerService.findAllRequestsByUser(req.user.id);
       } else {
         offerList = await this.offerService.getAllRequests();
