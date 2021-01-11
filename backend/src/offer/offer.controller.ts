@@ -28,7 +28,7 @@ export class OfferController {
 
   @Delete(":offerId")
   async deleteOffer(@Param("offerId") offerId: string, @Request() req) {
-    return this.offerService.deleteOffer(offerId);
+    return this.offerService.deleteOffer(offerId.trim());
   }
 
   @Put(":offerId")
@@ -43,17 +43,17 @@ export class OfferController {
     @Body("description") description: string | null,
     @Request() req
   ) {
-    const oldOffer = await this.offerService.getOfferById(offerId);
+    const oldOffer = await this.offerService.getOfferById(offerId.trim());
     const newOffer: Offer = {
-      from: from,
-      to: to,
+      from: from.trim(),
+      to: to.trim(),
       createDate: oldOffer.createDate,
       orderDate: undefined,
       service: service,
       price: price,
       seats: seats,
       storageSpace: storageSpace,
-      description: description,
+      description: description.trim(),
       provider: oldOffer.provider,
       customer: oldOffer.customer,
     };
@@ -74,15 +74,15 @@ export class OfferController {
     @Request() req
   ) {
     const newOffer: Offer = {
-      from: from,
-      to: to,
+      from: from.trim(),
+      to: to.trim(),
       createDate: new Date(),
       orderDate: undefined,
       service: service,
       price: price,
       seats: seats,
       storageSpace: storageSpace,
-      description: description,
+      description: description.trim(),
       provider: undefined,
       customer: undefined,
     };
@@ -96,32 +96,17 @@ export class OfferController {
 
   @Post("bookOffer/:offerId")
   async bookOffer(@Param("offerId") offerId: string, @Request() req) {
-    const oldOffer = await this.offerService.getOfferById(offerId);
-    const newOffer: Offer = {
-      from: oldOffer.from,
-      to: oldOffer.to,
-      createDate: oldOffer.createDate,
-      orderDate: new Date(),
-      service: oldOffer.service,
-      price: oldOffer.price,
-      seats: oldOffer.seats,
-      storageSpace: oldOffer.storageSpace,
-      description: oldOffer.description,
-      provider: undefined,
-      customer: undefined,
-    };
-    if (oldOffer.provider == undefined) {
-      newOffer.provider = req.user.id;
-      newOffer.customer = oldOffer.customer;
+    const offer = await this.offerService.getOfferById(offerId);
+    if (offer.provider == undefined) {
+      offer.provider = req.user.id;
     } else {
-      newOffer.customer = req.user.id;
-      newOffer.provider = oldOffer.provider;
+      offer.customer = req.user.id;
     }
     await this.statusService.addStatus({
-      offer: offerId,
+      offer: offerId.trim(),
       state: "Waiting",
     });
-    return this.offerService.updateOffer(offerId, newOffer);
+    return this.offerService.updateOffer(offerId, offer);
   }
 
   @Get()

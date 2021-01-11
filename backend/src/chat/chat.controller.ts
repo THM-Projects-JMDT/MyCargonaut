@@ -11,27 +11,23 @@ import {
 } from "@nestjs/common";
 import { JwtAuthGuard } from "../auth/guards/jwt-auth.guard";
 import { ChatService } from "./chat.service";
-import { OfferService } from "../offer/offer.service";
 
 @Controller("chat")
 @UseGuards(JwtAuthGuard)
 export class ChatController {
-  constructor(
-    private readonly chatService: ChatService,
-    private readonly offerService: OfferService
-  ) {}
+  constructor(private readonly chatService: ChatService) {}
 
   @Get(":offerId")
   async getMessagesFromOfferId(
     @Param("offerId") offerId: string,
     @Request() req
   ) {
-    return this.chatService.findByOffer(offerId);
+    return this.chatService.findByOffer(offerId.trim());
   }
 
   @Delete(":messageId")
   async deleteMessage(@Param("messageId") messageId: string, @Request() req) {
-    return this.chatService.deleteMessage(messageId);
+    return this.chatService.deleteMessage(messageId.trim());
   }
 
   @Put(":messageId")
@@ -40,7 +36,7 @@ export class ChatController {
     @Body("content") content: string | null,
     @Request() req
   ) {
-    await this.chatService.updateMessage(messageId, {
+    await this.chatService.updateMessage(messageId.trim(), {
       content: content,
     });
   }
@@ -52,8 +48,8 @@ export class ChatController {
     @Request() req
   ) {
     return this.chatService.addMessage({
-      offer: offerId,
-      content: content,
+      offer: offerId.trim(),
+      content: content.trim(),
     });
   }
 }

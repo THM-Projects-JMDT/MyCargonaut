@@ -228,7 +228,6 @@ describe("OfferService", () => {
       .set("Authorization", `Bearer ${localJwtToken}`)
       .expect(200);
     expect(response.body.length).toBe(1);
-    expect(response.body[0].orderDate).toBeDefined();
     expect(response.body[0].provider).toBe(user1.body._id);
     expect(response.body[0].customer).toBe(user2.body._id);
     expect(response.body[0].tracking.state).toBe("Waiting");

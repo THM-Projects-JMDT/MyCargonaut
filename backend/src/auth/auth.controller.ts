@@ -62,17 +62,17 @@ export class AuthController {
     try {
       const user = {
         password: password,
-        username: username,
-        firstName: firstName,
-        lastName: lastName,
+        username: username.trim(),
+        firstName: firstName.trim(),
+        lastName: lastName.trim(),
         cargoCoins: 0,
         birthday: birthday,
-        ppPath: ppPath,
-        email: email,
+        ppPath: ppPath.trim(),
+        email: email.trim(),
       };
       await this.userService.addUser(user);
 
-      delete user.password; // TODO improve?
+      delete user.password;
       return user;
     } catch {
       throw new HttpException(
