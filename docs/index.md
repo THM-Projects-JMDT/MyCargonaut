@@ -32,7 +32,7 @@ MyCargonaut ist ein Projekt im Rahmen des KmS-Praktikums im WS20/21.
 
 ### Demo
 
-Eine Demo der App befindet sich hier: [Heroku](https://my-cargonaut.herokuapp.com/home)
+Eine Demo der App befindet sich hier: [Heroku](https://my-cargonaut.herokuapp.com)
 
 ## Dokumentation
 
