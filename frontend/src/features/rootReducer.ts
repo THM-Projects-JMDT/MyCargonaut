@@ -4,6 +4,7 @@ import requestsReducers from "./requests/requestsSlice";
 import vehiclesReducers from "./vehicles/vehiclesSlice";
 import authReducer from "./authSlice";
 import userReducer from "./userSlice";
+import tabsReducer from "./tabSlice";
 import { RootStateOrAny } from "react-redux";
 
 const appReducer = combineReducers({
@@ -12,6 +13,7 @@ const appReducer = combineReducers({
   vehicles: vehiclesReducers,
   auth: authReducer,
   user: userReducer,
+  tabs: tabsReducer,
 });
 
 export type RootState = ReturnType<typeof appReducer>;
