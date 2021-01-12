@@ -21,7 +21,7 @@ export class RatingController {
     @Param("offerId") offerId: string,
     @Request() req
   ) {
-    return this.ratingService.findByOffer(offerId);
+    return this.ratingService.findByOffer(offerId.trim());
   }
 
   @Post(":offerId")
@@ -32,9 +32,9 @@ export class RatingController {
     @Request() req
   ) {
     return this.ratingService.addRating({
-      offer: offerId,
+      offer: offerId.trim(),
       rating: rating,
-      text: text,
+      text: text.trim(),
     });
   }
 }

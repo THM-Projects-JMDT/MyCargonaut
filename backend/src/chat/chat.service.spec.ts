@@ -113,6 +113,32 @@ describe("ChatService", () => {
     expect(response.body[0].content).toBe("Hi");
     expect(response.body[1].content).toBe("Test123");
   });
+  it(`chat get user works`, async () => {
+    const [localJwtToken2, username2] = await loginAndGetJWTToken(
+      userService,
+      jwtService,
+      app
+    );
+    const offer = await addOffer(app, localJwtToken, true);
+    await addChat(app, localJwtToken, offer.body._id, "Hi");
+    await addChat(app, localJwtToken2, offer.body._id, "Hallo");
+    const response = await request(app.getHttpServer())
+      .get("/chat/" + offer.body._id)
+      .set("Authorization", `Bearer ${localJwtToken}`);
+    expect(response.body.length).toBe(2);
+
+    const user1 = await request(app.getHttpServer())
+      .get("/user")
+      .set("Authorization", `Bearer ${localJwtToken}`)
+      .expect(200);
+    const user2 = await request(app.getHttpServer())
+      .get("/user")
+      .set("Authorization", `Bearer ${localJwtToken2}`)
+      .expect(200);
+
+    expect(response.body[0].user).toBe(user1.body._id);
+    expect(response.body[1].user).toBe(user2.body._id);
+  });
 
   afterAll(async () => {
     await closeInMongodConnection();
