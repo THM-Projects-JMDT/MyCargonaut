@@ -71,10 +71,6 @@ export class UserController {
 
   @Get("profile/:uid")
   seeUploadedFile(@Param("uid") image, @Res() res) {
-    try {
-      return res.sendFile(image, { root: "./profile" });
-    } catch {
-      throw new HttpException("File not found", HttpStatus.BAD_REQUEST);
-    }
+    return res.sendFile(image, { root: "./profile" });
   }
 }
