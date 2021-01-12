@@ -115,6 +115,7 @@ export const Offer: React.FC<OfferProps> = ({
   const handleOpenRating = () => {
     setRatingOpen(true);
     handleAvatarMenuClose();
+  };
 
   const getConfirmText = () => {
     if (isPendingOffer) {
