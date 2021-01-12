@@ -55,7 +55,6 @@ export class AuthController {
     @Body("lastName") lastName: string | null,
     @Body("username") username: string | null,
     @Body("birthday") birthday: Date | null,
-    @Body("ppPath") ppPath: string | null,
     @Body("email") email: string | null,
     @Body("password") password: string | null
   ) {
@@ -67,14 +66,14 @@ export class AuthController {
         lastName: lastName?.trim(),
         cargoCoins: 0,
         birthday: birthday,
-        ppPath: ppPath?.trim(),
         email: email?.trim(),
       };
-      await this.userService.addUser(user);
+      const newUser = (await this.userService.addUser(user)).toObject();
 
-      delete user.password;
-      return user;
-    } catch {
+      delete newUser.password;
+      return newUser;
+    } catch (e) {
+      console.warn(e);
       throw new HttpException(
         "Cant register user",
         HttpStatus.INTERNAL_SERVER_ERROR

@@ -9,8 +9,10 @@ import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 import { LinkButton } from "../../util/LinkButton";
 import { CargoCoinsDialog } from "../../util/CargoCoinsDialog";
 import { PasswordDialog } from "./PasswordDialog";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../features/rootReducer";
+import { uploadAvatar } from "../../api/user";
+import { updateProfile } from "../../features/userSlice";
 
 export interface ProfileProps {
   inputFields: InputField[];
@@ -23,6 +25,8 @@ export const Profile: React.FC<ProfileProps> = ({ inputFields }) => {
   const cargoCoinsBalance = useSelector(
     (state: RootState) => state.user.user?.cargoCoins
   );
+  const avatarUrl = useSelector((state: RootState) => state.user.avatarUrl);
+  const dispatch = useDispatch();
 
   const handleOpen = () => {
     setOpen(true);
@@ -32,11 +36,23 @@ export const Profile: React.FC<ProfileProps> = ({ inputFields }) => {
     setOpenPw(true);
   };
 
+  const handleUplaod = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+    if (files) {
+      await uploadAvatar(files[0]);
+      dispatch(updateProfile());
+    }
+  };
+
   return (
     <div className={classes.root}>
       <div className={classes.grid}>
         <div className={classes.profile}>
-          <Avatar variant="rounded" className={classes.avatar} />
+          <Avatar
+            variant="rounded"
+            className={classes.avatar}
+            src={avatarUrl}
+          />
           <div className={classes.editButton}>
             <label htmlFor="contained-button-file">
               <Button
@@ -77,6 +93,7 @@ export const Profile: React.FC<ProfileProps> = ({ inputFields }) => {
         id="contained-button-file"
         multiple
         type="file"
+        onChange={handleUplaod}
       />
       <CargoCoinsDialog open={open} setOpen={setOpen} />
       <PasswordDialog open={openPw} setOpen={setOpenPw} />

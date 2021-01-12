@@ -29,7 +29,6 @@ it("push to the right location after login", async () => {
       lastName: "test",
       cargoCoins: 0,
       birthday: new Date(),
-      ppPath: "",
       email: "test@test.de",
     })
   );

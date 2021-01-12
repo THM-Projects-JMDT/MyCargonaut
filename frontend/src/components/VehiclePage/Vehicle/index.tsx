@@ -3,6 +3,7 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import React from "react";
 import { useDispatch } from "react-redux";
 import { deleteVehicle } from "../../../features/vehicles/vehiclesSlice";
+import { ConfirmDialog } from "../../../util/ConfirmDialog";
 import { GridElement } from "../../../util/GridElement";
 import { VehicleIcon } from "../../../util/VehicleIcon";
 import { useStyles } from "./Vehicle.style";
@@ -26,6 +27,7 @@ export const Vehicle: React.FC<VehicleProps> = ({
 }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
+  const [open, setOpen] = React.useState(false);
 
   const handleDelete = () => {
     dispatch(deleteVehicle(id));
@@ -54,9 +56,18 @@ export const Vehicle: React.FC<VehicleProps> = ({
         </GridElement>
         <GridElement>
           <div className={classes.leftBorder}>
-            <IconButton className={classes.deleteButton} onClick={handleDelete}>
+            <IconButton
+              className={classes.deleteButton}
+              onClick={() => setOpen(true)}
+            >
               <DeleteIcon fontSize="large" />
             </IconButton>
+            <ConfirmDialog
+              open={open}
+              onClose={() => setOpen(false)}
+              text="Soll das Fahrzeug wirklich gelöscht werden?"
+              action={handleDelete}
+            />
           </div>
         </GridElement>
       </Grid>

@@ -212,7 +212,6 @@ describe("OfferService", () => {
       password: "admin",
       firstName: "Test",
       lastName: "Test",
-      ppPath: "images/test.png",
       birthday: new Date("11-09-1998"),
       email: randomStringGenerator() + "@mni.thm.de",
       cargoCoins: 0,
@@ -239,6 +238,36 @@ describe("OfferService", () => {
     expect(user1.body.cargoCoins).toBe(3000);
     expect(user2.body.cargoCoins).toBe(0);
   });
+
+  it(`book request`, async () => {
+    const [localJwtToken2, username2] = await loginAndGetJWTToken(
+      userService,
+      jwtService,
+      app
+    );
+    const offer = await addOffer(app, localJwtToken, false);
+    const user = await request(app.getHttpServer())
+      .get("/user")
+      .set("Authorization", `Bearer ${localJwtToken}`)
+      .expect(200);
+    expect(user.body.cargoCoins).toBe(2950);
+    await request(app.getHttpServer())
+      .post("/offer/bookOffer/" + offer.body._id)
+      .set("Authorization", `Bearer ${localJwtToken2}`)
+      .expect(201);
+    const user1 = await request(app.getHttpServer())
+      .get("/user")
+      .set("Authorization", `Bearer ${localJwtToken}`)
+      .expect(200);
+    const user2 = await request(app.getHttpServer())
+      .get("/user")
+      .set("Authorization", `Bearer ${localJwtToken2}`)
+      .expect(200);
+
+    expect(user1.body.cargoCoins).toBe(2950);
+    expect(user2.body.cargoCoins).toBe(3050);
+  });
+
   it(`average rating test`, async () => {
     const [localJwtToken2, username2] = await loginAndGetJWTToken(
       userService,
@@ -261,7 +290,7 @@ describe("OfferService", () => {
       .get("/offer?forOffer=true&forPrivate=false")
       .set("Authorization", `Bearer ${localJwtToken2}`)
       .expect(200);
-    expect(response.body[0].providerStars).toBe(5);
+    expect(response.body[0].providerRating).toBe(5);
     await request(app.getHttpServer())
       .post("/offer/bookOffer/" + offer2.body._id)
       .set("Authorization", `Bearer ${localJwtToken2}`)
@@ -278,7 +307,7 @@ describe("OfferService", () => {
       .get("/offer?forOffer=true&forPrivate=false")
       .set("Authorization", `Bearer ${localJwtToken2}`)
       .expect(200);
-    expect(response.body[0].providerStars).toBe(4);
+    expect(response.body[0].providerRating).toBe(4);
   });
 
   afterAll(async () => {

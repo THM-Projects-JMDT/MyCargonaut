@@ -5,10 +5,12 @@ import { AppThunk } from "./store";
 
 export interface UserState {
   user?: User;
+  avatarUrl?: string;
 }
 
 const initialState: UserState = {
   user: undefined,
+  avatarUrl: undefined,
 };
 
 export const user = createSlice({
@@ -17,11 +19,17 @@ export const user = createSlice({
   reducers: {
     getUserSuccess(state, { payload }: PayloadAction<User>) {
       state.user = payload;
+      state.avatarUrl = `/api/v1/user/profile/${payload._id}?v=${Date.now()}`;
+    },
+    updateProfile(state) {
+      state.avatarUrl = `/api/v1/user/profile/${
+        state.user?._id
+      }?v=${Date.now()}`;
     },
   },
 });
 
-export const { getUserSuccess } = user.actions;
+export const { getUserSuccess, updateProfile } = user.actions;
 
 export default user.reducer;
 
