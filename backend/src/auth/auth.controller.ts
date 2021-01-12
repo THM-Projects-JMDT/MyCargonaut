@@ -68,10 +68,10 @@ export class AuthController {
         birthday: birthday,
         email: email?.trim(),
       };
-      await this.userService.addUser(user);
+      const newUser = (await this.userService.addUser(user)).toObject();
 
-      delete user.password;
-      return user;
+      delete newUser.password;
+      return newUser;
     } catch (e) {
       console.warn(e);
       throw new HttpException(
