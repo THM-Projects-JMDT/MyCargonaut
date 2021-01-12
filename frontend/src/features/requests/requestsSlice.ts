@@ -10,6 +10,7 @@ import {
   OfferResponse,
 } from "../../api/offers";
 import { AppThunk } from "../store";
+import { fetchUser } from "../userSlice";
 
 export interface RequestsState {
   allRequests: OfferResponse[];
@@ -75,6 +76,7 @@ export const putRequest = (request: Offer): AppThunk => async (dispatch) => {
 export const acceptRequest = (id: string): AppThunk => async (dispatch) => {
   try {
     await bookOffer(id);
+    dispatch(fetchUser());
     dispatch(fetchRequests());
   } catch (e) {
     dispatch(getRequestsFailure(e.toString()));
