@@ -191,10 +191,14 @@ export const Offer: React.FC<OfferProps> = ({
                     variant="outlined"
                     onClick={handleTrackingClick}
                   >
-                    IN BEARBEITUNG
+                    {offer.tracking?.state === "Delivered"
+                      ? "ABGESCHLOSSEN"
+                      : "IN BEARBEITUNG"}
                   </Button>
                   {offer.tracking && (
                     <TrackingDialog
+                      offerId={offer.id}
+                      role={isCustomer ? "customer" : "provider"}
                       tracking={offer.tracking}
                       open={trackingOpen}
                       onClose={() => setTrackingOpen(false)}
@@ -229,7 +233,9 @@ export const Offer: React.FC<OfferProps> = ({
       <AccordionDetails className={classes.accordionDetails}>
         <Box ml={7} my={2}>
           <Typography variant="subtitle2">Beschreibung:</Typography>
-          <Typography>{offer.description ?? "-"}</Typography>
+          <Typography>
+            {offer.description ? offer.description.trim() : "-"}
+          </Typography>
         </Box>
       </AccordionDetails>
       <Menu

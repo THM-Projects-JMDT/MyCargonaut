@@ -106,6 +106,20 @@ describe("AuthService", () => {
       .expect(401)
       .expect({ statusCode: 401, message: "Unauthorized" });
   });
+  it(`registry without ppPath`, async () => {
+    const result = await request(app.getHttpServer())
+      .post("/auth/register")
+      .send({
+        username: "admin456",
+        password: "admin",
+        firstName: "Jannik",
+        lastName: "Lapp",
+        birthday: new Date("11-09-1998"),
+        email: "jannik.lapp@mni.thm.de",
+      })
+      .expect(201);
+    expect(result.body.username).toBe("admin456");
+  });
 
   afterAll(async () => {
     await closeInMongodConnection();
