@@ -101,6 +101,7 @@ export const Offer: React.FC<OfferProps> = ({
   };
 
   const handleOpenChat = () => {
+    dispatch(setChatOpenById(undefined));
     dispatch(setChatOpenById(offer.id));
     handleAvatarMenuClose();
   };

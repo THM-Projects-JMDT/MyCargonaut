@@ -26,4 +26,7 @@ export const useStyles = makeStyles((theme) => ({
   closeGridRow: {
     borderRadius: theme.spacing(1),
   },
+  loadCircle: {
+    textAlign: "center",
+  },
 }));

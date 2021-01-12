@@ -18,6 +18,7 @@ import {
   fetchChat,
   sendChatMessage,
   setChatOpenById,
+  setPollingTimer,
 } from "../../features/chat/chatSlice";
 import { Message } from "../../../../backend/src/chat/message";
 
@@ -36,7 +37,11 @@ export const ChatBox: React.FC<ChatBoxProps> = ({ offerId }) => {
   );
 
   useEffect(() => {
-    dispatch(fetchChat(offerId)); // offerId
+    dispatch(fetchChat(offerId));
+    const timer = setInterval(() => {
+      dispatch(fetchChat(offerId));
+    }, 3000);
+    dispatch(setPollingTimer(timer));
   }, [dispatch, offerId]);
 
   const handleTextChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -87,7 +92,9 @@ export const ChatBox: React.FC<ChatBoxProps> = ({ offerId }) => {
       <Card className={classes.chatBoxCard}>
         <CardContent>
           {chat.isLoading ? (
-            <CircularProgress />
+            <div className={classes.loadCircle}>
+              <CircularProgress />
+            </div>
           ) : (
             chat.chat?.map((m, i) => renderMessage(m, i))
           )}

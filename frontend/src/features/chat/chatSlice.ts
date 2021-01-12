@@ -6,6 +6,7 @@ import { getChat, postChatMessage } from "../../api/chat";
 export interface ChatState {
   offerId?: string;
   chat?: Message[];
+  timer?: NodeJS.Timeout;
   isLoading: boolean;
   error: string | null;
 }
@@ -19,7 +20,16 @@ export const chat = createSlice({
   name: "chat",
   initialState,
   reducers: {
+    setPollingTimer(state, { payload }: PayloadAction<NodeJS.Timeout>) {
+      state.timer = payload;
+    },
     setChatOpenById(state, { payload }: PayloadAction<string | undefined>) {
+      const timer = state.timer;
+      if (!payload && timer) {
+        state.chat = undefined;
+        state.isLoading = true;
+        clearInterval(timer as NodeJS.Timeout);
+      }
       state.offerId = payload;
     },
     getChatSucces(
@@ -40,7 +50,12 @@ export const chat = createSlice({
   },
 });
 
-export const { getChatSucces, getChatFailure, setChatOpenById } = chat.actions;
+export const {
+  getChatSucces,
+  getChatFailure,
+  setChatOpenById,
+  setPollingTimer,
+} = chat.actions;
 
 export default chat.reducer;
 

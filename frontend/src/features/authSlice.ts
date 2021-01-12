@@ -1,5 +1,6 @@
 import { Action, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { getLogin, postLogin, postLogout } from "../api/auth";
+import { setChatOpenById } from "./chat/chatSlice";
 import { AppThunk } from "./store";
 import { getUserSuccess } from "./userSlice";
 
@@ -55,6 +56,7 @@ export const login = (username: string, password: string): AppThunk => async (
 export const logout = (): AppThunk => async (dispatch) => {
   try {
     await postLogout();
+    dispatch(setChatOpenById(undefined));
     dispatch(resetApp);
     dispatch(logoutSuccess());
   } catch (err) {}
