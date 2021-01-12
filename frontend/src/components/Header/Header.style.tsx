@@ -25,4 +25,8 @@ export const useStyles = makeStyles((theme) => ({
   logo: {
     height: headerHeight,
   },
+  selected: {
+    fontSize: "18px",
+    fontWeight: "bold",
+  },
 }));
