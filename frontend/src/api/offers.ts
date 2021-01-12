@@ -1,6 +1,6 @@
 import { Offer } from "../../../backend/src/offer/offer";
 import { Stars } from "../../../backend/src/rating/rating";
-import { Status } from "../../../backend/src/status/status";
+import { State, Status } from "../../../backend/src/status/status";
 import { fetchTimeOut } from "./util";
 
 export interface OfferResponse extends Offer {
@@ -77,5 +77,19 @@ export const addRating = async (id: string, stars: Stars): Promise<void> => {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({ rating: stars, text: "" }),
+  });
+};
+
+export const addStatus = async (
+  id: string,
+  state: State,
+  text?: string
+): Promise<void> => {
+  fetch(`/api/v1/status/${id}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ state, text }),
   });
 };
