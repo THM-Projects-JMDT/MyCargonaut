@@ -4,4 +4,5 @@ export interface Status {
   offer: string;
   state: State;
   text: string;
+  createDate: Date;
 }
