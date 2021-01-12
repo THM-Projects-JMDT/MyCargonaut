@@ -291,7 +291,7 @@ describe("OfferService", () => {
       .get("/offer?forOffer=true&forPrivate=false")
       .set("Authorization", `Bearer ${localJwtToken2}`)
       .expect(200);
-    expect(response.body[0].providerStars).toBe(5);
+    expect(response.body[0].providerRating).toBe(5);
     await request(app.getHttpServer())
       .post("/offer/bookOffer/" + offer2.body._id)
       .set("Authorization", `Bearer ${localJwtToken2}`)
@@ -308,7 +308,7 @@ describe("OfferService", () => {
       .get("/offer?forOffer=true&forPrivate=false")
       .set("Authorization", `Bearer ${localJwtToken2}`)
       .expect(200);
-    expect(response.body[0].providerStars).toBe(4);
+    expect(response.body[0].providerRating).toBe(4);
   });
 
   afterAll(async () => {

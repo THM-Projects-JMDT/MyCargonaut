@@ -159,7 +159,7 @@ export class OfferController {
           this.offerService,
           this.ratingService,
           offerList[i].provider,
-          "providerStars"
+          "providerRating"
         );
         const user = await this.userService.findOneById(offerList[i].provider);
         offerList[i] = { ...offerList[i], providerUsername: user.username };
@@ -171,7 +171,7 @@ export class OfferController {
           this.offerService,
           this.ratingService,
           offerList[i].customer,
-          "customerStars"
+          "customerRating"
         );
         const user = await this.userService.findOneById(offerList[i].customer);
         offerList[i] = { ...offerList[i], customerUsername: user.username };
