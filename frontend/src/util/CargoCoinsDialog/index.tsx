@@ -28,6 +28,10 @@ export const CargoCoinsDialog: React.FC<CargoCoinsDialogProps> = ({
     dispatch(fetchAddMoney(moneyAmount));
   };
 
+  const confirmText = (coins: string, price: string) => {
+    return `Möchten Sie ${coins} CargoCoins zum Preis von ${price}€ auf Ihr Konto laden?`;
+  };
+
   const cardContent = [
     <div className={classes.cardContent}>
       <CargoCoins className={classes.icon} />
@@ -84,6 +88,7 @@ export const CargoCoinsDialog: React.FC<CargoCoinsDialogProps> = ({
             content={cardContent[0]}
             event={handleAddMoney("100")}
             headingProps={{ variant: "h4", align: "center" }}
+            confirmText={confirmText("100", "3.99")}
           />
         </div>
         <div className={classes.card2}>
@@ -93,6 +98,7 @@ export const CargoCoinsDialog: React.FC<CargoCoinsDialogProps> = ({
             content={cardContent[1]}
             event={handleAddMoney("500")}
             headingProps={{ variant: "h4", align: "center" }}
+            confirmText={confirmText("500", "9.99")}
           />
         </div>
         <div className={classes.card3}>
@@ -102,6 +108,7 @@ export const CargoCoinsDialog: React.FC<CargoCoinsDialogProps> = ({
             content={cardContent[2]}
             event={handleAddMoney("1000")}
             headingProps={{ variant: "h4", align: "center" }}
+            confirmText={confirmText("1000", "18.99")}
           />
         </div>
       </div>
