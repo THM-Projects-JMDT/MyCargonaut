@@ -21,7 +21,6 @@ describe("AuthService", () => {
   let jwtService: JwtService;
   let controller: AuthController;
   let app: INestApplication;
-  let jwtToken: string;
   const newUser = {
     username: "admin",
     password: "admin",
@@ -62,6 +61,14 @@ describe("AuthService", () => {
     await app.init();
   });
 
+  const initUser = async () => {
+    const res = await request(app.getHttpServer())
+      .post("/auth/register")
+      .send(newUser);
+
+    return jwtService.sign({ id: res.body._id });
+  };
+
   it("should be defined", () => {
     expect(service).toBeDefined();
   });
@@ -82,24 +89,28 @@ describe("AuthService", () => {
       .post("/auth/login")
       .send({ username: "admin", password: "admin" })
       .expect(201);
-    const payload = { id: res.body._id };
-    jwtToken = jwtService.sign(payload);
   });
 
-  it(`logout with login before`, () => {
+  it(`logout with login before`, async () => {
+    const jwtToken = await initUser();
+
     return request(app.getHttpServer())
       .post("/auth/logout")
       .set("Authorization", `Bearer ${jwtToken}`)
       .expect(201);
   });
-  it(`check if im login when logged in`, () => {
+
+  it(`check if im login when logged in`, async () => {
+    const jwtToken = await initUser();
+
     return request(app.getHttpServer())
       .get("/auth/login")
       .set("Authorization", `Bearer ${jwtToken}`)
       .expect(200);
   });
 
-  it(`check if im login when not logged in`, () => {
+  it(`check if im login when not logged in`, async () => {
+    await request(app.getHttpServer()).post("/auth/register").send(newUser);
     return request(app.getHttpServer())
       .get("/auth/login")
       .expect(401)
