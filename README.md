@@ -30,11 +30,16 @@ MyCargonaut ist ein Projekt im Rahmen des KmS-Praktikums im WS20/21.
 -   _Datenbank starten_: `npm run db:start`
 -   _Development-Server starten_: `npm run start:dev`
 
+### Demo
+
+Eine Demo der App befindet sich hier: [Heroku](https://my-cargonaut.herokuapp.com/home)
+
 ## Dokumentation
 
 Die Dokumentation befindet sich [hier](https://mycargonaut.readthedocs.io)
 
 Für die Dokumentation wird [mkdocs-material](https://squidfunk.github.io/mkdocs-material/getting-started/) verwendet.
+
 
 ### Lokal starten
 
