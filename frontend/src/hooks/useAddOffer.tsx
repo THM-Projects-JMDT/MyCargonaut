@@ -1,6 +1,6 @@
 import { createRef, useState } from "react";
 import { useSelector } from "react-redux";
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import { Car } from "../model/Car";
 import { Offer, Service } from "../../../backend/src/offer/offer";
 import { addOffer, addRequest } from "../api/offers";
@@ -26,6 +26,7 @@ export function useAddOffer(isOffer: boolean) {
   const vehilceRef = createRef<HTMLInputElement>();
   const [date, setDate] = useState<Date | null>(new Date());
   const vehicles = useSelector((state: RootState) => state.vehicles.vehicles);
+  const location = useLocation<{ from: string }>();
 
   const validate = () =>
     Object.values(requiredRefs).every((r) => getRefValue(r).trim()) &&
@@ -81,10 +82,10 @@ export function useAddOffer(isOffer: boolean) {
     try {
       if (isOffer) {
         await addOffer(offer);
-        history.push(routes.offers.path);
+        history.push(location.state?.from ?? routes.offers.path);
       } else {
         await addRequest(offer);
-        history.push(routes.requests.path);
+        history.push(location.state?.from ?? routes.requests.path);
       }
     } catch {}
   };
