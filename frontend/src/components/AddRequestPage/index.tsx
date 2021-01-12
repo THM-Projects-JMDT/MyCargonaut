@@ -14,6 +14,7 @@ export const AddRequestPage: React.FC = () => {
         buttonText="HINZUFÜGEN"
         content={<InputForm inputFields={inputFields}></InputForm>}
         event={handleAddOffer}
+        confirmText="Beim Hinzufügen der Anfrage wird der von Ihnen gewählte Betrag von Ihrem MyCargonaut-Konto abgebucht. Fortfahren?"
       ></CustomCard>
     </CenterCard>
   );
