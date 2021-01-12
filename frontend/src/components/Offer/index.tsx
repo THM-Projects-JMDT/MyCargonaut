@@ -171,7 +171,9 @@ export const Offer: React.FC<OfferProps> = ({
                     variant="outlined"
                     onClick={handleTrackingClick}
                   >
-                    IN BEARBEITUNG
+                    {offer.tracking?.state === "Delivered"
+                      ? "ABGESCHLOSSEN"
+                      : "IN BEARBEITUNG"}
                   </Button>
                   {offer.tracking && (
                     <TrackingDialog
