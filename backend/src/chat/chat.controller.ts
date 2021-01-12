@@ -22,12 +22,12 @@ export class ChatController {
     @Param("offerId") offerId: string,
     @Request() req
   ) {
-    return this.chatService.findByOffer(offerId.trim());
+    return this.chatService.findByOffer(offerId?.trim());
   }
 
   @Delete(":messageId")
   async deleteMessage(@Param("messageId") messageId: string, @Request() req) {
-    return this.chatService.deleteMessage(messageId.trim());
+    return this.chatService.deleteMessage(messageId?.trim());
   }
 
   @Put(":messageId")
@@ -36,7 +36,7 @@ export class ChatController {
     @Body("content") content: string | null,
     @Request() req
   ) {
-    await this.chatService.updateMessage(messageId.trim(), {
+    await this.chatService.updateMessage(messageId?.trim(), {
       content: content,
     });
   }
@@ -48,8 +48,8 @@ export class ChatController {
     @Request() req
   ) {
     return this.chatService.addMessage({
-      offer: offerId.trim(),
-      content: content.trim(),
+      offer: offerId?.trim(),
+      content: content?.trim(),
       user: req.user.id,
     });
   }
