@@ -2,13 +2,14 @@ import { makeStyles } from "@material-ui/core";
 
 export const useStyles = makeStyles((theme) => ({
   root: {
-    position: "fixed" /* Sit on top of the page content */,
-    width: "25%" /* Full width (cover the whole page) */,
-    height: "45%" /* Full height (cover the whole page) */,
+    position: "fixed",
+    width: "25%",
+    height: "45%",
     top: "55%",
     left: "75%",
     right: 0,
     bottom: 0,
+    zIndex: 3,
   },
   chatBoxCard: {
     height: "75%",

@@ -5,28 +5,21 @@ import { useStyles } from "./ChatMessage.style";
 
 export interface ChatMessageProps {
   text: string;
-  senderName?: string;
+  state: "sent" | "recieved";
 }
 
-export const ChatMessage: React.FC<ChatMessageProps> = ({
-  text,
-  senderName,
-}) => {
+export const ChatMessage: React.FC<ChatMessageProps> = ({ text, state }) => {
   const classes = useStyles();
   const theme = useTheme();
-  const styles: CSSProperties = !senderName
-    ? {
-        backgroundColor: theme.palette.primary.main,
-        color: "white",
-      }
-    : {};
+  const styles: CSSProperties =
+    state === "sent"
+      ? {
+          backgroundColor: theme.palette.primary.main,
+          color: "white",
+        }
+      : {};
   return (
     <Paper className={classes.sender} style={styles} elevation={4}>
-      {senderName && (
-        <Typography variant="caption" className={classes.senderName}>
-          {senderName}:
-        </Typography>
-      )}
       <Typography>{text}</Typography>
     </Paper>
   );
