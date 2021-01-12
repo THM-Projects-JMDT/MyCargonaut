@@ -25,4 +25,7 @@ export const useStyles = makeStyles((theme) => ({
   logo: {
     height: headerHeight,
   },
+  avatar: {
+    padding: 0,
+  },
 }));
