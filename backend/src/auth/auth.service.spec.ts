@@ -27,7 +27,6 @@ describe("AuthService", () => {
     password: "admin",
     firstName: "Jannik",
     lastName: "Lapp",
-    ppPath: "images/test.png",
     birthday: new Date("11-09-1998"),
     email: "jannik.lapp@mni.thm.de",
     cargoCoins: 3000,
@@ -106,7 +105,7 @@ describe("AuthService", () => {
       .expect(401)
       .expect({ statusCode: 401, message: "Unauthorized" });
   });
-  it(`registry without ppPath`, async () => {
+  it(`register`, async () => {
     const result = await request(app.getHttpServer())
       .post("/auth/register")
       .send({

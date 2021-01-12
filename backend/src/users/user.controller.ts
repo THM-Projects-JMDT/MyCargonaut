@@ -30,13 +30,11 @@ export class UserController {
     @Body("firstName") firstName: string | null,
     @Body("lastName") lastName: string | null,
     @Body("email") email: string | null,
-    @Body("ppPath") ppPath: string | null,
     @Request() req
   ) {
     await this.userService.updateUser(req.user.id, {
       firstName: firstName?.trim(),
       lastName: lastName?.trim(),
-      ppPath: ppPath,
       email: email?.trim(),
     });
 

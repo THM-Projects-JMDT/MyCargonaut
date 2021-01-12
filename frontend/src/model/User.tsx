@@ -5,6 +5,5 @@ export interface User {
   lastName: string;
   cargoCoins: number;
   birthday: Date;
-  ppPath: string;
   email: string;
 }
