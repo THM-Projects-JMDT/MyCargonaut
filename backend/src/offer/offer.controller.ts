@@ -31,7 +31,7 @@ export class OfferController {
 
   @Delete(":offerId")
   async deleteOffer(@Param("offerId") offerId: string, @Request() req) {
-    return this.offerService.deleteOffer(offerId);
+    return this.offerService.deleteOffer(offerId.trim());
   }
 
   @Put(":offerId")
@@ -46,17 +46,17 @@ export class OfferController {
     @Body("description") description: string | null,
     @Request() req
   ) {
-    const oldOffer = await this.offerService.getOfferById(offerId);
+    const oldOffer = await this.offerService.getOfferById(offerId.trim());
     const newOffer: Offer = {
-      from: from,
-      to: to,
+      from: from.trim(),
+      to: to.trim(),
       createDate: oldOffer.createDate,
       orderDate: undefined,
       service: service,
       price: price,
       seats: seats,
       storageSpace: storageSpace,
-      description: description,
+      description: description.trim(),
       provider: oldOffer.provider,
       customer: oldOffer.customer,
     };
@@ -77,15 +77,15 @@ export class OfferController {
     @Request() req
   ) {
     const newOffer: Offer = {
-      from: from,
-      to: to,
+      from: from.trim(),
+      to: to.trim(),
       createDate: new Date(),
       orderDate: orderDate,
       service: service,
       price: price,
       seats: seats,
       storageSpace: storageSpace,
-      description: description,
+      description: description.trim(),
       provider: undefined,
       customer: undefined,
     };
@@ -99,44 +99,27 @@ export class OfferController {
 
   @Post("bookOffer/:offerId")
   async bookOffer(@Param("offerId") offerId: string, @Request() req) {
-    const oldOffer = await this.offerService.getOfferById(offerId);
-    const newOffer: Offer = {
-      from: oldOffer.from,
-      to: oldOffer.to,
-      createDate: oldOffer.createDate,
-      orderDate: oldOffer.orderDate,
-      service: oldOffer.service,
-      price: oldOffer.price,
-      seats: oldOffer.seats,
-      storageSpace: oldOffer.storageSpace,
-      description: oldOffer.description,
-      provider: undefined,
-      customer: undefined,
-    };
-    if (oldOffer.provider == undefined) {
-      newOffer.provider = req.user.id;
-      newOffer.customer = oldOffer.customer;
+    const offer = await this.offerService.getOfferById(offerId);
+    if (offer.provider == undefined) {
+      offer.provider = req.user.id;
     } else {
-      newOffer.customer = req.user.id;
-      newOffer.provider = oldOffer.provider;
+      offer.customer = req.user.id;
     }
-
-    const customerUser = await this.userService.findOneById(newOffer.customer);
-    if (customerUser.cargoCoins >= newOffer.price) {
-      await this.userService.updateMoney(newOffer.customer, 0 - newOffer.price);
-      await this.userService.updateMoney(newOffer.provider, newOffer.price);
+    const customerUser = await this.userService.findOneById(offer.customer);
+    if (customerUser.cargoCoins >= offer.price) {
+      await this.userService.updateMoney(offer.customer, 0 - offer.price);
+      await this.userService.updateMoney(offer.provider, offer.price);
     } else {
       throw new HttpException(
         "Not enaught Cargo Coins",
         HttpStatus.BAD_REQUEST
       );
     }
-
     await this.statusService.addStatus({
-      offer: offerId,
+      offer: offerId.trim(),
       state: "Waiting",
     });
-    return this.offerService.updateOffer(offerId, newOffer);
+    return this.offerService.updateOffer(offerId, offer);
   }
 
   @Get()
@@ -208,7 +191,7 @@ export const addStars = async (
   const personalOffers = await offerService.findAllOffersByUser(user);
   const starList = [];
   for (let j = 0; j < personalOffers.length; j++) {
-    const rating = await ratingService.findByOffer(user);
+    const rating = await ratingService.findByOffer(personalOffers[j]._id);
     if (rating != undefined) {
       starList.push(rating.rating);
     }
@@ -216,6 +199,6 @@ export const addStars = async (
   if (starList.length > 0) {
     return { ...offer, [tag]: average(starList) };
   } else {
-    return { ...offer, [tag]: undefined };
+    return offer;
   }
 };

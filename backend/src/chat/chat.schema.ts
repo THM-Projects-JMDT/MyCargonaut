@@ -11,6 +11,9 @@ export class Chat {
   })
   offer: string;
 
+  @Prop({ required: true, index: true })
+  user: string;
+
   @Prop()
   content: string;
 }
