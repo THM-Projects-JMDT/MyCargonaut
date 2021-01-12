@@ -7,7 +7,7 @@ import {
   MenuItem,
 } from "@material-ui/core";
 import React, { useState } from "react";
-import { useHistory } from "react-router-dom";
+import { useHistory, useRouteMatch } from "react-router-dom";
 import { routes } from "../../../routes";
 import { useStyles } from "../Header.style";
 import { CargoCoins } from "../../../util/CargoCoins";
@@ -15,8 +15,8 @@ import { CargoCoinsDialog } from "../../../util/CargoCoinsDialog";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../features/rootReducer";
 import { logout } from "../../../features/authSlice";
+import clsx from "clsx";
 
-// TODO: retrieve logged in user from store
 export const NavElements: React.FC = () => {
   const classes = useStyles();
   const logedIn = useSelector((state: RootState) => state.auth.isLogedIn);
@@ -28,6 +28,9 @@ export const NavElements: React.FC = () => {
   const history = useHistory();
   const [open, setOpen] = useState(false);
   const avatarUrl = useSelector((state: RootState) => state.user.avatarUrl);
+  const matchRequest = useRouteMatch("/requests");
+  const matchOffer = useRouteMatch("/offers");
+  const matchVehicle = useRouteMatch("/vehicles");
 
   const handleAvatarClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -89,21 +92,27 @@ export const NavElements: React.FC = () => {
             </Box>
           </Button>
           <Button
-            className={classes.button}
+            className={clsx(classes.button, {
+              [classes.selected]: matchRequest,
+            })}
             color="primary"
             onClick={() => handleClick(routes.requests.path)}
           >
             Anfragen
           </Button>
           <Button
-            className={classes.button}
+            className={clsx(classes.button, {
+              [classes.selected]: matchOffer,
+            })}
             color="primary"
             onClick={() => handleClick(routes.offers.path)}
           >
             Angebote
           </Button>
           <Button
-            className={classes.button}
+            className={clsx(classes.button, {
+              [classes.selected]: matchVehicle,
+            })}
             color="primary"
             onClick={() => handleClick(routes.vehicles.path)}
           >

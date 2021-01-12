@@ -1,25 +1,16 @@
 import React from "react";
 import { ListItem, Paper, Typography } from "@material-ui/core";
-import { useStyles } from "./Offer.style";
+import { useStyles } from "./../../Offer/Offer.style";
 import AddBoxOutlinedIcon from "@material-ui/icons/AddBoxOutlined";
-import { useHistory, useLocation } from "react-router-dom";
-import { routes } from "../../routes";
+import { useHistory } from "react-router-dom";
+import { routes } from "../../../routes";
 
-export interface OfferDummyProps {
-  show: string;
-}
-
-export const OfferDummy: React.FC<OfferDummyProps> = ({ show }) => {
+export const VehicleDummy: React.FC = () => {
   const classes = useStyles();
-  const displayText = show === "offers" ? "s Angebot" : " Anfrage";
   const history = useHistory();
-  const location = useLocation();
 
   const handleClick = () => {
-    history.push(
-      show === "offers" ? routes.addOffer.path : routes.addRequest.path,
-      { from: location.pathname }
-    );
+    history.push(routes.addVehicle.path);
   };
 
   return (
@@ -27,7 +18,7 @@ export const OfferDummy: React.FC<OfferDummyProps> = ({ show }) => {
       <Paper className={classes.dummy}>
         <Typography className={classes.text}>
           <AddBoxOutlinedIcon className={classes.addIcon} />{" "}
-          {`Neue${displayText} hinzufügen`}
+          {`Neues Fahrzeug hinzufügen`}
         </Typography>
       </Paper>
     </ListItem>

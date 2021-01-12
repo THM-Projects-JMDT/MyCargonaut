@@ -28,4 +28,8 @@ export const useStyles = makeStyles((theme) => ({
   avatar: {
     padding: 0,
   },
+  selected: {
+    fontSize: "18px",
+    fontWeight: "bold",
+  },
 }));

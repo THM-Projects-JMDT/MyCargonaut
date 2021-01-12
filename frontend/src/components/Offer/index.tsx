@@ -28,6 +28,7 @@ import { RatingDialog } from "./RatingDialog";
 import { useDispatch } from "react-redux";
 import { acceptOffers } from "../../features/offers/offersSlice";
 import { acceptRequest } from "../../features/requests/requestsSlice";
+import { ConfirmDialog } from "../../util/ConfirmDialog";
 
 export interface OfferProps {
   provider?: UserDetails;
@@ -60,6 +61,7 @@ export const Offer: React.FC<OfferProps> = ({
   const classes = useStyles();
   const [ratingOpen, setRatingOpen] = React.useState(false);
   const [trackingOpen, setTrackingOpen] = React.useState(false);
+  const [confirmOpen, setConfirmOpen] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
   const isPendingOffer = customer === undefined;
@@ -84,10 +86,14 @@ export const Offer: React.FC<OfferProps> = ({
     setAnchorEl(event.currentTarget);
   };
 
-  const handleCheckbuttonClick = (
+  const handleOpenConfirm = (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     event.stopPropagation();
+    setConfirmOpen(true);
+  };
+
+  const handleBookOffer = () => {
     if (isPendingOffer) {
       dispatch(acceptOffers(offer.id));
     } else {
@@ -97,6 +103,14 @@ export const Offer: React.FC<OfferProps> = ({
 
   const handleAvatarMenuClose = () => {
     setAnchorEl(null);
+  };
+
+  const getConfirmText = () => {
+    if (isPendingOffer) {
+      return `Bei Annahme dieses Angebots werden ${offer.price} CargoCoins von Ihrem MyCargonaut-Konto abgebucht. Fortfahren?`;
+    } else {
+      return `Bei Annahme dieser Anfrage werden ${offer.price} CargoCoins auf Ihr MyCargonaut-Konto überwiesen. Fortfahren?`;
+    }
   };
 
   return (
@@ -152,12 +166,18 @@ export const Offer: React.FC<OfferProps> = ({
           {!isMyOffer && isPending ? (
             <GridElement>
               <Box mt={2}>
-                <IconButton color="primary" onClick={handleCheckbuttonClick}>
+                <IconButton color="primary" onClick={handleOpenConfirm}>
                   <CheckCircle
                     data-testid="check-circle-icon"
                     fontSize="large"
                   />
                 </IconButton>
+                <ConfirmDialog
+                  open={confirmOpen}
+                  text={getConfirmText()}
+                  onClose={() => setConfirmOpen(false)}
+                  action={handleBookOffer}
+                />
               </Box>
             </GridElement>
           ) : (
@@ -173,10 +193,14 @@ export const Offer: React.FC<OfferProps> = ({
                     variant="outlined"
                     onClick={handleTrackingClick}
                   >
-                    IN BEARBEITUNG
+                    {offer.tracking?.state === "Delivered"
+                      ? "ABGESCHLOSSEN"
+                      : "IN BEARBEITUNG"}
                   </Button>
                   {offer.tracking && (
                     <TrackingDialog
+                      offerId={offer.id}
+                      role={isCustomer ? "customer" : "provider"}
                       tracking={offer.tracking}
                       open={trackingOpen}
                       onClose={() => setTrackingOpen(false)}
@@ -213,7 +237,9 @@ export const Offer: React.FC<OfferProps> = ({
       <AccordionDetails className={classes.accordionDetails}>
         <Box ml={7} my={2}>
           <Typography variant="subtitle2">Beschreibung:</Typography>
-          <Typography>{offer.description ?? "-"}</Typography>
+          <Typography>
+            {offer.description ? offer.description.trim() : "-"}
+          </Typography>
         </Box>
       </AccordionDetails>
       <Menu
