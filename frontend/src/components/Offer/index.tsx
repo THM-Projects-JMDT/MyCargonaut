@@ -113,11 +113,13 @@ export const Offer: React.FC<OfferProps> = ({
                 <UserSummary
                   username={provider?.username}
                   rating={provider?.rating}
+                  userId={provider?.id}
                 />
               ) : (
                 <UserSummary
                   username={customer?.username}
                   rating={customer?.rating}
+                  userId={customer?.id}
                 />
               )}
             </GridElement>
@@ -192,11 +194,13 @@ export const Offer: React.FC<OfferProps> = ({
                     <UserSummary
                       username={customer?.username}
                       rating={customer?.rating}
+                      userId={customer?.id}
                     />
                   ) : (
                     <UserSummary
                       username={provider?.username}
                       rating={provider?.rating}
+                      userId={provider?.id}
                     />
                   )}
                 </div>
