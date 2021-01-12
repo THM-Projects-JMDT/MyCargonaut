@@ -26,8 +26,11 @@ import { UserDetails } from "../../model/UserDetails";
 import { OfferDetails } from "../../model/OfferDetails";
 import { RatingDialog } from "./RatingDialog";
 import { useDispatch } from "react-redux";
-import { acceptOffers } from "../../features/offers/offersSlice";
-import { acceptRequest } from "../../features/requests/requestsSlice";
+import { acceptOffers, fetchOffers } from "../../features/offers/offersSlice";
+import {
+  acceptRequest,
+  fetchRequests,
+} from "../../features/requests/requestsSlice";
 import { ConfirmDialog } from "../../util/ConfirmDialog";
 import clsx from "clsx";
 
@@ -78,6 +81,9 @@ export const Offer: React.FC<OfferProps> = ({
   const handleTrackingClick = (event: any) => {
     event.stopPropagation();
     setTrackingOpen(true);
+
+    if (isProvider) dispatch(fetchOffers());
+    if (isCustomer) dispatch(fetchRequests());
   };
 
   const handleAvatarClick = (
