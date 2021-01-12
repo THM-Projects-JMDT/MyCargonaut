@@ -14,7 +14,6 @@ MyCargonaut ist ein Projekt im Rahmen des KmS-Praktikums im WS20/21.
 -   [Redux](https://redux.js.org/)
 -   [Material-UI](https://material-ui.com/)
 -   [NestJS](https://nestjs.com/)
--   [GraphQL](https://graphql.org/)
 
 ## Development
 
@@ -31,9 +30,14 @@ MyCargonaut ist ein Projekt im Rahmen des KmS-Praktikums im WS20/21.
 -   _Benötigte Module installieren:_ `npm i`
 -   _Development-Server starten_: `npm run start:dev`
 
+### Demo
+
+Eine Demo der App befindet sich hier: [Heroku](https://my-cargonaut.herokuapp.com)
+
 ## Dokumentation
 
 Für die Dokumentation wird [mkdocs-material](https://squidfunk.github.io/mkdocs-material/getting-started/) verwendet.
+
 
 ### Lokal starten
 

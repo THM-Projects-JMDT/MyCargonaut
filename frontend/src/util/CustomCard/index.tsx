@@ -8,13 +8,15 @@ import {
   TypographyProps,
 } from "@material-ui/core";
 import { useStyles } from "./CustomCard.style";
+import { ConfirmDialog } from "../ConfirmDialog";
 
 export interface CustomCardProps {
   buttonText: string;
   heading: string;
   content: any;
-  event: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
+  event: (event?: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
   headingProps?: TypographyProps;
+  confirmText?: string;
 }
 
 export const CustomCard: React.FC<CustomCardProps> = ({
@@ -23,8 +25,20 @@ export const CustomCard: React.FC<CustomCardProps> = ({
   heading,
   event,
   headingProps,
+  confirmText,
 }) => {
   const classes = useStyles();
+  const [open, setOpen] = React.useState(false);
+
+  const handleClick = (
+    clickEvent: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    if (confirmText) {
+      setOpen(true);
+    } else {
+      event(clickEvent);
+    }
+  };
 
   return (
     <Card className={classes.card} elevation={8}>
@@ -36,7 +50,7 @@ export const CustomCard: React.FC<CustomCardProps> = ({
       </CardContent>
       <CardActions className={classes.root}>
         <Button
-          onClick={event}
+          onClick={handleClick}
           fullWidth
           variant="contained"
           className={classes.button}
@@ -45,6 +59,14 @@ export const CustomCard: React.FC<CustomCardProps> = ({
           {buttonText}
         </Button>
       </CardActions>
+      {confirmText && (
+        <ConfirmDialog
+          open={open}
+          text={confirmText}
+          onClose={() => setOpen(false)}
+          action={() => event()}
+        />
+      )}
     </Card>
   );
 };
