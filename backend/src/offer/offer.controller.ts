@@ -92,6 +92,15 @@ export class OfferController {
     if (isOffer) {
       newOffer.provider = req.user.id;
     } else {
+      const user = await this.userService.findOneById(req.user.id);
+      if (user.cargoCoins >= price) {
+        await this.userService.updateMoney(req.user.id, 0 - price);
+      } else {
+        throw new HttpException(
+          "Not enaught Cargo Coins",
+          HttpStatus.BAD_REQUEST
+        );
+      }
       newOffer.customer = req.user.id;
     }
     return this.offerService.addOffer(newOffer);
@@ -107,7 +116,9 @@ export class OfferController {
     }
     const customerUser = await this.userService.findOneById(offer.customer);
     if (customerUser.cargoCoins >= offer.price) {
-      await this.userService.updateMoney(offer.customer, 0 - offer.price);
+      if (offer.customer == req.user.id) {
+        await this.userService.updateMoney(offer.customer, 0 - offer.price);
+      }
       await this.userService.updateMoney(offer.provider, offer.price);
     } else {
       throw new HttpException(
