@@ -35,7 +35,7 @@ export const getStepByState = (trackingState: State) => {
     case "InProgress":
       return 1;
     case "Delivered":
-      return 2;
+      return 3;
   }
 };
 
@@ -100,7 +100,7 @@ export const TrackingDialog: React.FC<TrackingDialogProps> = ({
             <StepLabel>{activeStep === 1 ? getStatusLabel(1) : ""}</StepLabel>
           </Step>
           <Step>
-            <StepLabel>{activeStep === 2 ? getStatusLabel(2) : ""}</StepLabel>
+            <StepLabel>{activeStep === 3 ? getStatusLabel(2) : ""}</StepLabel>
           </Step>
         </Stepper>
         {tracking.text && (
