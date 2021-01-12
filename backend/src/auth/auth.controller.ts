@@ -62,13 +62,13 @@ export class AuthController {
     try {
       const user = {
         password: password,
-        username: username.trim(),
-        firstName: firstName.trim(),
-        lastName: lastName.trim(),
+        username: username?.trim(),
+        firstName: firstName?.trim(),
+        lastName: lastName?.trim(),
         cargoCoins: 0,
         birthday: birthday,
-        ppPath: ppPath.trim(),
-        email: email.trim(),
+        ppPath: ppPath?.trim(),
+        email: email?.trim(),
       };
       await this.userService.addUser(user);
 

@@ -31,7 +31,7 @@ export class OfferController {
 
   @Delete(":offerId")
   async deleteOffer(@Param("offerId") offerId: string, @Request() req) {
-    return this.offerService.deleteOffer(offerId.trim());
+    return this.offerService.deleteOffer(offerId?.trim());
   }
 
   @Put(":offerId")
@@ -46,17 +46,17 @@ export class OfferController {
     @Body("description") description: string | null,
     @Request() req
   ) {
-    const oldOffer = await this.offerService.getOfferById(offerId.trim());
+    const oldOffer = await this.offerService.getOfferById(offerId?.trim());
     const newOffer: Offer = {
-      from: from.trim(),
-      to: to.trim(),
+      from: from?.trim(),
+      to: to?.trim(),
       createDate: oldOffer.createDate,
       orderDate: undefined,
       service: service,
       price: price,
       seats: seats,
       storageSpace: storageSpace,
-      description: description.trim(),
+      description: description?.trim(),
       provider: oldOffer.provider,
       customer: oldOffer.customer,
     };
@@ -77,15 +77,15 @@ export class OfferController {
     @Request() req
   ) {
     const newOffer: Offer = {
-      from: from.trim(),
-      to: to.trim(),
+      from: from?.trim(),
+      to: to?.trim(),
       createDate: new Date(),
       orderDate: orderDate,
       service: service,
       price: price,
       seats: seats,
       storageSpace: storageSpace,
-      description: description.trim(),
+      description: description?.trim(),
       provider: undefined,
       customer: undefined,
     };
@@ -116,7 +116,7 @@ export class OfferController {
       );
     }
     await this.statusService.addStatus({
-      offer: offerId.trim(),
+      offer: offerId?.trim(),
       state: "Waiting",
     });
     return this.offerService.updateOffer(offerId, offer);
