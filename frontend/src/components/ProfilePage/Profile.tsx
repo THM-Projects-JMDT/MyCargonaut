@@ -81,9 +81,6 @@ export const Profile: React.FC<ProfileProps> = ({ inputFields }) => {
               <AddCircleOutlineIcon />
             </IconButton>
           </div>
-          <div>
-            <LinkButton onClick={handleOpenPw}>Passwort ändern</LinkButton>
-          </div>
         </div>
       </div>
       <InputForm inputFields={inputFields} />
