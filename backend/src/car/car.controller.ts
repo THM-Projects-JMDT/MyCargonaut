@@ -19,7 +19,7 @@ export class CarController {
 
   @Delete(":carId")
   async deleteCar(@Param("carId") carId: string, @Request() req) {
-    return this.carService.deleteCar(carId.trim());
+    return this.carService.deleteCar(carId?.trim());
   }
 
   @Put(":carId")
@@ -32,9 +32,9 @@ export class CarController {
     @Body("storageSpace") storageSpace: number | null,
     @Request() req
   ) {
-    await this.carService.updateCar(carId.trim(), {
-      manufacturer: manufacturer.trim(),
-      model: model.trim(),
+    await this.carService.updateCar(carId?.trim(), {
+      manufacturer: manufacturer?.trim(),
+      model: model?.trim(),
       manufactureYear: manufactureYear,
       seats: seats,
       storageSpace: storageSpace,
@@ -53,8 +53,8 @@ export class CarController {
   ) {
     return this.carService.addCar({
       owner: req.user.id,
-      manufacturer: manufacturer.trim(),
-      model: model.trim(),
+      manufacturer: manufacturer?.trim(),
+      model: model?.trim(),
       manufactureYear: manufactureYear,
       seats: seats,
       storageSpace: storageSpace,

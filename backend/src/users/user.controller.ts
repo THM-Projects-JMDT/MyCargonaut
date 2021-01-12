@@ -34,10 +34,10 @@ export class UserController {
     @Request() req
   ) {
     await this.userService.updateUser(req.user.id, {
-      firstName: firstName.trim(),
-      lastName: lastName.trim(),
+      firstName: firstName?.trim(),
+      lastName: lastName?.trim(),
       ppPath: ppPath,
-      email: email.trim(),
+      email: email?.trim(),
     });
 
     return this.userService.findOneById(req.user.id);
@@ -45,7 +45,7 @@ export class UserController {
 
   @Post("addMoney/:moneyAmount")
   async addMoney(@Param("moneyAmount") cargoCoins: string, @Request() req) {
-    await this.userService.updateMoney(req.user.id, Number(cargoCoins.trim()));
+    await this.userService.updateMoney(req.user.id, Number(cargoCoins?.trim()));
     return this.userService.findOneById(req.user.id);
   }
 

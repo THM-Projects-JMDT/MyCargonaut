@@ -18,7 +18,7 @@ export class StatusController {
 
   @Get(":offerId")
   async getStatusByOfferId(@Param("offerId") offerId: string, @Request() req) {
-    return this.statusService.findByOffer(offerId.trim());
+    return this.statusService.findByOffer(offerId?.trim());
   }
 
   @Post(":offerId")
@@ -28,14 +28,14 @@ export class StatusController {
     @Body("state") state: State,
     @Request() req
   ) {
-    const status = await this.statusService.findByOffer(offerId.trim());
+    const status = await this.statusService.findByOffer(offerId?.trim());
     if (status != null) {
       await this.statusService.deleteStatus(status._id);
     }
     return this.statusService.addStatus({
-      offer: offerId.trim(),
+      offer: offerId?.trim(),
       state: state,
-      text: text.trim(),
+      text: text?.trim(),
     });
   }
 }
