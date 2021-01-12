@@ -74,7 +74,6 @@ describe("UsersService", () => {
       password: "admin",
       firstName: "Test",
       lastName: "Lapp",
-      ppPath: "images/test.png",
       birthday: new Date("11-09-1998"),
       email: "jannik.lapp@mni.thm.de",
       cargoCoins: 3000,
@@ -103,7 +102,6 @@ describe("UsersService", () => {
         firstName: "Test123",
         lastName: "TestABC",
         email: "test@test.de",
-        ppPath: "test.img",
       })
       .set("Authorization", `Bearer ${localJwtToken}`)
       .expect(200);

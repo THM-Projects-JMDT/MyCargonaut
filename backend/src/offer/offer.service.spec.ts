@@ -212,7 +212,6 @@ describe("OfferService", () => {
       password: "admin",
       firstName: "Test",
       lastName: "Test",
-      ppPath: "images/test.png",
       birthday: new Date("11-09-1998"),
       email: randomStringGenerator() + "@mni.thm.de",
       cargoCoins: 0,

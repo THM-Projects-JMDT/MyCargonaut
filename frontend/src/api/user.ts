@@ -20,3 +20,13 @@ export function updateUser(user: {
     body: JSON.stringify(user),
   }).then((res) => res.json()) as Promise<User>;
 }
+
+export function uploadAvatar(file: File) {
+  const formData = new FormData();
+  formData.append("file", file);
+
+  return fetchTimeOut(buildApiUrl(`/user/profile/upload`), {
+    method: "POST",
+    body: formData,
+  });
+}
