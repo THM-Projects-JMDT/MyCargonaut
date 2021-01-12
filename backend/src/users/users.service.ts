@@ -12,7 +12,11 @@ export class UsersService {
   ) {}
 
   async findOne(username: string) {
-    return this.userModel.findOne({ username: username }, { __v: 0 });
+    let user = await this.userModel.findOne({ username: username }, { __v: 0 });
+    if (!user) {
+      user = await this.userModel.findOne({ email: username }, { __v: 0 });
+    }
+    return user;
   }
 
   async findOneById(id: string) {
@@ -43,10 +47,13 @@ export class UsersService {
     username: string,
     planTextPassword: string
   ): Promise<boolean> {
-    const user = await this.userModel.findOne(
+    let user = await this.userModel.findOne(
       { username: username },
       { password: 1 }
     );
+    if (!user) {
+      user = await this.userModel.findOne({ email: username }, { password: 1 });
+    }
 
     return user && compare(planTextPassword, user.password);
   }
