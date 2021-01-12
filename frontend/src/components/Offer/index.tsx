@@ -29,6 +29,7 @@ import { useDispatch } from "react-redux";
 import { acceptOffers } from "../../features/offers/offersSlice";
 import { acceptRequest } from "../../features/requests/requestsSlice";
 import { ConfirmDialog } from "../../util/ConfirmDialog";
+import clsx from "clsx";
 
 export interface OfferProps {
   provider?: UserDetails;
@@ -192,6 +193,10 @@ export const Offer: React.FC<OfferProps> = ({
                     color="secondary"
                     variant="outlined"
                     onClick={handleTrackingClick}
+                    className={clsx({
+                      [classes.trackingCompleted]:
+                        offer.tracking?.state === "Delivered",
+                    })}
                   >
                     {offer.tracking?.state === "Delivered"
                       ? "ABGESCHLOSSEN"
