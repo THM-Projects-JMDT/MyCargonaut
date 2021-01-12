@@ -1,7 +1,9 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Offer } from "../../../../backend/src/offer/offer";
+import { State } from "../../../../backend/src/status/status";
 import {
   addOffer,
+  addStatus,
   bookOffer,
   getAllOffers,
   getPersonalOffers,
@@ -73,6 +75,19 @@ export const putOffer = (offer: Offer): AppThunk => async (dispatch) => {
 export const acceptOffers = (id: string): AppThunk => async (dispatch) => {
   try {
     await bookOffer(id);
+    dispatch(fetchOffers());
+  } catch (e) {
+    dispatch(getOffersFailure(e.toString()));
+  }
+};
+
+export const setOfferStatus = (
+  id: string,
+  state: State,
+  text?: string
+): AppThunk => async (dispatch) => {
+  try {
+    await addStatus(id, state, text);
     dispatch(fetchOffers());
   } catch (e) {
     dispatch(getOffersFailure(e.toString()));
