@@ -14,7 +14,6 @@ MyCargonaut ist ein Projekt im Rahmen des KmS-Praktikums im WS20/21.
 -   [Redux](https://redux.js.org/)
 -   [Material-UI](https://material-ui.com/)
 -   [NestJS](https://nestjs.com/)
--   [GraphQL](https://graphql.org/)
 
 ## Development
 
