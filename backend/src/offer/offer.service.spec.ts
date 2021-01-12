@@ -239,6 +239,36 @@ describe("OfferService", () => {
     expect(user1.body.cargoCoins).toBe(3000);
     expect(user2.body.cargoCoins).toBe(0);
   });
+
+  it(`book request`, async () => {
+    const [localJwtToken2, username2] = await loginAndGetJWTToken(
+      userService,
+      jwtService,
+      app
+    );
+    const offer = await addOffer(app, localJwtToken, false);
+    const user = await request(app.getHttpServer())
+      .get("/user")
+      .set("Authorization", `Bearer ${localJwtToken}`)
+      .expect(200);
+    expect(user.body.cargoCoins).toBe(2950);
+    await request(app.getHttpServer())
+      .post("/offer/bookOffer/" + offer.body._id)
+      .set("Authorization", `Bearer ${localJwtToken2}`)
+      .expect(201);
+    const user1 = await request(app.getHttpServer())
+      .get("/user")
+      .set("Authorization", `Bearer ${localJwtToken}`)
+      .expect(200);
+    const user2 = await request(app.getHttpServer())
+      .get("/user")
+      .set("Authorization", `Bearer ${localJwtToken2}`)
+      .expect(200);
+
+    expect(user1.body.cargoCoins).toBe(2950);
+    expect(user2.body.cargoCoins).toBe(3050);
+  });
+
   it(`average rating test`, async () => {
     const [localJwtToken2, username2] = await loginAndGetJWTToken(
       userService,
