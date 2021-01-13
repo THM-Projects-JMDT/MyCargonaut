@@ -42,7 +42,7 @@ export const AddRequestPage: React.FC = () => {
         anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
         open={booking.requestPaymentState === "paymentFailure"}
         onClose={handleSnackbarClose}
-        message="Angebot konnte nicht angenommen werden. Haben Sie genug
+        message="Anfrage konnte nicht hinzugefügt werden. Haben Sie genug
         CargoCoins auf Ihrem Konto?"
         key={1}
         autoHideDuration={3000}
