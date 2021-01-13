@@ -85,9 +85,16 @@ describe("AuthService", () => {
 
   it(`check if registry and login works`, async () => {
     await request(app.getHttpServer()).post("/auth/register").send(newUser);
-    const res = await request(app.getHttpServer())
+    await request(app.getHttpServer())
       .post("/auth/login")
       .send({ username: "admin", password: "admin" })
+      .expect(201);
+  });
+  it(`check if registry and login with email works`, async () => {
+    await request(app.getHttpServer()).post("/auth/register").send(newUser);
+    await request(app.getHttpServer())
+      .post("/auth/login")
+      .send({ username: "jannik.lapp@mni.thm.de", password: "admin" })
       .expect(201);
   });
 

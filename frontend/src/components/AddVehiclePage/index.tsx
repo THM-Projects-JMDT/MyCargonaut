@@ -5,7 +5,7 @@ import { CustomCard } from "../../util/CustomCard";
 import { InputForm } from "../../util/InputForm";
 
 export const AddVehiclePage: React.FC = () => {
-  const { inputFields, handleAdd } = useAddVehicle();
+  const { inputFields, handleAdd, validate } = useAddVehicle();
 
   return (
     <CenterCard>
@@ -14,6 +14,7 @@ export const AddVehiclePage: React.FC = () => {
         buttonText="HINZUFÜGEN"
         content={<InputForm inputFields={inputFields}></InputForm>}
         event={handleAdd}
+        validate={validate}
       ></CustomCard>
     </CenterCard>
   );

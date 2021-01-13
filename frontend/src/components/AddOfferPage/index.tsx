@@ -1,11 +1,11 @@
 import React from "react";
 import { CenterCard } from "../../util/CenterCard";
 import { CustomCard } from "../../util/CustomCard";
-import { InputForm } from "../../util/InputForm";
 import { useAddOffer } from "../../hooks/useAddOffer";
+import { InputForm } from "../../util/InputForm";
 
 export const AddOfferPage: React.FC = () => {
-  const { inputFields, handleAddOffer } = useAddOffer(true);
+  const { inputFields, handleAddOffer, validate } = useAddOffer(true);
 
   return (
     <CenterCard>
@@ -14,6 +14,7 @@ export const AddOfferPage: React.FC = () => {
         buttonText="HINZUFÜGEN"
         content={<InputForm inputFields={inputFields}></InputForm>}
         event={handleAddOffer}
+        validate={validate}
       ></CustomCard>
     </CenterCard>
   );
