@@ -6,7 +6,6 @@ import { InputField, InputForm } from "../../util/InputForm";
 import EditIcon from "@material-ui/icons/Edit";
 import { CargoCoins } from "../../util/CargoCoins";
 import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
-import { LinkButton } from "../../util/LinkButton";
 import { CargoCoinsDialog } from "../../util/CargoCoinsDialog";
 import { PasswordDialog } from "./PasswordDialog";
 import { useDispatch, useSelector } from "react-redux";
@@ -30,10 +29,6 @@ export const Profile: React.FC<ProfileProps> = ({ inputFields }) => {
 
   const handleOpen = () => {
     setOpen(true);
-  };
-
-  const handleOpenPw = () => {
-    setOpenPw(true);
   };
 
   const handleUplaod = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -80,9 +75,6 @@ export const Profile: React.FC<ProfileProps> = ({ inputFields }) => {
             <IconButton onClick={handleOpen}>
               <AddCircleOutlineIcon />
             </IconButton>
-          </div>
-          <div>
-            <LinkButton onClick={handleOpenPw}>Passwort ändern</LinkButton>
           </div>
         </div>
       </div>

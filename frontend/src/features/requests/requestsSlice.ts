@@ -9,7 +9,9 @@ import {
   getPersonalRequests,
   OfferResponse,
 } from "../../api/offers";
+import { setAddRequestPaymentStatus } from "../booking/bookingSlice";
 import { AppThunk } from "../store";
+import { fetchUser } from "../userSlice";
 
 export interface RequestsState {
   allRequests: OfferResponse[];
@@ -65,18 +67,12 @@ export const fetchRequests = (): AppThunk => async (dispatch) => {
 
 export const putRequest = (request: Offer): AppThunk => async (dispatch) => {
   try {
+    dispatch(setAddRequestPaymentStatus("paymentInProgress"));
     await addRequest(request);
+    dispatch(setAddRequestPaymentStatus("paymentSuccess"));
     dispatch(fetchRequests());
   } catch (e) {
-    dispatch(getRequestsFailure(e.toString()));
-  }
-};
-
-export const acceptRequest = (id: string): AppThunk => async (dispatch) => {
-  try {
-    await bookOffer(id);
-    dispatch(fetchRequests());
-  } catch (e) {
+    dispatch(setAddRequestPaymentStatus("paymentFailure"));
     dispatch(getRequestsFailure(e.toString()));
   }
 };
@@ -86,6 +82,16 @@ export const rateRequest = (id: string, stars: Stars): AppThunk => async (
 ) => {
   try {
     await addRating(id, stars);
+    dispatch(fetchRequests());
+  } catch (e) {
+    dispatch(getRequestsFailure(e.toString()));
+  }
+};
+
+export const acceptRequest = (id: string): AppThunk => async (dispatch) => {
+  try {
+    await bookOffer(id);
+    dispatch(fetchUser());
     dispatch(fetchRequests());
   } catch (e) {
     dispatch(getRequestsFailure(e.toString()));

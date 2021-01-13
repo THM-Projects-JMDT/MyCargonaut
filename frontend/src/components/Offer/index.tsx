@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Grid,
   Accordion,
@@ -11,6 +11,7 @@ import {
   Menu,
   MenuItem,
   ListItemIcon,
+  Snackbar,
 } from "@material-ui/core";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import { useStyles } from "./Offer.style";
@@ -25,11 +26,17 @@ import StarIcon from "@material-ui/icons/Star";
 import { UserDetails } from "../../model/UserDetails";
 import { OfferDetails } from "../../model/OfferDetails";
 import { RatingDialog } from "./RatingDialog";
-import { useDispatch } from "react-redux";
-import { acceptOffers } from "../../features/offers/offersSlice";
-import { acceptRequest } from "../../features/requests/requestsSlice";
 import { setChatOpenById } from "../../features/chat/chatSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { acceptOffer, fetchOffers } from "../../features/offers/offersSlice";
+import {
+  acceptRequest,
+  fetchRequests,
+} from "../../features/requests/requestsSlice";
 import { ConfirmDialog } from "../../util/ConfirmDialog";
+import clsx from "clsx";
+import { RootState } from "../../features/rootReducer";
+import { setBookOfferPaymentStatus } from "../../features/booking/bookingSlice";
 
 export interface OfferProps {
   provider?: UserDetails;
@@ -64,6 +71,7 @@ export const Offer: React.FC<OfferProps> = ({
   const [trackingOpen, setTrackingOpen] = React.useState(false);
   const [confirmOpen, setConfirmOpen] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const booking = useSelector((state: RootState) => state.booking);
 
   const isPendingOffer = customer === undefined;
   const isPendingRequest = provider === undefined;
@@ -75,9 +83,21 @@ export const Offer: React.FC<OfferProps> = ({
 
   const dispatch = useDispatch();
 
+  useEffect(() => {
+    dispatch(
+      setBookOfferPaymentStatus({
+        offerId: offer.id,
+        paymentState: "paymentInProgress",
+      })
+    );
+  }, [dispatch, offer.id]);
+
   const handleTrackingClick = (event: any) => {
     event.stopPropagation();
     setTrackingOpen(true);
+
+    if (isProvider) dispatch(fetchOffers());
+    if (isCustomer) dispatch(fetchRequests());
   };
 
   const handleAvatarClick = (
@@ -96,7 +116,7 @@ export const Offer: React.FC<OfferProps> = ({
 
   const handleBookOffer = () => {
     if (isPendingOffer) {
-      dispatch(acceptOffers(offer.id));
+      dispatch(acceptOffer(offer.id));
     } else {
       dispatch(acceptRequest(offer.id));
     }
@@ -115,6 +135,15 @@ export const Offer: React.FC<OfferProps> = ({
   const handleOpenRating = () => {
     setRatingOpen(true);
     handleAvatarMenuClose();
+  };
+
+  const handleSnackbarClose = () => {
+    dispatch(
+      setBookOfferPaymentStatus({
+        offerId: offer.id,
+        paymentState: "paymentInProgress",
+      })
+    );
   };
 
   const getConfirmText = () => {
@@ -204,6 +233,10 @@ export const Offer: React.FC<OfferProps> = ({
                     color="secondary"
                     variant="outlined"
                     onClick={handleTrackingClick}
+                    className={clsx({
+                      [classes.trackingCompleted]:
+                        offer.tracking?.state === "Delivered",
+                    })}
                   >
                     {offer.tracking?.state === "Delivered"
                       ? "ABGESCHLOSSEN"
@@ -244,11 +277,21 @@ export const Offer: React.FC<OfferProps> = ({
             </GridElement>
           )}
         </Grid>
+        <Snackbar
+          anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+          open={booking[offer.id] === "paymentFailure"}
+          onClose={handleSnackbarClose}
+          message="Angebot konnte nicht angenommen werden. Haben Sie genug
+        CargoCoins auf Ihrem Konto?"
+          key={1}
+          autoHideDuration={3000}
+        />
       </AccordionSummary>
       <Divider variant="middle" className={classes.divider} />
       <AccordionDetails className={classes.accordionDetails}>
         <Box ml={7} my={2}>
           <Typography variant="subtitle2">Beschreibung:</Typography>
+          {booking[offer.id] === "paymentFailure" ? "FAIL" : ""}
           <Typography>
             {offer.description ? offer.description.trim() : "-"}
           </Typography>

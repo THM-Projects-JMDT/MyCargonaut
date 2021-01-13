@@ -30,3 +30,9 @@ export function uploadAvatar(file: File) {
     body: formData,
   });
 }
+
+export function getUser() {
+  return fetchTimeOut(buildApiUrl("/user")).then((res) =>
+    res.json()
+  ) as Promise<User>;
+}

@@ -20,13 +20,16 @@ import { RootState } from "../../features/rootReducer";
 import { fetchOffers } from "../../features/offers/offersSlice";
 import { fetchRequests } from "../../features/requests/requestsSlice";
 import { OfferResponse } from "../../api/offers";
+import { setOffersTab, setRequestsTab } from "../../features/tabSlice";
 
 export interface OfferPageProps {
   show: "offers" | "requests";
 }
 
 export const OfferPage: React.FC<OfferPageProps> = ({ show }) => {
-  const [activeTab, setActiveTab] = React.useState(0);
+  const activeTab = useSelector((state: RootState) =>
+    show === "offers" ? state.tabs.offersTab : state.tabs.requestsTab
+  );
   const [service, setService] = React.useState<string>("both");
   const [filter, setFilter] = React.useState({
     from: "",
@@ -55,7 +58,13 @@ export const OfferPage: React.FC<OfferPageProps> = ({ show }) => {
   }, [dispatch, show]);
 
   const handleTabChange = (event: React.ChangeEvent<{}>, tab: number) => {
-    setActiveTab(tab);
+    if (tab === 0 || tab === 1) {
+      if (show === "offers") {
+        dispatch(setOffersTab(tab));
+      } else {
+        dispatch(setRequestsTab(tab));
+      }
+    }
   };
 
   const handleServiceFilterChange = (

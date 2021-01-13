@@ -39,4 +39,13 @@ export const useStyles = makeStyles((theme) => ({
   addIcon: {
     marginRight: "10px",
   },
+  trackingCompleted: {
+    color: theme.palette.success.main,
+    borderColor: theme.palette.success.main,
+    "&:hover": {
+      color: theme.palette.success.dark,
+      borderColor: theme.palette.success.dark,
+      backgroundColor: "rgba(77, 245, 0, 0.04)",
+    },
+  },
 }));
