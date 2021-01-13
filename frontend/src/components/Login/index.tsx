@@ -12,7 +12,7 @@ export const Login = () => {
   const usernameRef = createRef<HTMLInputElement>();
   const passwordRef = createRef<HTMLInputElement>();
   useNotLoggedIn();
-  const [validate, setValidate] = useState(false);
+  const [validate, setValidate] = useState({ open: false, message: "" });
 
   const handleLogin = () => {
     try {
@@ -21,9 +21,13 @@ export const Login = () => {
 
       if (!username || !password) throw new Error();
 
-      dispatch(login(username, password));
+      dispatch(
+        login(username, password, () =>
+          setValidate({ open: true, message: "Ungültige Anmeldedaten" })
+        )
+      );
     } catch {
-      setValidate(true);
+      setValidate({ open: true, message: "Felder nicht korrekt ausgefüllt" });
     }
   };
 
@@ -34,7 +38,7 @@ export const Login = () => {
   };
 
   const handleClose = () => {
-    setValidate(false);
+    setValidate({ ...validate, open: false });
   };
 
   const inputFields = [
@@ -73,9 +77,9 @@ export const Login = () => {
       />
       <Snackbar
         anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
-        open={validate}
+        open={validate.open}
         onClose={handleClose}
-        message="Felder nicht korrekt ausgefüllt"
+        message={validate.message}
         key={1}
         autoHideDuration={3000}
       />
