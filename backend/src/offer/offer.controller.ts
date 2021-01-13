@@ -115,7 +115,10 @@ export class OfferController {
       offer.customer = req.user.id;
     }
     const customerUser = await this.userService.findOneById(offer.customer);
-    if (customerUser.cargoCoins >= offer.price) {
+    if (
+      customerUser.cargoCoins >= offer.price ||
+      offer.customer != req.user.id
+    ) {
       if (offer.customer == req.user.id) {
         await this.userService.updateMoney(offer.customer, 0 - offer.price);
       }
