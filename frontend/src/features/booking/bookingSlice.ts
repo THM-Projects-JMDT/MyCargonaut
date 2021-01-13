@@ -30,7 +30,6 @@ export const booking = createSlice({
       state,
       { payload }: PayloadAction<PaymentState>
     ) {
-      console.log(payload);
       state.requestPaymentState = payload;
     },
   },
