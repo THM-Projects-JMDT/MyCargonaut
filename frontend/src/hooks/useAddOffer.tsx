@@ -75,9 +75,6 @@ export function useAddOffer(isOffer: boolean) {
       description: getRefValue(descriptionRef).trim(),
     };
 
-    console.log(offer);
-    console.log(!validate());
-
     if (!validate()) return;
 
     try {
