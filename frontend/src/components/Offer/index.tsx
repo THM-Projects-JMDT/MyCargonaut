@@ -28,6 +28,7 @@ import { RatingDialog } from "./RatingDialog";
 import { useDispatch } from "react-redux";
 import { acceptOffers } from "../../features/offers/offersSlice";
 import { acceptRequest } from "../../features/requests/requestsSlice";
+import { setChatOpenById } from "../../features/chat/chatSlice";
 import { ConfirmDialog } from "../../util/ConfirmDialog";
 
 export interface OfferProps {
@@ -103,6 +104,17 @@ export const Offer: React.FC<OfferProps> = ({
 
   const handleAvatarMenuClose = () => {
     setAnchorEl(null);
+  };
+
+  const handleOpenChat = () => {
+    dispatch(setChatOpenById(undefined));
+    dispatch(setChatOpenById(offer.id));
+    handleAvatarMenuClose();
+  };
+
+  const handleOpenRating = () => {
+    setRatingOpen(true);
+    handleAvatarMenuClose();
   };
 
   const getConfirmText = () => {
@@ -253,14 +265,14 @@ export const Offer: React.FC<OfferProps> = ({
           horizontal: "center",
         }}
       >
-        <MenuItem onClick={() => {}}>
+        <MenuItem onClick={handleOpenChat}>
           <ListItemIcon>
             <ChatBubbleIcon />
           </ListItemIcon>
           Chat
         </MenuItem>
         {isCustomer && (
-          <MenuItem onClick={() => setRatingOpen(true)}>
+          <MenuItem onClick={handleOpenRating}>
             <ListItemIcon>
               <StarIcon />
             </ListItemIcon>

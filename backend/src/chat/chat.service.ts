@@ -14,6 +14,8 @@ export class ChatService {
   ) {}
 
   async findByOffer(offerId: string) {
+    const res = await this.chatModel.find({ offer: offerId }, { __v: 0 });
+    console.log(res);
     return this.chatModel.find({ offer: offerId }, { __v: 0 });
   }
 
@@ -27,7 +29,7 @@ export class ChatService {
     });
   }
 
-  async addMessage(message: Message) {
+  async addMessage(message) {
     const newMessage = new this.chatModel(message);
     return newMessage.save();
   }

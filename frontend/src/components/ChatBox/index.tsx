@@ -2,47 +2,47 @@ import {
   Box,
   Card,
   CardContent,
+  CircularProgress,
   Grid,
   IconButton,
   TextField,
 } from "@material-ui/core";
-import React from "react";
+import React, { useEffect } from "react";
 import { useStyles } from "./ChatBox.style";
 import { ChatMessage } from "./ChatMessage";
 import SendIcon from "@material-ui/icons/Send";
 import CloseIcon from "@material-ui/icons/Close";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../features/rootReducer";
+import {
+  fetchChat,
+  sendChatMessage,
+  setChatOpenById,
+  setPollingTimer,
+} from "../../features/chat/chatSlice";
+import { Message } from "../../../../backend/src/chat/message";
 
-export interface ChatProps {}
+interface ChatBoxProps {
+  offerId: string;
+}
 
-export const ChatBox: React.FC<ChatProps> = () => {
+export const ChatBox: React.FC<ChatBoxProps> = ({ offerId }) => {
   const classes = useStyles();
   const [text, setText] = React.useState("");
+  const dispatch = useDispatch();
 
-  // TODO: retrieve from store
-  const messages = [
-    {
-      content: "Hi, wie gehts dir?",
-    },
-    {
-      content: "Gut, selbst?",
-      senderName: "cargo98",
-    },
-    {
-      content: "Auch :)",
-    },
-    {
-      content:
-        "Weiß nicht ob dus schon wusstest, aber Timon ist ZWEIMAL durch LA durchgefallen xDDD",
-    },
-    {
-      content: "Nee, nicht im Ernst!",
-      senderName: "cargo98",
-    },
-    {
-      content: "ROFL",
-      senderName: "cargo98",
-    },
-  ];
+  const chat = useSelector((state: RootState) => state.chat);
+  const loggedInUserId = useSelector(
+    (state: RootState) => state.user.user?._id
+  );
+
+  useEffect(() => {
+    dispatch(fetchChat(offerId));
+    const timer = setInterval(() => {
+      dispatch(fetchChat(offerId));
+    }, 3000);
+    dispatch(setPollingTimer(timer));
+  }, [dispatch, offerId]);
 
   const handleTextChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setText(event.target.value);
@@ -56,21 +56,25 @@ export const ChatBox: React.FC<ChatProps> = () => {
 
   const handleSend = () => {
     if (text.trim() !== "") {
+      dispatch(sendChatMessage(offerId, text));
       setText("");
-      // TODO: send message
     }
   };
 
-  const handleClose = () => {};
+  const handleClose = () => {
+    dispatch(setChatOpenById(undefined));
+  };
 
-  const renderMessage = (m: any) => {
+  const renderMessage = (message: Message, idx: number) => {
+    const state = message.user === loggedInUserId ? "sent" : "recieved";
     return (
       <Box
         display="flex"
-        flexDirection={m.senderName ? "row" : "row-reverse"}
+        flexDirection={state === "recieved" ? "row" : "row-reverse"}
         mb={1}
+        key={idx}
       >
-        <ChatMessage text={m.content} senderName={m.senderName} />
+        <ChatMessage text={message.content} state={state} />
       </Box>
     );
   };
@@ -87,13 +91,20 @@ export const ChatBox: React.FC<ChatProps> = () => {
       </Grid>
       <Card className={classes.chatBoxCard}>
         <CardContent>
-          {messages.map((m) => renderMessage(m))}
+          {chat.isLoading ? (
+            <div className={classes.loadCircle}>
+              <CircularProgress />
+            </div>
+          ) : (
+            chat.chat?.map((m, i) => renderMessage(m, i))
+          )}
           <Box display="flex" flexDirection="column-reverse"></Box>
         </CardContent>
       </Card>
       <Grid container>
         <Grid item xs={10}>
           <TextField
+            style={{ backgroundColor: "white" }}
             value={text}
             onKeyDown={handleEnter}
             onChange={handleTextChange}
