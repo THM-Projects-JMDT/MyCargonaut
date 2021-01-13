@@ -26,8 +26,8 @@ MyCargonaut ist ein Projekt im Rahmen des KmS-Praktikums im WS20/21.
 ### Backend
 
 -   _In den `backend`-Ordner wechseln:_ `cd backend`
--   _Benötigte Module installieren:_ `npm i`
 -   _Datenbank starten_: `npm run db:start`
+-   _Benötigte Module installieren:_ `npm i`
 -   _Development-Server starten_: `npm run start:dev`
 
 ### Demo
@@ -36,22 +36,21 @@ Eine Demo der App befindet sich hier: [Heroku](https://my-cargonaut.herokuapp.co
 
 ## Dokumentation
 
-Die Dokumentation befindet sich [hier](https://mycargonaut.readthedocs.io)
-
 Für die Dokumentation wird [mkdocs-material](https://squidfunk.github.io/mkdocs-material/getting-started/) verwendet.
 
 
 ### Lokal starten
 
-#### Unter Linux
+=== "Linux"
 
--   _requirements installieren:_ `sudo pip3 install -r docs/requirements.txt`
--   _mkdocs-material starten:_ `mkdocs serve`
+    -   _requirements installieren:_ `sudo pip3 install -r docs/requirements.txt`
+    -   _mkdocs-material starten:_ `mkdocs serve`
 
-#### Unter Windows
+=== "Windows"
 
--   _requirements installieren:_ `pip install -r docs/requirements.txt`
--   _mkdocs-material starten:_ `mkdocs serve`
+    -   _requirements installieren:_ `pip install -r docs/requirements.txt`
+    -   _mkdocs-material starten:_ `mkdocs serve`
+
 
 > sollte der Port 8000 belegt sein, so kann das Pragramm auf einem anderen gestartet werden:
 > `mkdocs serve --dev-addr 127.0.0.1:port`
