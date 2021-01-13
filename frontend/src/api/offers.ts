@@ -63,7 +63,7 @@ export const addRequest = async (request: Offer): Promise<OfferResponse> => {
 };
 
 export const bookOffer = async (id: string): Promise<OfferResponse> => {
-  return fetch(`/api/v1/offer/bookOffer/${id}`, {
+  return fetchTimeOut(`/api/v1/offer/bookOffer/${id}`, {
     method: "POST",
   }).then((res) => {
     return res.json();
@@ -71,7 +71,7 @@ export const bookOffer = async (id: string): Promise<OfferResponse> => {
 };
 
 export const addRating = async (id: string, stars: Stars): Promise<void> => {
-  fetch(`/api/v1/rating/${id}`, {
+  fetchTimeOut(`/api/v1/rating/${id}`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -85,7 +85,7 @@ export const addStatus = async (
   state: State,
   text?: string
 ): Promise<void> => {
-  fetch(`/api/v1/status/${id}`, {
+  fetchTimeOut(`/api/v1/status/${id}`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
