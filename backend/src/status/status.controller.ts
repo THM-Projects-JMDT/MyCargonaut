@@ -36,6 +36,7 @@ export class StatusController {
       offer: offerId?.trim(),
       state: state,
       text: text?.trim(),
+      createDate: new Date(),
     });
   }
 }

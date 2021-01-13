@@ -128,6 +128,7 @@ export class OfferController {
     }
     await this.statusService.addStatus({
       offer: offerId?.trim(),
+      createDate: new Date(),
       state: "Waiting",
     });
     return this.offerService.updateOffer(offerId, offer);
