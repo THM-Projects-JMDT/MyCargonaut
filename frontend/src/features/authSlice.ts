@@ -41,14 +41,17 @@ export const { loginSuccess, loginFailure, logoutSuccess } = auth.actions;
 
 export default auth.reducer;
 
-export const login = (username: string, password: string): AppThunk => async (
-  dispatch
-) => {
+export const login = (
+  username: string,
+  password: string,
+  errCb: () => void
+): AppThunk => async (dispatch) => {
   try {
     const user = await postLogin(username, password);
     dispatch(loginSuccess());
     dispatch(getUserSuccess(user));
   } catch (err) {
+    errCb();
     dispatch(loginFailure("Anmeldung Fehlgeschlagen"));
   }
 };
