@@ -9,6 +9,7 @@ import {
   getPersonalOffers,
   OfferResponse,
 } from "../../api/offers";
+import { setBookOfferPaymentStatus } from "../booking/bookingSlice";
 import { AppThunk } from "../store";
 import { fetchUser } from "../userSlice";
 
@@ -73,16 +74,6 @@ export const putOffer = (offer: Offer): AppThunk => async (dispatch) => {
   }
 };
 
-export const acceptOffers = (id: string): AppThunk => async (dispatch) => {
-  try {
-    await bookOffer(id);
-    dispatch(fetchUser());
-    dispatch(fetchOffers());
-  } catch (e) {
-    dispatch(getOffersFailure(e.toString()));
-  }
-};
-
 export const setOfferStatus = (
   id: string,
   state: State,
@@ -92,6 +83,34 @@ export const setOfferStatus = (
     await addStatus(id, state, text);
     dispatch(fetchOffers());
   } catch (e) {
+    dispatch(getOffersFailure(e.toString()));
+  }
+};
+
+export const acceptOffer = (id: string): AppThunk => async (dispatch) => {
+  try {
+    dispatch(
+      setBookOfferPaymentStatus({
+        offerId: id,
+        paymentState: "paymentInProgress",
+      })
+    );
+    await bookOffer(id);
+    dispatch(
+      setBookOfferPaymentStatus({
+        offerId: id,
+        paymentState: "paymentSuccess",
+      })
+    );
+    dispatch(fetchUser());
+    dispatch(fetchOffers());
+  } catch (e) {
+    dispatch(
+      setBookOfferPaymentStatus({
+        offerId: id,
+        paymentState: "paymentFailure",
+      })
+    );
     dispatch(getOffersFailure(e.toString()));
   }
 };
