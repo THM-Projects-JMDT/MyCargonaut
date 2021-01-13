@@ -25,11 +25,20 @@ export interface InputField {
 
 export interface InputFormProps {
   inputFields: InputField[];
+  filter?: (service: string) => (field: InputField) => boolean;
 }
 
-export const InputForm: React.FC<InputFormProps> = ({ inputFields }) => {
+export const InputForm: React.FC<InputFormProps> = ({
+  inputFields,
+  filter,
+}) => {
   const classes = useStyles();
   const [date, setDate] = useState<Date | null>(new Date());
+  const [service, setService] = useState<string>("");
+
+  const handleSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setService(event.target.value);
+  };
 
   const renderInputField = (field: InputField, idx: number) => {
     switch (true) {
@@ -43,6 +52,9 @@ export const InputForm: React.FC<InputFormProps> = ({ inputFields }) => {
             className={classes.input}
             required={field.required ?? true}
             data-testid={field.inputProps?.id}
+            inputProps={{
+              min: 1,
+            }}
             {...field.inputProps}
           />
         );
@@ -68,7 +80,7 @@ export const InputForm: React.FC<InputFormProps> = ({ inputFields }) => {
             label={field.label}
             variant="outlined"
             required={field.required}
-            onChange={() => {}}
+            onChange={handleSelect}
             defaultValue=""
             data-testid={field.inputProps?.id}
             {...field.inputProps}
@@ -107,7 +119,9 @@ export const InputForm: React.FC<InputFormProps> = ({ inputFields }) => {
 
   return (
     <FormControl fullWidth>
-      {inputFields.map((field, idx) => renderInputField(field, idx))}
+      {inputFields
+        .filter(filter ? filter(service) : () => true)
+        .map((field, idx) => renderInputField(field, idx))}
     </FormControl>
   );
 };

@@ -8,7 +8,7 @@ import { CustomCard } from "../../util/CustomCard";
 import { Profile } from "./Profile";
 
 export const ProfilePage = () => {
-  const { handleUpdate, inputFields } = useRegister();
+  const { handleUpdate, inputFields, validateEdit } = useRegister();
   const user = useSelector((state: RootState) => state.user.user);
 
   return (
@@ -20,6 +20,7 @@ export const ProfilePage = () => {
           user ? <Profile inputFields={inputFields} /> : <CircularProgress />
         }
         event={handleUpdate}
+        validate={validateEdit}
       ></CustomCard>
     </CenterCard>
   );

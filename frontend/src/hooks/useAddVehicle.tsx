@@ -19,9 +19,7 @@ export function useAddVehicle() {
   const [date, setDate] = useState<Date | null>(new Date());
 
   const validate = () =>
-    Object.values(refs).every((r) => getRefValue(r).trim()) &&
-    isValid(date) &&
-    Object.values(numRefs).every((r) => Number(getRefValue(r)));
+    Object.values(refs).every((r) => getRefValue(r).trim()) && isValid(date);
 
   const handleAdd = async () => {
     const car = {

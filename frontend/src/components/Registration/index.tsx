@@ -6,7 +6,12 @@ import { useNotLoggedIn } from "../../hooks/useNotLoggedIn";
 import { useRegister } from "../../hooks/useRegister";
 
 export const Registration = () => {
-  const { handleRegister, inputFields } = useRegister();
+  const {
+    handleRegister,
+    inputFields,
+    validate,
+    validatePassword,
+  } = useRegister();
   useNotLoggedIn();
 
   return (
@@ -16,6 +21,7 @@ export const Registration = () => {
         heading="MyCargonaut - Registrieren"
         content={<InputForm inputFields={inputFields} />}
         event={handleRegister}
+        validate={() => validate() && validatePassword()}
       />
     </CenterCard>
   );

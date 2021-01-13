@@ -30,6 +30,11 @@ export function useRegister() {
   const validate = () =>
     Object.values(refs).every((r) => getRefValue(r).trim()) && isValid(date);
 
+  const validateEdit = () =>
+    !!getRefValue(refs.fistNameRef).trim() &&
+    !!getRefValue(refs.lastNameRef).trim() &&
+    !!getRefValue(refs.emailRef).trim();
+
   const validatePassword = () => {
     const password = getRefValue(refs.passwordRef);
     const repeatPassword = getRefValue(refs.repeatPasswordRef);
@@ -45,7 +50,7 @@ export function useRegister() {
       email: getRefValue(refs.emailRef).trim(),
     };
 
-    if (!user.firstName || !user.lastName || !user.email) return;
+    if (!validateEdit()) return;
 
     try {
       dispatch(putUser(user));
@@ -158,5 +163,6 @@ export function useRegister() {
     validatePassword,
     handleRegister,
     handleUpdate,
+    validateEdit,
   };
 }

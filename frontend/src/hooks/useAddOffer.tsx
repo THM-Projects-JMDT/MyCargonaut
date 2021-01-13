@@ -31,9 +31,7 @@ export function useAddOffer(isOffer: boolean) {
   const validate = () =>
     Object.values(requiredRefs).every((r) => getRefValue(r).trim()) &&
     isValid(date) &&
-    (isOffer
-      ? Number(getRefValue(numRefs.priceRef))
-      : Object.values(numRefs).every((r) => Number(getRefValue(r))));
+    Number(getRefValue(numRefs.priceRef));
 
   const getService = (service: string) => {
     switch (service) {
@@ -63,8 +61,6 @@ export function useAddOffer(isOffer: boolean) {
   const handleAddOffer = async () => {
     const { seats, storageSpace } = getVehicleInfo(getRefValue(vehilceRef));
 
-    if (!validate()) return;
-
     const offer: Offer = {
       from: getRefValue(requiredRefs.fromRef).trim(),
       to: getRefValue(requiredRefs.toRef).trim(),
@@ -78,6 +74,8 @@ export function useAddOffer(isOffer: boolean) {
         : Number(getRefValue(numRefs.storageSpaceRef)),
       description: getRefValue(descriptionRef).trim(),
     };
+
+    if (!validate()) return;
 
     try {
       if (isOffer) {
@@ -132,6 +130,7 @@ export function useAddOffer(isOffer: boolean) {
             inputProps: {
               type: "number",
               inputRef: numRefs.seatsRef,
+              defaultValue: 1,
             },
           },
           {
@@ -140,6 +139,7 @@ export function useAddOffer(isOffer: boolean) {
             inputProps: {
               type: "number",
               inputRef: numRefs.storageSpaceRef,
+              defaultValue: 1,
             },
           },
         ]
@@ -162,20 +162,21 @@ export function useAddOffer(isOffer: boolean) {
               inputRef: vehilceRef,
             },
           },
-          {
-            label: "Beschreibung",
-            type: "multiline",
-            required: false,
-            inputProps: {
-              inputRef: descriptionRef,
-            },
-          },
         ]
       : []),
+    {
+      label: "Beschreibung",
+      type: "multiline",
+      required: false,
+      inputProps: {
+        inputRef: descriptionRef,
+      },
+    },
   ];
 
   return {
     inputFields,
     handleAddOffer,
+    validate,
   };
 }
