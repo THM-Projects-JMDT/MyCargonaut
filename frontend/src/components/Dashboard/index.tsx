@@ -60,7 +60,7 @@ export const Dashboard = () => {
   const handleServiceFilterChangeRequest = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    setServiceOffer(event.target.value);
+    setServiceRequest(event.target.value);
   };
 
   const handleFromFilterChangeOffer = (
