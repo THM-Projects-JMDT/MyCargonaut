@@ -1,4 +1,4 @@
-import { createRef, useState } from "react";
+import { createRef, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useLocation } from "react-router-dom";
 import { Car } from "../model/Car";
@@ -10,6 +10,7 @@ import { InputField } from "../util/InputForm";
 import { getRefValue } from "../util/InputForm/inputFormUtils";
 import { isValid } from "date-fns";
 import { fetchUser } from "../features/userSlice";
+import { setAddRequestPaymentStatus } from "../features/booking/bookingSlice";
 
 export function useAddOffer(isOffer: boolean) {
   const history = useHistory();
@@ -29,6 +30,10 @@ export function useAddOffer(isOffer: boolean) {
   const vehicles = useSelector((state: RootState) => state.vehicles.vehicles);
   const location = useLocation<{ from: string }>();
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(setAddRequestPaymentStatus("paymentInProgress"));
+  }, [dispatch]);
 
   const validate = () =>
     Object.values(requiredRefs).every((r) => getRefValue(r).trim()) &&
@@ -84,11 +89,15 @@ export function useAddOffer(isOffer: boolean) {
         await addOffer(offer);
         history.push(location.state?.from ?? routes.offers.path);
       } else {
+        dispatch(setAddRequestPaymentStatus("paymentInProgress"));
         await addRequest(offer);
+        dispatch(setAddRequestPaymentStatus("paymentSuccess"));
         history.push(location.state?.from ?? routes.requests.path);
         dispatch(fetchUser());
       }
-    } catch {}
+    } catch {
+      dispatch(setAddRequestPaymentStatus("paymentFailure"));
+    }
   };
 
   const inputFields: InputField[] = [

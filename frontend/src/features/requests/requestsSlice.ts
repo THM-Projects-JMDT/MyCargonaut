@@ -66,6 +66,7 @@ export const fetchRequests = (): AppThunk => async (dispatch) => {
 };
 
 export const putRequest = (request: Offer): AppThunk => async (dispatch) => {
+  console.log("heyy");
   try {
     dispatch(setAddRequestPaymentStatus("paymentInProgress"));
     await addRequest(request);
