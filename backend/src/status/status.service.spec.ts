@@ -108,6 +108,7 @@ describe("StatusService", () => {
       .get("/status/" + offer.body._id)
       .set("Authorization", `Bearer ${localJwtToken}`);
     expect(response.body.state).toBe("Waiting");
+    expect(response.body.createDate).toBeDefined();
     await addStatus(app, localJwtToken, offer.body._id, "InProgress");
     response = await request(app.getHttpServer())
       .get("/status/" + offer.body._id)

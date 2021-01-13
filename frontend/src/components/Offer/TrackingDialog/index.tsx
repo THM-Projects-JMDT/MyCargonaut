@@ -106,6 +106,15 @@ export const TrackingDialog: React.FC<TrackingDialogProps> = ({
         {tracking.text && (
           <div className={classes.message}>
             <Typography variant="subtitle2">Letztes Update:</Typography>
+            <Typography className={classes.date} variant="subtitle1">
+              <i>{new Date(tracking.createDate).toLocaleDateString() + " "}</i>
+              <i>
+                {new Date(tracking.createDate).toLocaleTimeString([], {
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })}
+              </i>
+            </Typography>
             <Typography>
               <i>{tracking.text}</i>
             </Typography>

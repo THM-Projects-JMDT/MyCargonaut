@@ -5,8 +5,12 @@ import { useStyles } from "./Header.style";
 import { NavElements } from "./NavElements";
 import { Link } from "react-router-dom";
 import { routes } from "../../routes";
+import { useSelector } from "react-redux";
+import { RootState } from "../../features/rootReducer";
+import { ChatBox } from "../ChatBox";
 
 export const Header: React.FC = () => {
+  const offerId = useSelector((state: RootState) => state.chat.offerId);
   const classes = useStyles();
   return (
     <div className="classes.root">
@@ -23,6 +27,7 @@ export const Header: React.FC = () => {
           <NavElements />
         </Toolbar>
       </AppBar>
+      {offerId && <ChatBox offerId={offerId} />}
     </div>
   );
 };

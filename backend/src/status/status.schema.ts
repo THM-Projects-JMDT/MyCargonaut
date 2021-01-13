@@ -15,6 +15,9 @@ export class Status {
   @Prop({ required: true })
   state: "Waiting" | "InProgress" | "Delivered";
 
+  @Prop({ required: true })
+  createDate: Date;
+
   @Prop()
   text: string;
 }
